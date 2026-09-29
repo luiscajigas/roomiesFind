@@ -34,9 +34,4 @@ export class LoginComponent {
     });
   }
 
-  usarDemo(email: string): void {
-    this.email = email;
-    this.password = 'demo123';
-    this.ingresar();
-  }
 }

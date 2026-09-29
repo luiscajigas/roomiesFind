@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  // Reemplaza esto por la URL real del backend cuando lo despliegues en Render
-  apiUrl: 'https://TU-BACKEND-EN-RENDER.onrender.com/api'
+  // Sustituye el dominio por el servicio web de Render antes de desplegar.
+  apiUrl: 'https://TU-BACKEND.onrender.com/api'
 };

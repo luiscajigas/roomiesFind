@@ -102,23 +102,3 @@ button.secundario {
   color: var(--accent-2);
 }
 
-.demo {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.demo__botones {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.demo__botones button {
-  margin-top: 0;
-  flex: 1;
-  font-size: 0.8rem;
-  padding: 0.5rem;
-}
