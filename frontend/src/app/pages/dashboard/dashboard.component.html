@@ -1,0 +1,65 @@
+<main class="page">
+  <header class="topbar">
+    <div>
+      <h1>Roomies</h1>
+      <p *ngIf="usuario">Hola, {{ usuario.nombre }}</p>
+    </div>
+    <button class="link" (click)="salir()">Cerrar sesión</button>
+  </header>
+
+  <section class="mi-perfil" *ngIf="miPerfil">
+    <h2>Tu perfil</h2>
+    <div class="mi-perfil__grid">
+      <span><strong>Presupuesto:</strong> ${{ miPerfil.presupuesto | number }}</span>
+      <span><strong>Zona:</strong> {{ miPerfil.zona }}</span>
+      <span><strong>Horario:</strong> {{ miPerfil.horario }}</span>
+      <span><strong>Limpieza:</strong> {{ miPerfil.limpieza }}/5</span>
+      <span><strong>Tolerancia al ruido:</strong> {{ miPerfil.tolerancia_ruido }}/5</span>
+      <span><strong>Visitas:</strong> {{ miPerfil.frecuencia_visitas }}</span>
+    </div>
+  </section>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <p class="cargando" *ngIf="cargando">Calculando compatibilidad con los candidatos (Web Worker en marcha)...</p>
+
+  <section class="candidatos" *ngIf="!cargando && resultados.length">
+    <h2>Compañeros compatibles</h2>
+
+    <article class="candidato" *ngFor="let r of resultados">
+      <div class="candidato__header">
+        <h3>{{ r.candidato.nombre }}</h3>
+        <span class="score" [class.score--alto]="r.score >= 70" [class.score--medio]="r.score >= 40 && r.score < 70" [class.score--bajo]="r.score < 40">
+          {{ r.score }}%
+        </span>
+      </div>
+
+      <p class="candidato__detalle">{{ r.candidato.zona }} · {{ r.candidato.horario }} · presupuesto ${{ r.candidato.presupuesto | number }}</p>
+
+      <div class="listas">
+        <div *ngIf="r.coincidencias.length">
+          <strong>En común</strong>
+          <ul>
+            <li *ngFor="let c of r.coincidencias">{{ c }}</li>
+          </ul>
+        </div>
+        <div *ngIf="r.conflictos.length">
+          <strong>Posibles conflictos</strong>
+          <ul>
+            <li *ngFor="let c of r.conflictos">{{ c }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <button class="secundario" (click)="verExplicacion(r)">
+        {{ explicacionAbierta === r.candidato.id ? 'Ocultar' : 'Ver' }} explicación de la IA
+      </button>
+
+      <div class="explicacion" *ngIf="explicacionAbierta === r.candidato.id">
+        <p *ngIf="cargandoExplicacion === r.candidato.id">Generando explicación...</p>
+        <p *ngIf="explicaciones[r.candidato.id]">{{ explicaciones[r.candidato.id].explicacion }}</p>
+      </div>
+    </article>
+  </section>
+
+  <p *ngIf="!cargando && !resultados.length && !error">Todavía no hay otros perfiles registrados para comparar.</p>
+</main>

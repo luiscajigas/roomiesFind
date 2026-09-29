@@ -1,0 +1,69 @@
+<main class="auth">
+  <div class="auth__card">
+    <h1>Crea tu perfil</h1>
+    <p class="subtitulo">Cuéntanos cómo eres para encontrarte compañeros compatibles.</p>
+
+    <div class="grid">
+      <div class="campo">
+        <label>Nombre</label>
+        <input type="text" [(ngModel)]="datos.nombre" placeholder="Tu nombre" />
+      </div>
+      <div class="campo">
+        <label>Correo</label>
+        <input type="email" [(ngModel)]="datos.email" placeholder="tucorreo@demo.com" />
+      </div>
+      <div class="campo">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="datos.password" placeholder="••••••••" />
+      </div>
+      <div class="campo">
+        <label>Presupuesto mensual (COP)</label>
+        <input type="number" [(ngModel)]="datos.presupuesto" step="10000" />
+      </div>
+      <div class="campo">
+        <label>Zona donde buscas</label>
+        <input type="text" [(ngModel)]="datos.zona" placeholder="Ej: Centro, Pasto" />
+      </div>
+      <div class="campo">
+        <label>Horario</label>
+        <select [(ngModel)]="datos.horario">
+          <option value="madrugador">Madrugador</option>
+          <option value="nocturno">Nocturno</option>
+          <option value="mixto">Mixto</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Nivel de limpieza que manejas: {{ datos.limpieza }}/5</label>
+        <input type="range" min="1" max="5" [(ngModel)]="datos.limpieza" />
+      </div>
+      <div class="campo">
+        <label>Tolerancia al ruido: {{ datos.tolerancia_ruido }}/5</label>
+        <input type="range" min="1" max="5" [(ngModel)]="datos.tolerancia_ruido" />
+      </div>
+      <div class="campo">
+        <label>Frecuencia de visitas</label>
+        <select [(ngModel)]="datos.frecuencia_visitas">
+          <option value="nunca">Nunca</option>
+          <option value="ocasional">Ocasional</option>
+          <option value="frecuente">Frecuente</option>
+        </select>
+      </div>
+      <div class="campo campo--check">
+        <label><input type="checkbox" [(ngModel)]="datos.tiene_mascotas" /> Tengo mascotas</label>
+        <label><input type="checkbox" [(ngModel)]="datos.acepta_mascotas" /> Acepto vivir con mascotas</label>
+      </div>
+      <div class="campo campo--full">
+        <label>Cuéntanos un poco más (opcional)</label>
+        <textarea rows="2" [(ngModel)]="datos.descripcion"></textarea>
+      </div>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <button (click)="registrar()" [disabled]="cargando || !datos.nombre || !datos.email || !datos.password || !datos.zona">
+      {{ cargando ? 'Creando cuenta...' : 'Crear cuenta y buscar compañeros' }}
+    </button>
+
+    <p class="link-registro">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+  </div>
+</main>
