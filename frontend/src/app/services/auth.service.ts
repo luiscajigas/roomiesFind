@@ -16,6 +16,7 @@ export interface DatosRegistro {
   tiene_mascotas: boolean;
   acepta_mascotas: boolean;
   descripcion?: string;
+  foto_url?: string;
 }
 
 interface RespuestaAuth {

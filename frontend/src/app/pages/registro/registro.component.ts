@@ -24,7 +24,8 @@ export class RegistroComponent {
     frecuencia_visitas: 'ocasional',
     tiene_mascotas: false,
     acepta_mascotas: true,
-    descripcion: ''
+    descripcion: '',
+    foto_url: ''
   };
 
   cargando = false;

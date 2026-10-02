@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
@@ -10,7 +10,7 @@ import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -102,5 +102,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   get usuario() {
     return this.auth.usuarioActual;
+  }
+
+  iniciales(nombre: string): string {
+    return nombre
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((parte) => parte.charAt(0))
+      .join('')
+      .toUpperCase() || '?';
+  }
+
+  ocultarImagen(event: Event): void {
+    (event.target as HTMLImageElement).hidden = true;
   }
 }

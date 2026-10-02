@@ -11,6 +11,7 @@ export interface Perfil {
   tiene_mascotas: boolean;
   acepta_mascotas: boolean;
   descripcion?: string;
+  foto_url?: string | null;
 }
 
 export interface ResultadoCompatibilidad {

@@ -16,6 +16,12 @@
         <label>Contraseña</label>
         <input type="password" [(ngModel)]="datos.password" placeholder="••••••••" />
       </div>
+      <div class="campo campo--full">
+        <label for="foto-url">Enlace a tu foto (opcional)</label>
+        <input id="foto-url" name="foto-url" type="url" [(ngModel)]="datos.foto_url"
+          placeholder="https://ejemplo.com/mi-foto.jpg" autocomplete="url" />
+        <small class="ayuda">Usa un enlace público que empiece con https://. Podrás agregar tu foto más adelante.</small>
+      </div>
       <div class="campo">
         <label>Presupuesto mensual (COP)</label>
         <input type="number" [(ngModel)]="datos.presupuesto" step="10000" />
