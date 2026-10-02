@@ -9,9 +9,39 @@
       </span>
       <span>roomies<span class="brand__dot">.</span></span>
     </a>
-    <div class="topbar__user" *ngIf="usuario">
+    <div class="topbar__user" *ngIf="usuario" #menuContainer>
       <span class="topbar__greeting">Hola, {{ usuario.nombre }}</span>
-      <button class="logout" type="button" (click)="salir()">Cerrar sesión</button>
+      <button #menuToggle class="menu-toggle" type="button" (click)="toggleMenu()"
+        [attr.aria-label]="menuAbierto ? 'Cerrar menú de opciones' : 'Abrir menú de opciones'"
+        aria-controls="account-menu"
+        [attr.aria-expanded]="menuAbierto" (keydown.escape)="cerrarMenu()">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="account-menu" class="account-menu" *ngIf="menuAbierto"
+        aria-label="Menú de opciones">
+        <div class="account-menu__user">
+          <span class="account-menu__avatar">{{ iniciales(usuario.nombre) }}</span>
+          <span class="account-menu__identity">
+            <strong>{{ usuario.nombre }}</strong>
+            <small>{{ usuario.email }}</small>
+          </span>
+        </div>
+        <span class="account-menu__divider"></span>
+        <a href="#mi-perfil" (click)="cerrarMenu()">
+          <span class="account-menu__icon" aria-hidden="true">◎</span>
+          Mi perfil
+          <span class="account-menu__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="#companeros" (click)="cerrarMenu()">
+          <span class="account-menu__icon" aria-hidden="true">⌕</span>
+          Descubrir compañeros
+          <span class="account-menu__arrow" aria-hidden="true">→</span>
+        </a>
+        <span class="account-menu__divider"></span>
+        <button class="account-menu__logout" type="button" (click)="cerrarMenu(); salir()">
+          Cerrar sesión
+        </button>
+      </nav>
     </div>
   </header>
 
@@ -21,7 +51,7 @@
     <p class="intro__copy">Conoce personas que podrían hacer de tu próximo hogar un lugar mejor.</p>
   </section>
 
-  <section class="mi-perfil" *ngIf="miPerfil">
+  <section id="mi-perfil" class="mi-perfil" *ngIf="miPerfil">
     <div class="mi-perfil__heading">
       <div>
         <p class="eyebrow">Así te ven los demás</p>
@@ -33,7 +63,7 @@
     <div class="mi-perfil__content">
       <div class="avatar avatar--large" aria-label="Tu foto de perfil">
         <span class="avatar__fallback">{{ iniciales(usuario?.nombre || 'Tú') }}</span>
-        <img *ngIf="miPerfil.foto_url" [src]="miPerfil.foto_url"
+        <img *ngIf="urlFoto(miPerfil.foto_url) as fotoSrc" [src]="fotoSrc"
           [alt]="'Foto de perfil de ' + (usuario?.nombre || 'ti')"
           referrerpolicy="no-referrer" (error)="ocultarImagen($event)" />
       </div>
@@ -57,7 +87,7 @@
     <p>Buscando personas compatibles contigo...</p>
   </div>
 
-  <section class="candidatos" *ngIf="!cargando && resultados.length">
+  <section id="companeros" class="candidatos" *ngIf="!cargando && resultados.length">
     <div class="section-heading">
       <div>
         <p class="eyebrow">Personas para conocer</p>
@@ -71,7 +101,7 @@
         <div class="candidato__top">
           <div class="avatar avatar--candidate">
             <span class="avatar__fallback">{{ iniciales(r.candidato.nombre) }}</span>
-            <img *ngIf="r.candidato.foto_url" [src]="r.candidato.foto_url"
+            <img *ngIf="urlFoto(r.candidato.foto_url) as fotoSrc" [src]="fotoSrc"
               [alt]="'Foto de ' + r.candidato.nombre" loading="lazy"
               referrerpolicy="no-referrer" (error)="ocultarImagen($event)" />
           </div>
@@ -128,7 +158,7 @@
     </div>
   </section>
 
-  <section class="empty-state" *ngIf="!cargando && !resultados.length && !error">
+  <section id="companeros" class="empty-state" *ngIf="!cargando && !resultados.length && !error">
     <span class="empty-state__icon" aria-hidden="true">
       <svg viewBox="0 0 48 48" fill="none">
         <circle cx="19" cy="16" r="7" />

@@ -57,22 +57,58 @@ app-dashboard {
 .brand__mark svg { width: 1.25rem; stroke: var(--accent-2); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
 .brand__dot { color: var(--accent); }
 
-.topbar__user { display: flex; align-items: center; gap: 1.1rem; }
+.topbar__user { position: relative; display: flex; align-items: center; gap: 1.1rem; }
 .topbar__greeting { color: var(--muted); font-size: 0.9rem; }
 
-.logout {
-  padding: 0.55rem 0.85rem;
+.menu-toggle {
+  display: flex;
+  width: 2.65rem;
+  height: 2.65rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: 0.85rem;
   background: transparent;
   color: var(--text);
-  font: inherit;
-  font-size: 0.82rem;
   cursor: pointer;
   transition: border-color 160ms ease, background 160ms ease;
 }
 
-.logout:hover { border-color: var(--accent-2); background: rgba(184, 166, 255, 0.07); }
+.menu-toggle span { display: block; width: 1rem; height: 2px; border-radius: 2px; background: currentColor; transition: transform 160ms ease, width 160ms ease; }
+.menu-toggle:hover, .menu-toggle[aria-expanded="true"] { border-color: var(--accent-2); background: rgba(184, 166, 255, 0.08); }
+.menu-toggle[aria-expanded="true"] span:nth-child(2) { width: 0.7rem; }
+.menu-toggle:focus-visible, .account-menu a:focus-visible, .account-menu button:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+
+.account-menu {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  width: min(18rem, calc(100vw - 2rem));
+  padding: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: #211e29;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+  animation: menu-in 140ms ease-out;
+}
+
+@keyframes menu-in { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+.account-menu__user { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem; }
+.account-menu__avatar { display: grid; width: 2.4rem; height: 2.4rem; flex: 0 0 auto; place-items: center; border: 1px solid rgba(184, 166, 255, 0.3); border-radius: 50%; background: rgba(184, 166, 255, 0.13); color: var(--accent-2); font-size: 0.8rem; font-weight: 700; }
+.account-menu__identity { display: flex; min-width: 0; flex-direction: column; gap: 0.18rem; }
+.account-menu__identity strong, .account-menu__identity small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-menu__identity strong { font-size: 0.84rem; }
+.account-menu__identity small { color: var(--muted); font-size: 0.7rem; }
+.account-menu__divider { display: block; height: 1px; margin: 0.35rem 0; background: var(--border); }
+.account-menu a { display: flex; align-items: center; gap: 0.65rem; padding: 0.68rem 0.6rem; border-radius: 0.65rem; color: var(--text); font-size: 0.8rem; text-decoration: none; transition: background 140ms ease; }
+.account-menu a:hover { background: rgba(184, 166, 255, 0.09); }
+.account-menu__icon { display: grid; width: 1.6rem; height: 1.6rem; place-items: center; border-radius: 0.5rem; background: rgba(184, 166, 255, 0.1); color: var(--accent-2); font-size: 1.05rem; }
+.account-menu__arrow { margin-left: auto; color: var(--muted); }
+.account-menu__logout { width: 100%; padding: 0.68rem 0.6rem; border: 0; border-radius: 0.65rem; background: transparent; color: var(--red); font: inherit; font-size: 0.8rem; text-align: left; cursor: pointer; }
+.account-menu__logout:hover { background: rgba(241, 140, 145, 0.09); }
 
 .intro { max-width: 680px; margin: 4rem 0 2.4rem; }
 app-dashboard .eyebrow { margin: 0 0 0.55rem; color: var(--accent); font-size: 0.72rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
@@ -196,7 +232,7 @@ app-dashboard button.secundario span { color: var(--accent-2); font-size: 1rem; 
   .page { width: min(100% - 1.25rem, 600px); }
   .topbar__user { gap: 0.55rem; }
   .topbar__greeting { max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .logout { padding: 0.48rem 0.58rem; font-size: 0.72rem; }
+  .menu-toggle { width: 2.5rem; height: 2.5rem; }
   .intro { margin: 2.6rem 0 1.8rem; }
   .intro__copy { font-size: 0.9rem; }
   .mi-perfil { padding: 1rem; }

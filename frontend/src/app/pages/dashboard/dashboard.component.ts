@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -23,8 +23,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   explicacionAbierta: number | null = null; // id del candidato con la explicación abierta
   explicaciones: Record<number, RespuestaExplicacion> = {};
   cargandoExplicacion: number | null = null;
+  menuAbierto = false;
 
   private worker: Worker | null = null;
+
+  @ViewChild('menuContainer') private menuContainer?: ElementRef<HTMLElement>;
+  @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
 
   constructor(
     private perfilService: PerfilService,
@@ -67,6 +71,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.worker?.terminate();
+  }
+
+  toggleMenu(): void {
+    this.menuAbierto = !this.menuAbierto;
+  }
+
+  cerrarMenu(): void {
+    this.menuAbierto = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  cerrarMenuAlHacerClickFuera(event: MouseEvent): void {
+    if (this.menuAbierto && !this.menuContainer?.nativeElement.contains(event.target as Node)) {
+      this.cerrarMenu();
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  cerrarMenuConEscape(): void {
+    if (this.menuAbierto) {
+      this.cerrarMenu();
+      this.menuToggle?.nativeElement.focus();
+    }
   }
 
   verExplicacion(resultado: ResultadoCompatibilidad): void {
@@ -117,5 +144,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ocultarImagen(event: Event): void {
     (event.target as HTMLImageElement).hidden = true;
+  }
+
+  urlFoto(fotoUrl: string | null | undefined): string | null {
+    return this.perfilService.urlFoto(fotoUrl);
   }
 }

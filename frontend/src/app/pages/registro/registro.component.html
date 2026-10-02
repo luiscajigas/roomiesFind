@@ -17,10 +17,26 @@
         <input type="password" [(ngModel)]="datos.password" placeholder="••••••••" />
       </div>
       <div class="campo campo--full">
-        <label for="foto-url">Enlace a tu foto (opcional)</label>
-        <input id="foto-url" name="foto-url" type="url" [(ngModel)]="datos.foto_url"
-          placeholder="https://ejemplo.com/mi-foto.jpg" autocomplete="url" />
-        <small class="ayuda">Usa un enlace público que empiece con https://. Podrás agregar tu foto más adelante.</small>
+        <label for="foto">Foto de perfil (opcional)</label>
+        <div class="selector-foto">
+          <div class="selector-foto__preview" *ngIf="vistaPreviaFoto; else sinFoto">
+            <img [src]="vistaPreviaFoto" alt="Vista previa de tu foto de perfil" />
+          </div>
+          <ng-template #sinFoto>
+            <div class="selector-foto__placeholder" aria-hidden="true">+</div>
+          </ng-template>
+          <div class="selector-foto__acciones">
+            <label class="selector-foto__boton" for="foto">
+              {{ vistaPreviaFoto ? 'Cambiar foto' : 'Elegir foto del dispositivo' }}
+            </label>
+            <small>JPG, PNG, WEBP o GIF · máximo 5 MB</small>
+            <small *ngIf="fotoSeleccionada" class="selector-foto__nombre">{{ fotoSeleccionada.name }}</small>
+          </div>
+          <button *ngIf="vistaPreviaFoto" class="selector-foto__quitar" type="button"
+            (click)="quitarFoto(fotoInput)">Quitar</button>
+          <input #fotoInput id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp,image/gif"
+            (change)="seleccionarFoto($event)" />
+        </div>
       </div>
       <div class="campo">
         <label>Presupuesto mensual (COP)</label>

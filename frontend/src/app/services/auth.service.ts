@@ -16,7 +16,6 @@ export interface DatosRegistro {
   tiene_mascotas: boolean;
   acepta_mascotas: boolean;
   descripcion?: string;
-  foto_url?: string;
 }
 
 interface RespuestaAuth {
@@ -33,9 +32,17 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  registro(datos: DatosRegistro): Observable<RespuestaAuth> {
+  registro(datos: DatosRegistro, foto?: File): Observable<RespuestaAuth> {
+    const formulario = new FormData();
+    for (const [campo, valor] of Object.entries(datos)) {
+      formulario.append(campo, String(valor));
+    }
+    if (foto) {
+      formulario.append('foto', foto);
+    }
+
     return this.http
-      .post<RespuestaAuth>(`${this.apiUrl}/auth/registro`, datos)
+      .post<RespuestaAuth>(`${this.apiUrl}/auth/registro`, formulario)
       .pipe(tap((r) => this.guardarSesion(r)));
   }
 
