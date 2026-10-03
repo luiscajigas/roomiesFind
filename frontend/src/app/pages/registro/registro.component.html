@@ -26,16 +26,15 @@
             <div class="selector-foto__placeholder" aria-hidden="true">+</div>
           </ng-template>
           <div class="selector-foto__acciones">
-            <label class="selector-foto__boton" for="foto">
-              {{ vistaPreviaFoto ? 'Cambiar foto' : 'Elegir foto del dispositivo' }}
-            </label>
+            <input #fotoInput id="foto" name="foto" type="file"
+              accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
+              aria-label="Elegir foto de perfil desde el dispositivo"
+              (change)="seleccionarFoto($event)" />
             <small>JPG, PNG, WEBP o GIF · máximo 5 MB</small>
             <small *ngIf="fotoSeleccionada" class="selector-foto__nombre">{{ fotoSeleccionada.name }}</small>
           </div>
           <button *ngIf="vistaPreviaFoto" class="selector-foto__quitar" type="button"
             (click)="quitarFoto(fotoInput)">Quitar</button>
-          <input #fotoInput id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp,image/gif"
-            (change)="seleccionarFoto($event)" />
         </div>
       </div>
       <div class="campo">

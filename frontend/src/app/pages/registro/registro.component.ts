@@ -47,15 +47,13 @@ export class RegistroComponent implements OnDestroy {
     if (!archivo) return;
 
     if (!this.tiposFotoPermitidos.includes(archivo.type)) {
-      this.limpiarFoto();
       input.value = '';
-      this.error = 'Elige una imagen JPG, PNG, WEBP o GIF.';
+      this.error = 'No se pudo agregar la foto. Elige una imagen JPG, PNG, WEBP o GIF.';
       return;
     }
     if (archivo.size > this.maximoFotoBytes) {
-      this.limpiarFoto();
       input.value = '';
-      this.error = 'La foto debe pesar 5 MB o menos.';
+      this.error = 'No se pudo agregar la foto. El archivo debe pesar 5 MB o menos.';
       return;
     }
 
