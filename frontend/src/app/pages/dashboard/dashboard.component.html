@@ -77,6 +77,15 @@
           <span>Ruido <strong>{{ miPerfil.tolerancia_ruido }}/5</strong></span>
           <span>Visitas <strong>{{ miPerfil.frecuencia_visitas }}</strong></span>
         </div>
+        <div class="profile-photo-edit">
+          <label for="mi-foto">{{ fotoSubiendo ? 'Guardando foto...' : 'Cambiar foto de perfil' }}</label>
+          <input id="mi-foto" type="file"
+            accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
+            aria-label="Cambiar foto de perfil desde el dispositivo"
+            [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
+          <small>JPG, PNG, WEBP o GIF · máximo 5 MB</small>
+          <p class="profile-photo-edit__error" *ngIf="errorFoto" role="alert">{{ errorFoto }}</p>
+        </div>
       </div>
     </div>
   </section>

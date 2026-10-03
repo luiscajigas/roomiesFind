@@ -18,10 +18,17 @@ export class PerfilService {
     return this.http.get<Perfil[]>(`${this.apiUrl}/perfiles/candidatos`);
   }
 
-  urlFoto(fotoUrl: string | null | undefined): string | null {
+  actualizarFoto(foto: File): Observable<{ foto_url: string }> {
+    const formulario = new FormData();
+    formulario.append('foto', foto);
+    return this.http.put<{ foto_url: string }>(`${this.apiUrl}/perfiles/me/foto`, formulario);
+  }
+
+  urlFoto(fotoUrl: string | null | undefined, version?: number): string | null {
     if (!fotoUrl) return null;
     if (/^https?:\/\//i.test(fotoUrl)) return fotoUrl;
-    if (!/^\/uploads\/[A-Za-z0-9._-]+$/.test(fotoUrl)) return null;
-    return `${this.apiUrl.replace(/\/api\/?$/, '')}${fotoUrl}`;
+    if (!/^\/(?:uploads\/[A-Za-z0-9._-]+|api\/perfiles\/[0-9]+\/foto)$/.test(fotoUrl)) return null;
+    const url = `${this.apiUrl.replace(/\/api\/?$/, '')}${fotoUrl}`;
+    return fotoUrl.startsWith('/api/') && version ? `${url}?v=${version}` : url;
   }
 }

@@ -24,6 +24,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   explicaciones: Record<number, RespuestaExplicacion> = {};
   cargandoExplicacion: number | null = null;
   menuAbierto = false;
+  fotoSubiendo = false;
+  errorFoto: string | null = null;
+  private versionFoto = Date.now();
 
   private worker: Worker | null = null;
 
@@ -147,6 +150,42 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   urlFoto(fotoUrl: string | null | undefined): string | null {
-    return this.perfilService.urlFoto(fotoUrl);
+    return this.perfilService.urlFoto(fotoUrl, this.versionFoto);
+  }
+
+  actualizarFoto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const foto = input.files?.[0];
+    if (!foto) return;
+
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!tiposPermitidos.includes(foto.type)) {
+      this.errorFoto = 'Elige una imagen JPG, PNG, WEBP o GIF.';
+      input.value = '';
+      return;
+    }
+    if (foto.size > 5 * 1024 * 1024) {
+      this.errorFoto = 'La foto debe pesar 5 MB o menos.';
+      input.value = '';
+      return;
+    }
+
+    this.fotoSubiendo = true;
+    this.errorFoto = null;
+    this.perfilService.actualizarFoto(foto).subscribe({
+      next: ({ foto_url }) => {
+        if (this.miPerfil) {
+          this.miPerfil = { ...this.miPerfil, foto_url };
+        }
+        this.versionFoto = Date.now();
+        this.fotoSubiendo = false;
+        input.value = '';
+      },
+      error: (error) => {
+        this.errorFoto = error.error?.error || 'No se pudo guardar la foto. Inténtalo de nuevo.';
+        this.fotoSubiendo = false;
+        input.value = '';
+      }
+    });
   }
 }
