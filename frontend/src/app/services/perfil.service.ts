@@ -14,6 +14,10 @@ export class PerfilService {
     return this.http.get<Perfil>(`${this.apiUrl}/perfiles/me`);
   }
 
+  actualizar(datos: Partial<Perfil>): Observable<Perfil> {
+    return this.http.put<Perfil>(`${this.apiUrl}/perfiles/me`, datos);
+  }
+
   candidatos(): Observable<Perfil[]> {
     return this.http.get<Perfil[]>(`${this.apiUrl}/perfiles/candidatos`);
   }

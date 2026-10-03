@@ -1,17 +1,16 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
 import { CompatibilidadService, RespuestaExplicacion } from '../../services/compatibilidad.service';
-import { ThemeService } from '../../services/theme.service';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, AppHeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -24,22 +23,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   explicacionAbierta: number | null = null; // id del candidato con la explicación abierta
   explicaciones: Record<number, RespuestaExplicacion> = {};
   cargandoExplicacion: number | null = null;
-  menuAbierto = false;
   fotoSubiendo = false;
   errorFoto: string | null = null;
   private versionFoto = Date.now();
 
   private worker: Worker | null = null;
 
-  @ViewChild('menuContainer') private menuContainer?: ElementRef<HTMLElement>;
-  @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
-
   constructor(
     private perfilService: PerfilService,
     private compatibilidadService: CompatibilidadService,
-    private auth: AuthService,
-    private router: Router,
-    private theme: ThemeService
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -78,37 +71,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.worker?.terminate();
   }
 
-  toggleMenu(): void {
-    this.menuAbierto = !this.menuAbierto;
-  }
-
-  cerrarMenu(): void {
-    this.menuAbierto = false;
-  }
-
-  alternarTema(): void {
-    this.theme.alternar();
-  }
-
-  get modoClaro(): boolean {
-    return this.theme.modoClaro;
-  }
-
-  @HostListener('document:click', ['$event'])
-  cerrarMenuAlHacerClickFuera(event: MouseEvent): void {
-    if (this.menuAbierto && !this.menuContainer?.nativeElement.contains(event.target as Node)) {
-      this.cerrarMenu();
-    }
-  }
-
-  @HostListener('document:keydown.escape')
-  cerrarMenuConEscape(): void {
-    if (this.menuAbierto) {
-      this.cerrarMenu();
-      this.menuToggle?.nativeElement.focus();
-    }
-  }
-
   verExplicacion(resultado: ResultadoCompatibilidad): void {
     const id = resultado.candidato.id;
 
@@ -133,11 +95,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.cargandoExplicacion = null;
         }
       });
-  }
-
-  salir(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
   }
 
   get usuario() {

@@ -1,0 +1,70 @@
+<main class="companions-page">
+  <app-header></app-header>
+
+  <section class="page-intro">
+    <a class="companions-back-link" routerLink="/dashboard">← Volver al inicio</a>
+    <p class="eyebrow">Personas para conocer</p>
+    <h1>Descubrir compañeros</h1>
+    <p>Explora perfiles y conoce qué hábitos comparten y qué temas podrían conversar antes de vivir juntos.</p>
+  </section>
+
+  <div class="companions-loading" *ngIf="cargando" role="status">
+    <span class="companions-loading__spinner" aria-hidden="true"></span>
+    <p>Calculando compatibilidad...</p>
+  </div>
+
+  <p class="feedback feedback--error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <section class="candidate-grid" *ngIf="!cargando && !error && resultados.length">
+    <article class="candidate-card" *ngFor="let resultado of resultados">
+      <div class="candidate-card__top">
+        <div class="companion-avatar">
+          <span>{{ iniciales(resultado.candidato.nombre) }}</span>
+          <img *ngIf="urlFoto(resultado.candidato) as src" [src]="src"
+            [alt]="'Foto de ' + resultado.candidato.nombre"
+            (error)="ocultarImagen($event)" />
+        </div>
+        <div class="candidate-card__identity">
+          <h2>{{ resultado.candidato.nombre }}</h2>
+          <p>{{ resultado.candidato.zona }} <span>·</span> {{ resultado.candidato.horario }}</p>
+        </div>
+        <strong class="score"
+          [class.score--high]="resultado.score >= 70"
+          [class.score--medium]="resultado.score >= 40 && resultado.score < 70"
+          [class.score--low]="resultado.score < 40">{{ resultado.score }}%</strong>
+      </div>
+
+      <p class="candidate-card__description" *ngIf="resultado.candidato.descripcion">
+        “{{ resultado.candidato.descripcion }}”
+      </p>
+
+      <div class="candidate-card__details">
+        <span>Presupuesto <strong>${{ resultado.candidato.presupuesto | number }}</strong></span>
+        <span>Limpieza <strong>{{ resultado.candidato.limpieza }}/5</strong></span>
+        <span>Visitas <strong>{{ resultado.candidato.frecuencia_visitas }}</strong></span>
+      </div>
+
+      <div class="score-track" role="progressbar" [attr.aria-valuenow]="resultado.score"
+        aria-valuemin="0" aria-valuemax="100"
+        [attr.aria-label]="'Compatibilidad con ' + resultado.candidato.nombre">
+        <span [style.width.%]="resultado.score"></span>
+      </div>
+
+      <div class="match-lists">
+        <div *ngIf="resultado.coincidencias.length">
+          <h3>En común</h3>
+          <ul><li *ngFor="let coincidencia of resultado.coincidencias">{{ coincidencia }}</li></ul>
+        </div>
+        <div *ngIf="resultado.conflictos.length">
+          <h3>Para conversar</h3>
+          <ul><li *ngFor="let conflicto of resultado.conflictos">{{ conflicto }}</li></ul>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="empty-state" *ngIf="!cargando && !error && !resultados.length">
+    <h2>Tu comunidad está creciendo</h2>
+    <p>Cuando más personas creen su perfil, aparecerán aquí tus posibles compañeros de hogar.</p>
+  </section>
+</main>

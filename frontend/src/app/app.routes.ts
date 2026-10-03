@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
+import { CompanerosComponent } from './pages/companeros/companeros.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -9,5 +11,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
+  { path: 'companeros', component: CompanerosComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login' }
 ];

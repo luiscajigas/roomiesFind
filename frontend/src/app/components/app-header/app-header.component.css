@@ -1,0 +1,33 @@
+app-header { display: block; }
+.topbar { display: flex; align-items: center; justify-content: space-between; min-height: 3rem; }
+.brand { display: inline-flex; align-items: center; gap: 0.62rem; color: var(--text); font-size: 1.35rem; font-weight: 750; letter-spacing: -0.055em; text-decoration: none; }
+.brand__mark { display: grid; width: 2.35rem; height: 2.35rem; place-items: center; border: 1px solid rgba(184,166,255,.25); border-radius: .8rem; background: rgba(184,166,255,.1); }
+.brand__mark svg { width: 1.25rem; stroke: var(--accent-2); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+.brand__dot { color: var(--accent); }
+.topbar__user { position: relative; display: flex; align-items: center; gap: 1.1rem; }
+.topbar__greeting { color: var(--muted); font-size: .9rem; }
+.menu-toggle { display: flex; width: 2.65rem; height: 2.65rem; flex-direction: column; align-items: center; justify-content: center; gap: .28rem; border: 1px solid var(--border); border-radius: .85rem; background: transparent; color: var(--text); cursor: pointer; transition: border-color 160ms ease, background 160ms ease; }
+.menu-toggle span { display: block; width: 1rem; height: 2px; border-radius: 2px; background: currentColor; transition: transform 160ms ease, width 160ms ease; }
+.menu-toggle:hover, .menu-toggle[aria-expanded="true"] { border-color: var(--accent-2); background: rgba(184,166,255,.08); }
+.menu-toggle[aria-expanded="true"] span:nth-child(2) { width: .7rem; }
+.menu-toggle:focus-visible, .account-menu a:focus-visible, .account-menu button:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+.account-menu { position: absolute; z-index: 5; top: calc(100% + .65rem); right: 0; width: min(18rem, calc(100vw - 2rem)); padding: .65rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--panel-raised); box-shadow: 0 18px 48px rgba(0,0,0,.25); animation: menu-in 140ms ease-out; }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+.account-menu__user { display: flex; align-items: center; gap: .7rem; padding: .6rem; }
+.account-menu__avatar { display: grid; width: 2.4rem; height: 2.4rem; flex: 0 0 auto; place-items: center; border: 1px solid rgba(184,166,255,.3); border-radius: 50%; background: rgba(184,166,255,.13); color: var(--accent-2); font-size: .8rem; font-weight: 700; }
+.account-menu__identity { display: flex; min-width: 0; flex-direction: column; gap: .18rem; }
+.account-menu__identity strong, .account-menu__identity small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-menu__identity strong { font-size: .84rem; }
+.account-menu__identity small { color: var(--muted); font-size: .7rem; }
+.account-menu__divider { display: block; height: 1px; margin: .35rem 0; background: var(--border); }
+.account-menu a, .account-menu__theme { display: flex; width: 100%; align-items: center; gap: .65rem; padding: .68rem .6rem; border: 0; border-radius: .65rem; background: transparent; color: var(--text); font: inherit; font-size: .8rem; text-align: left; text-decoration: none; cursor: pointer; transition: background 140ms ease; }
+.account-menu a:hover, .account-menu__theme:hover, .account-menu__link--active { background: rgba(184,166,255,.09); }
+.account-menu__icon { display: grid; width: 1.6rem; height: 1.6rem; flex: 0 0 auto; place-items: center; border-radius: .5rem; background: rgba(184,166,255,.1); color: var(--accent-2); font-size: 1.05rem; }
+.account-menu__arrow { margin-left: auto; color: var(--muted); }
+.account-menu__logout { width: 100%; padding: .68rem .6rem; border: 0; border-radius: .65rem; background: transparent; color: var(--red); font: inherit; font-size: .8rem; text-align: left; cursor: pointer; }
+.account-menu__logout:hover { background: rgba(241,140,145,.09); }
+@media (max-width: 480px) {
+  .topbar__user { gap: .55rem; }
+  .topbar__greeting { max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .menu-toggle { width: 2.5rem; height: 2.5rem; }
+}

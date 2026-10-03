@@ -1,0 +1,93 @@
+<main class="profile-page">
+  <app-header></app-header>
+
+  <section class="page-intro">
+    <a class="profile-back-link" routerLink="/dashboard">← Volver al inicio</a>
+    <p class="eyebrow">Tu espacio en RoomiesFind</p>
+    <h1>Mi perfil</h1>
+    <p>Actualiza tus preferencias para que los demás sepan cómo sería compartir hogar contigo.</p>
+  </section>
+
+  <div class="profile-loading" *ngIf="cargando" role="status">Cargando tu perfil...</div>
+
+  <form class="profile-form" *ngIf="!cargando && formulario" (ngSubmit)="guardar()">
+    <section class="profile-card profile-card--identity">
+      <div class="profile-avatar">
+        <span>{{ iniciales }}</span>
+        <img *ngIf="fotoSrc as src" [src]="src" [alt]="'Foto de ' + nombre"
+          (error)="ocultarImagen($event)" />
+      </div>
+      <div class="profile-identity">
+        <p class="eyebrow">Así te ven los demás</p>
+        <h2>{{ nombre }}</h2>
+        <p>{{ perfil?.zona }} <span>·</span> {{ perfil?.horario }}</p>
+        <label class="photo-picker" for="profile-photo">{{ fotoSubiendo ? 'Guardando foto...' : 'Cambiar foto' }}</label>
+        <input id="profile-photo" type="file"
+          accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
+          [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
+        <small>JPG, PNG, WEBP o GIF · máximo 5 MB</small>
+      </div>
+    </section>
+
+    <section class="profile-card">
+      <div class="card-heading">
+        <div><p class="eyebrow">Preferencias de convivencia</p><h2>Cuéntales de ti</h2></div>
+      </div>
+      <div class="form-grid">
+        <label class="field">
+          <span>Presupuesto mensual (COP)</span>
+          <input type="number" name="presupuesto" min="0" step="10000" required [(ngModel)]="formulario.presupuesto" />
+        </label>
+        <label class="field">
+          <span>Zona donde buscas</span>
+          <input type="text" name="zona" required maxlength="160" [(ngModel)]="formulario.zona" />
+        </label>
+        <label class="field">
+          <span>Horario habitual</span>
+          <select name="horario" [(ngModel)]="formulario.horario">
+            <option value="madrugador">Madrugador</option>
+            <option value="nocturno">Nocturno</option>
+            <option value="mixto">Mixto</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Frecuencia de visitas</span>
+          <select name="frecuencia_visitas" [(ngModel)]="formulario.frecuencia_visitas">
+            <option value="nunca">Nunca</option>
+            <option value="ocasional">Ocasional</option>
+            <option value="frecuente">Frecuente</option>
+          </select>
+        </label>
+        <label class="field field--range">
+          <span>Nivel de limpieza: <strong>{{ formulario.limpieza }}/5</strong></span>
+          <input type="range" name="limpieza" min="1" max="5" [(ngModel)]="formulario.limpieza" />
+        </label>
+        <label class="field field--range">
+          <span>Tolerancia al ruido: <strong>{{ formulario.tolerancia_ruido }}/5</strong></span>
+          <input type="range" name="tolerancia_ruido" min="1" max="5" [(ngModel)]="formulario.tolerancia_ruido" />
+        </label>
+        <label class="field field--full">
+          <span>Un poco más sobre ti</span>
+          <textarea name="descripcion" rows="4" maxlength="1000"
+            placeholder="Cuéntales qué te gusta hacer o cómo imaginas tu hogar ideal."
+            [(ngModel)]="formulario.descripcion"></textarea>
+        </label>
+        <div class="checkboxes field--full">
+          <label><input type="checkbox" name="tiene_mascotas" [(ngModel)]="formulario.tiene_mascotas" /> Tengo mascotas</label>
+          <label><input type="checkbox" name="acepta_mascotas" [(ngModel)]="formulario.acepta_mascotas" /> Acepto vivir con mascotas</label>
+        </div>
+      </div>
+    </section>
+
+    <p class="feedback feedback--error" *ngIf="error" role="alert">{{ error }}</p>
+    <p class="feedback feedback--success" *ngIf="exito" role="status">{{ exito }}</p>
+    <div class="form-actions">
+      <a class="secondary-button" routerLink="/dashboard">Cancelar</a>
+      <button type="submit" [disabled]="guardando">
+        {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+      </button>
+    </div>
+  </form>
+
+  <p class="feedback feedback--error" *ngIf="!cargando && !formulario && error" role="alert">{{ error }}</p>
+</main>

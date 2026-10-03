@@ -2,3 +2,6 @@
 @import './theme.styles.css';
 @import './app/pages/dashboard/dashboard.styles.css';
 @import './app/pages/registro/registro.styles.css';
+@import './app/components/app-header/app-header.component.css';
+@import './app/pages/perfil/perfil.component.css';
+@import './app/pages/companeros/companeros.component.css';
