@@ -1,13 +1,13 @@
 <main class="page">
   <header class="topbar">
-    <a class="brand" routerLink="/dashboard" aria-label="Roomies, inicio">
+    <a class="brand" routerLink="/dashboard" aria-label="RoomiesFind, inicio">
       <span class="brand__mark" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="m3.5 10 8.5-7 8.5 7v10.5h-17V10Z" />
           <path d="M9 20.5v-7h6v7M2 10.5l10-8 10 8" />
         </svg>
       </span>
-      <span>roomies<span class="brand__dot">.</span></span>
+      <span>RoomiesFind<span class="brand__dot">.</span></span>
     </a>
     <div class="topbar__user" *ngIf="usuario" #menuContainer>
       <span class="topbar__greeting">Hola, {{ usuario.nombre }}</span>
@@ -37,6 +37,12 @@
           Descubrir compañeros
           <span class="account-menu__arrow" aria-hidden="true">→</span>
         </a>
+        <button class="account-menu__theme" type="button" (click)="alternarTema()"
+          [attr.aria-pressed]="modoClaro">
+          <span class="account-menu__icon" aria-hidden="true">{{ modoClaro ? '☾' : '☀' }}</span>
+          {{ modoClaro ? 'Activar modo oscuro' : 'Activar modo claro' }}
+          <span class="account-menu__arrow" aria-hidden="true">{{ modoClaro ? 'Oscuro' : 'Claro' }}</span>
+        </button>
         <span class="account-menu__divider"></span>
         <button class="account-menu__logout" type="button" (click)="cerrarMenu(); salir()">
           Cerrar sesión

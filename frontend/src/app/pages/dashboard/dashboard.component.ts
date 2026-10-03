@@ -5,6 +5,7 @@ import { forkJoin } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
 import { CompatibilidadService, RespuestaExplicacion } from '../../services/compatibilidad.service';
+import { ThemeService } from '../../services/theme.service';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 
 @Component({
@@ -37,7 +38,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private perfilService: PerfilService,
     private compatibilidadService: CompatibilidadService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private theme: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +84,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   cerrarMenu(): void {
     this.menuAbierto = false;
+  }
+
+  alternarTema(): void {
+    this.theme.alternar();
+  }
+
+  get modoClaro(): boolean {
+    return this.theme.modoClaro;
   }
 
   @HostListener('document:click', ['$event'])

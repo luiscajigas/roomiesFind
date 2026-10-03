@@ -1,0 +1,87 @@
+:root {
+  color-scheme: dark;
+  --bg: #100e16;
+  --panel: #1e1b26;
+  --panel-raised: #25212e;
+  --border: #322d3d;
+  --text: #f2f0f6;
+  --muted: #a49bad;
+  --accent: #ff8a3d;
+  --accent-2: #b8a6ff;
+  --green: #76d8a4;
+  --yellow: #f4ca72;
+  --red: #f18c91;
+  --input-bg: #0b0a10;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f4fb;
+  --panel: #ffffff;
+  --panel-raised: #f0edf7;
+  --border: #e4deed;
+  --text: #292337;
+  --muted: #746d80;
+  --accent: #bd5119;
+  --accent-2: #6952c7;
+  --green: #187b4b;
+  --yellow: #936000;
+  --red: #bd394c;
+  --input-bg: #ffffff;
+}
+
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  margin: 0;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+html[data-theme='light'] app-dashboard .account-menu {
+  background: var(--panel);
+  box-shadow: 0 18px 48px rgba(42, 31, 65, 0.16);
+}
+
+html[data-theme='light'] app-dashboard .candidato {
+  box-shadow: 0 14px 40px rgba(42, 31, 65, 0.07);
+}
+
+html[data-theme='light'] app-dashboard .candidato:hover {
+  border-color: #c9bfdf;
+  box-shadow: 0 20px 42px rgba(42, 31, 65, 0.12);
+}
+
+html[data-theme='light'] app-dashboard .score__track {
+  background: #e6e1ed;
+}
+
+html[data-theme='light'] app-registro input,
+html[data-theme='light'] app-registro select,
+html[data-theme='light'] app-registro textarea,
+html[data-theme='light'] app-login input {
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+html[data-theme='light'] app-registro .selector-foto {
+  background: rgba(105, 82, 199, 0.035);
+}
+
+html[data-theme='light'] app-registro .selector-foto input {
+  background: transparent;
+}
+
+html[data-theme='light'] app-registro .selector-foto__quitar {
+  background: transparent;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+}

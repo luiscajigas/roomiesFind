@@ -1,11 +1,4 @@
 :host {
-  --bg: #100e16;
-  --panel: #1e1b26;
-  --border: #322d3d;
-  --text: #f2f0f6;
-  --muted: #9a93ab;
-  --accent: #ff8a3d;
-  --accent-2: #7c6cf0;
   display: block;
   min-height: 100vh;
   background: var(--bg);
@@ -51,7 +44,7 @@ label {
 }
 
 input {
-  background: #0b0a10;
+  background: var(--input-bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text);
@@ -137,7 +130,7 @@ button.secundario {
 .campo--check label { display: flex; align-items: center; gap: 0.4rem; color: var(--text); }
 
 select, textarea {
-  background: #0b0a10;
+  background: var(--input-bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text);

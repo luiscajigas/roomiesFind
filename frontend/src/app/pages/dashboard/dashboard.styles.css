@@ -1,15 +1,4 @@
 app-dashboard {
-  --bg: #100e16;
-  --panel: #1b1822;
-  --panel-raised: #211e29;
-  --border: #302b39;
-  --text: #f6f3fa;
-  --muted: #a49bad;
-  --accent: #ff9f67;
-  --accent-2: #b8a6ff;
-  --green: #76d8a4;
-  --yellow: #f4ca72;
-  --red: #f18c91;
   display: block;
   min-height: 100vh;
   background:
@@ -90,7 +79,7 @@ app-dashboard {
   padding: 0.65rem;
   border: 1px solid var(--border);
   border-radius: 1rem;
-  background: #211e29;
+  background: var(--panel-raised);
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
   animation: menu-in 140ms ease-out;
 }
@@ -105,6 +94,8 @@ app-dashboard {
 .account-menu__divider { display: block; height: 1px; margin: 0.35rem 0; background: var(--border); }
 .account-menu a { display: flex; align-items: center; gap: 0.65rem; padding: 0.68rem 0.6rem; border-radius: 0.65rem; color: var(--text); font-size: 0.8rem; text-decoration: none; transition: background 140ms ease; }
 .account-menu a:hover { background: rgba(184, 166, 255, 0.09); }
+.account-menu__theme { display: flex; width: 100%; align-items: center; gap: 0.65rem; padding: 0.68rem 0.6rem; border: 0; border-radius: 0.65rem; background: transparent; color: var(--text); font: inherit; font-size: 0.8rem; text-align: left; cursor: pointer; transition: background 140ms ease; }
+.account-menu__theme:hover { background: rgba(184, 166, 255, 0.09); }
 .account-menu__icon { display: grid; width: 1.6rem; height: 1.6rem; place-items: center; border-radius: 0.5rem; background: rgba(184, 166, 255, 0.1); color: var(--accent-2); font-size: 1.05rem; }
 .account-menu__arrow { margin-left: auto; color: var(--muted); }
 .account-menu__logout { width: 100%; padding: 0.68rem 0.6rem; border: 0; border-radius: 0.65rem; background: transparent; color: var(--red); font: inherit; font-size: 0.8rem; text-align: left; cursor: pointer; }
