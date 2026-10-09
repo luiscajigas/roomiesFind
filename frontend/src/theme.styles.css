@@ -1,32 +1,32 @@
 :root {
   color-scheme: dark;
-  --bg: #100e16;
-  --panel: #1e1b26;
-  --panel-raised: #25212e;
-  --border: #322d3d;
-  --text: #f2f0f6;
-  --muted: #a49bad;
-  --accent: #ff8a3d;
-  --accent-2: #b8a6ff;
-  --green: #76d8a4;
-  --yellow: #f4ca72;
-  --red: #f18c91;
-  --input-bg: #0b0a10;
+  --bg: #0b130e;
+  --panel: #121e16;
+  --panel-raised: #1a2a1f;
+  --border: #2c4132;
+  --text: #eff5ee;
+  --muted: #a0b1a2;
+  --accent: #b5ed78;
+  --accent-2: #83d7a2;
+  --green: #83d7a2;
+  --yellow: #e8c77c;
+  --red: #ed9690;
+  --input-bg: #0d1711;
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #f6f4fb;
+  --bg: #f3f6ef;
   --panel: #ffffff;
-  --panel-raised: #f0edf7;
-  --border: #e4deed;
-  --text: #292337;
-  --muted: #746d80;
-  --accent: #bd5119;
-  --accent-2: #6952c7;
-  --green: #187b4b;
-  --yellow: #936000;
-  --red: #bd394c;
+  --panel-raised: #edf2e9;
+  --border: #dce5d8;
+  --text: #1b2a20;
+  --muted: #647367;
+  --accent: #527c2b;
+  --accent-2: #27835b;
+  --green: #27835b;
+  --yellow: #93680c;
+  --red: #b64d48;
   --input-bg: #ffffff;
 }
 
@@ -38,7 +38,12 @@ html, body {
 
 body {
   margin: 0;
+  font-family: 'DM Sans', sans-serif;
   transition: background-color 180ms ease, color 180ms ease;
+}
+
+h1, h2, h3, button, input, select, textarea {
+  font-family: 'Manrope', 'DM Sans', sans-serif;
 }
 
 html[data-theme='light'] app-dashboard .candidato {

@@ -1,8 +1,27 @@
-<main class="auth">
-  <div class="auth__card">
-    <div class="auth__brand"><img src="/logo.jpg" alt="" /><span>RoomiesFind</span></div>
-    <h1>Crea tu perfil</h1>
-    <p class="subtitulo">Cuéntanos cómo eres para encontrarte compañeros compatibles.</p>
+<main class="auth auth--register">
+  <div class="auth__layout">
+    <header class="auth__masthead">
+      <a class="auth__brand" routerLink="/login" aria-label="RoomiesFind, inicio">
+        <span class="auth__brand-mark"><img src="/logo.svg" alt="" /></span>
+        <span>RoomiesFind</span>
+      </a>
+      <span class="auth__masthead-note">Tu próximo hogar empieza con una buena conversación.</span>
+    </header>
+
+    <section class="auth__story">
+      <p class="auth__eyebrow">Un hogar que encaja contigo</p>
+      <h1>Primero, cuéntanos <em>cómo convives.</em></h1>
+      <p class="auth__story-copy">Tus preferencias nos ayudan a encontrar personas con hábitos compatibles y expectativas claras.</p>
+      <ul class="auth__benefits">
+        <li><span>01</span> Comparte solo lo que importa para convivir</li>
+        <li><span>02</span> Edita tus preferencias cuando quieras</li>
+      </ul>
+    </section>
+
+    <section class="auth__card auth__card--register" aria-labelledby="register-title">
+      <p class="auth__eyebrow">Empieza por ti</p>
+      <h2 id="register-title">Crea tu perfil</h2>
+      <p class="auth__card-copy">Cuéntanos cómo eres para encontrar compañeros compatibles.</p>
 
     <div class="grid">
       <div class="campo">
@@ -86,6 +105,7 @@
       {{ cargando ? 'Creando cuenta...' : 'Crear cuenta y buscar compañeros' }}
     </button>
 
-    <p class="link-registro">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+      <p class="link-registro">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </section>
   </div>
 </main>
