@@ -2,9 +2,24 @@
   <app-header></app-header>
 
   <section class="intro">
-    <p class="eyebrow">Vivir bien empieza por compartir bien</p>
-    <h1>Tu próximo gran compañero <span>está aquí.</span></h1>
-    <p class="intro__copy">Conoce personas que podrían hacer de tu próximo hogar un lugar mejor.</p>
+    <div class="intro__main">
+      <p class="eyebrow">ROOMIESFIND <span>·</span> TU ESPACIO DE BÚSQUEDA</p>
+      <h1>Un buen hogar empieza con una buena <span>convivencia.</span></h1>
+      <p class="intro__copy">Revisa tu perfil y descubre personas compatibles con tu forma de vivir.</p>
+      <div class="intro__actions">
+        <a class="intro__action intro__action--primary" href="#companeros">Ver coincidencias <span aria-hidden="true">↓</span></a>
+        <a class="intro__action" href="#mi-perfil">Revisar mi perfil</a>
+      </div>
+    </div>
+    <aside class="search-summary" aria-label="Resumen de búsqueda">
+      <p class="eyebrow">ESTADO DE BÚSQUEDA</p>
+      <div class="search-summary__metric">{{ cargando || error ? '—' : resultados.length }}</div>
+      <p class="search-summary__label">{{ error ? 'No disponible ahora' : 'perfiles compatibles' }}</p>
+      <div class="search-summary__details" *ngIf="miPerfil">
+        <span>{{ miPerfil.zona }}</span>
+        <span>{{ miPerfil.horario }}</span>
+      </div>
+    </aside>
   </section>
 
   <section id="mi-perfil" class="mi-perfil" *ngIf="miPerfil">

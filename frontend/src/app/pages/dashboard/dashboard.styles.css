@@ -2,29 +2,41 @@ app-dashboard {
   display: block;
   min-height: 100vh;
   background:
-    radial-gradient(ellipse at 4% 0%, rgba(131, 215, 162, 0.11), transparent 34rem),
-    radial-gradient(ellipse at 95% 20%, rgba(181, 237, 120, 0.06), transparent 28rem),
+    linear-gradient(180deg, rgba(131, 215, 162, 0.045), transparent 28rem),
     var(--bg);
   color: var(--text);
 }
 
 .page {
-  width: min(100% - 2.5rem, 1080px);
+  width: min(100% - 3rem, 1160px);
   margin: 0 auto;
   padding: 1.5rem 0 5rem;
   font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
 }
 
-.intro { max-width: 720px; margin: 3.2rem 0 2rem; }
+.intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(14rem, .42fr); align-items: center; gap: 2rem; margin: 2.4rem 0 2rem; padding: 1.2rem 0 2rem; border-bottom: 1px solid var(--border); }
+.intro__main { max-width: 720px; }
 app-dashboard .eyebrow { margin: 0 0 0.55rem; color: var(--accent); font-size: 0.72rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
-.intro h1 { margin: 0; font-size: clamp(2.1rem, 5vw, 3.45rem); line-height: 1.08; letter-spacing: -0.055em; }
+.intro .eyebrow span { color: var(--muted); }
+.intro h1 { max-width: 740px; margin: 0; font-size: 2.8rem; line-height: 1.12; }
 .intro h1 span { color: var(--accent-2); }
 .intro__copy { margin: 0.9rem 0 0; color: var(--muted); font-size: 1rem; line-height: 1.65; }
+.intro__actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.35rem; }
+.intro__action { display: inline-flex; min-height: 2.65rem; align-items: center; gap: .7rem; padding: .65rem .85rem; border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: .8rem; font-weight: 650; text-decoration: none; transition: border-color 150ms ease, background 150ms ease; }
+.intro__action:hover { border-color: var(--accent-2); background: rgba(131, 215, 162, .07); }
+.intro__action--primary { border-color: var(--accent); background: var(--accent); color: #152119; }
+.intro__action--primary:hover { background: #c3f28d; color: #152119; }
+.intro__action span { font-size: 1rem; }
+.search-summary { min-width: 0; padding: .45rem 0 .45rem 1.7rem; border-left: 1px solid var(--border); }
+.search-summary .eyebrow { margin-bottom: .7rem; }
+.search-summary__metric { color: var(--text); font-size: 3.35rem; font-weight: 750; line-height: 1; }
+.search-summary__label { margin: .4rem 0 0; color: var(--muted); font-size: .83rem; }
+.search-summary__details { display: flex; flex-wrap: wrap; gap: .45rem 1rem; margin-top: 1.1rem; padding-top: .75rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .76rem; text-transform: capitalize; }
 
 .mi-perfil {
   padding: 1.4rem 1.5rem 1.5rem;
   border: 1px solid var(--border);
-  border-radius: 1.2rem;
+  border-radius: 8px;
   background: linear-gradient(125deg, rgba(131, 215, 162, 0.08), transparent 52%), var(--panel);
   box-shadow: 0 18px 55px rgba(0, 0, 0, 0.14);
 }
@@ -38,10 +50,10 @@ app-dashboard .eyebrow { margin: 0 0 0.55rem; color: var(--accent); font-size: 0
 .mi-perfil__info { min-width: 0; }
 .mi-perfil__info h3 { margin: 0; font-size: 1.2rem; }
 .mi-perfil__zone { margin: 0.22rem 0 0; color: var(--muted); font-size: 0.84rem; text-transform: capitalize; }
-.mi-perfil__zone span, .candidato__identity p span { padding: 0 0.2rem; color: #625c6b; }
+.mi-perfil__zone span, .candidato__identity p span { padding: 0 0.2rem; color: var(--muted); }
 .mi-perfil__description { max-width: 720px; margin: 0.65rem 0 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
 .profile-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
-.profile-tags span { padding: 0.42rem 0.65rem; border: 1px solid var(--border); border-radius: 0.6rem; background: rgba(255,255,255,.018); color: var(--muted); font-size: 0.72rem; }
+.profile-tags span { padding: 0.42rem 0.65rem; border: 1px solid var(--border); border-radius: 4px; background: rgba(255,255,255,.018); color: var(--muted); font-size: 0.72rem; }
 .profile-tags strong { margin-left: 0.2rem; color: var(--text); font-weight: 600; }
 .profile-photo-edit { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin-top: 0.85rem; }
 .profile-photo-edit label { color: var(--accent); font-size: 0.76rem; font-weight: 650; }
@@ -84,13 +96,13 @@ app-dashboard .error { margin-top: 1.2rem; color: #ffaaaa; }
   min-width: 0;
   padding: 1.15rem;
   border: 1px solid var(--border);
-  border-radius: 1.1rem;
+  border-radius: 8px;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 45%), var(--panel);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.13);
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.candidato:hover { transform: translateY(-3px); border-color: #51465f; box-shadow: 0 20px 42px rgba(0, 0, 0, 0.22); }
+.candidato:hover { transform: translateY(-2px); border-color: var(--accent-2); box-shadow: 0 20px 42px rgba(0, 0, 0, 0.22); }
 .candidato__top { display: flex; align-items: center; gap: 0.8rem; }
 .candidato__identity { min-width: 0; flex: 1; }
 .candidato__identity h3 { overflow: hidden; margin: 0; font-size: 1.05rem; text-overflow: ellipsis; white-space: nowrap; }
@@ -103,15 +115,15 @@ app-dashboard .error { margin-top: 1.2rem; color: #ffaaaa; }
 .score--medio strong { color: var(--yellow); }
 .score--bajo strong { color: var(--red); }
 
-.candidato__description { margin: 1rem 0 0; color: #d0cad8; font-size: 0.84rem; font-style: italic; line-height: 1.55; }
+.candidato__description { margin: 1rem 0 0; color: var(--muted); font-size: 0.84rem; font-style: italic; line-height: 1.55; }
 .candidato__details { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
-.candidato__details > span { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.42rem 0.55rem; border-radius: 0.55rem; background: var(--panel-raised); color: var(--muted); font-size: 0.68rem; }
+.candidato__details > span { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.42rem 0.55rem; border-radius: 4px; background: var(--panel-raised); color: var(--muted); font-size: 0.68rem; }
 .candidato__details strong { color: var(--text); font-weight: 600; }
 .detail-dot { width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--accent-2); }
 .detail-dot--home { background: var(--green); }
 .detail-dot--visits { background: var(--accent); }
 
-.score__track { height: 0.28rem; margin-top: 1rem; overflow: hidden; border-radius: 999px; background: #34303b; }
+.score__track { height: 0.28rem; margin-top: 1rem; overflow: hidden; border-radius: 999px; background: var(--border); }
 .score__track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #83d7a2, #b5ed78); transition: width 400ms ease; }
 
 .listas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1rem; }
@@ -119,7 +131,7 @@ app-dashboard .error { margin-top: 1.2rem; color: #ffaaaa; }
 .list-title span { display: grid; width: 1rem; height: 1rem; place-items: center; border-radius: 50%; background: rgba(118, 216, 164, 0.13); font-size: 0.78rem; }
 .list-title--conflict { color: var(--yellow); }
 .list-title--conflict span { background: rgba(244, 202, 114, 0.13); }
-.listas ul { margin: 0.5rem 0 0; padding-left: 1rem; color: #d2cdda; font-size: 0.76rem; line-height: 1.55; }
+.listas ul { margin: 0.5rem 0 0; padding-left: 1rem; color: var(--text); font-size: 0.76rem; line-height: 1.55; }
 .listas li + li { margin-top: 0.2rem; }
 
 app-dashboard button.secundario { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 1rem; padding: 0.65rem 0.75rem; border: 1px solid var(--border); border-radius: 0.7rem; background: transparent; color: var(--text); font: inherit; font-size: 0.78rem; cursor: pointer; transition: border-color 160ms ease, background 160ms ease; }
@@ -129,21 +141,32 @@ app-dashboard button.secundario span { color: var(--accent-2); font-size: 1rem; 
 .explicacion p { margin: 0; }
 
 .empty-state { max-width: 440px; margin: 5rem auto 0; text-align: center; }
-.empty-state__icon { display: grid; width: 4rem; height: 4rem; margin: 0 auto 1rem; place-items: center; border: 1px solid var(--border); border-radius: 1.2rem; background: var(--panel); }
+.empty-state__icon { display: grid; width: 4rem; height: 4rem; margin: 0 auto 1rem; place-items: center; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
 .empty-state__icon svg { width: 2rem; stroke: var(--accent-2); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
 .empty-state h2 { margin: 0; font-size: 1.2rem; }
 .empty-state p { margin: 0.55rem 0 0; color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
 
 @media (max-width: 760px) {
-  .page { width: min(100% - 2rem, 600px); padding-top: 1rem; }
-  .intro { margin-top: 3rem; }
+  .page { width: min(100% - 2rem, 680px); padding-top: 1rem; }
+  .intro { grid-template-columns: minmax(0, 1fr) minmax(11rem, .48fr); gap: 1.25rem; margin-top: 1.8rem; }
+  .intro h1 { font-size: 2.25rem; }
+  .search-summary { padding-left: 1.1rem; }
+  .search-summary__metric { font-size: 2.8rem; }
   .candidatos__grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
   .page { width: min(100% - 1.25rem, 600px); }
-  .intro { margin: 2.6rem 0 1.8rem; }
+  .intro { grid-template-columns: 1fr; gap: 1.25rem; margin: 1.2rem 0 1.6rem; padding-bottom: 1.25rem; }
+  .intro h1 { font-size: 2rem; }
   .intro__copy { font-size: 0.9rem; }
+  .intro__actions { gap: .5rem; }
+  .intro__action { min-height: 2.5rem; padding: .6rem .7rem; font-size: .74rem; }
+  .search-summary { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: .75rem; padding: .85rem 0 0; border-top: 1px solid var(--border); border-left: 0; }
+  .search-summary .eyebrow { grid-column: 1 / -1; margin: 0 0 .45rem; }
+  .search-summary__metric { grid-row: span 2; font-size: 2.3rem; }
+  .search-summary__label { margin: 0; }
+  .search-summary__details { grid-column: 1 / -1; margin-top: .7rem; padding-top: .6rem; }
   .mi-perfil { padding: 1rem; }
   .mi-perfil__content { align-items: flex-start; gap: 0.8rem; }
   .avatar--large { width: 4rem; height: 4rem; }
