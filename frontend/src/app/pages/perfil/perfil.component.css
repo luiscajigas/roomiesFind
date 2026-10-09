@@ -7,8 +7,8 @@
 .page-intro > p:last-child { max-width: 600px; margin: .6rem 0 0; color: var(--muted); line-height: 1.6; }
 .profile-form { display: grid; gap: 1rem; }
 .profile-card { padding: 1.4rem; border: 1px solid var(--border); border-radius: .95rem; background: var(--panel); }
-.profile-card--identity { display: flex; align-items: center; gap: 1.2rem; background: linear-gradient(125deg, rgba(131,215,162,.08), transparent 52%), var(--panel); }
-.profile-avatar { position: relative; display: grid; width: 6rem; height: 6rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 2px solid rgba(131,215,162,.34); border-radius: 50%; background: linear-gradient(140deg,#31543b,#547b4d); color: white; font-size: 1.5rem; font-weight: 750; }
+.profile-card--identity { display: flex; align-items: center; gap: 1.2rem; background: linear-gradient(125deg, rgba(var(--accent-2-rgb),.1), rgba(var(--accent-rgb),.035) 52%, transparent), var(--panel); }
+.profile-avatar { position: relative; display: grid; width: 6rem; height: 6rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 2px solid rgba(var(--accent-2-rgb),.34); border-radius: 50%; background: linear-gradient(140deg,var(--accent-2),var(--accent)); color: white; font-size: 1.5rem; font-weight: 750; }
 .profile-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .profile-identity h2 { margin: 0; font-size: 1.25rem; }
 .profile-identity > p:not(.eyebrow) { margin: .25rem 0 .7rem; color: var(--muted); font-size: .84rem; text-transform: capitalize; }
@@ -16,7 +16,7 @@
 .photo-picker { display: inline-block; color: var(--accent); font-size: .78rem; font-weight: 700; cursor: pointer; }
 .photo-picker:hover { text-decoration: underline; }
 .profile-identity input[type=file] { display: block; max-width: 100%; margin-top: .35rem; color: var(--muted); font: inherit; font-size: .7rem; }
-.profile-identity input::file-selector-button { padding: .4rem .6rem; border: 1px solid var(--border); border-radius: .5rem; background: rgba(181,237,120,.1); color: var(--accent); cursor: pointer; }
+.profile-identity input::file-selector-button { padding: .4rem .6rem; border: 1px solid var(--border); border-radius: .5rem; background: rgba(var(--accent-rgb),.1); color: var(--accent); cursor: pointer; }
 .profile-identity small { display: block; margin-top: .3rem; color: var(--muted); font-size: .68rem; }
 .card-heading { margin-bottom: 1.2rem; }
 .card-heading h2 { margin: 0; font-size: 1.2rem; }
@@ -25,7 +25,7 @@
 .field > span { color: var(--muted); font-size: .78rem; }
 .field > span strong { color: var(--text); }
 .field input:not([type=range]), .field select, .field textarea { width: 100%; box-sizing: border-box; padding: .72rem .8rem; border: 1px solid var(--border); border-radius: .65rem; background: var(--input-bg); color: var(--text); font: inherit; font-size: .86rem; }
-.field :focus-visible { border-color: var(--accent-2); outline: 0; box-shadow: 0 0 0 3px rgba(131,215,162,.14); }
+.field :focus-visible { border-color: var(--accent-2); outline: 0; box-shadow: 0 0 0 3px rgba(var(--accent-2-rgb),.14); }
 .field--range input { accent-color: var(--accent-2); }
 .field--full { grid-column: 1/-1; }
 .checkboxes { display: flex; flex-wrap: wrap; gap: .8rem 1.4rem; }
@@ -36,7 +36,7 @@
 .feedback--success { color: var(--green); }
 .form-actions { display: flex; justify-content: flex-end; gap: .7rem; }
 .form-actions button, .secondary-button { display: inline-flex; min-height: 2.7rem; align-items: center; justify-content: center; padding: .65rem 1rem; border: 1px solid var(--border); border-radius: .7rem; font: inherit; font-size: .82rem; text-decoration: none; }
-.form-actions button { border-color: var(--accent); background: linear-gradient(100deg,#b5ed78,#8fdba3); color: #152119; font-weight: 800; cursor: pointer; }
+.form-actions button { border-color: var(--accent); background: var(--accent); color: #24170f; font-weight: 800; cursor: pointer; }
 .form-actions button:disabled { opacity: .6; cursor: wait; }
 .secondary-button { color: var(--text); }
 .profile-loading { margin-top: 3rem; color: var(--muted); }

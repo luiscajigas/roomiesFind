@@ -6,10 +6,10 @@
 .page-intro h1 { margin: 0; font-size: clamp(2rem,5vw,3rem); font-weight: 800; }
 .page-intro > p:last-child { margin: .7rem 0 0; color: var(--muted); line-height: 1.6; }
 .candidate-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 1rem; }
-.candidate-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: .95rem; background: linear-gradient(150deg,rgba(131,215,162,.035),transparent 45%),var(--panel); box-shadow: 0 14px 40px rgba(0,0,0,.12); transition: transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease; }
-.candidate-card:hover { transform: translateY(-2px); border-color: rgba(131,215,162,.38); box-shadow: 0 18px 42px rgba(0,0,0,.2); }
+.candidate-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: .95rem; background: linear-gradient(150deg,rgba(var(--accent-2-rgb),.07),transparent 45%),var(--panel); box-shadow: 0 14px 40px rgba(0,0,0,.12); transition: transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease; }
+.candidate-card:hover { transform: translateY(-2px); border-color: rgba(var(--accent-2-rgb),.38); box-shadow: 0 18px 42px rgba(0,0,0,.2); }
 .candidate-card__top { display: flex; align-items: center; gap: .8rem; }
-.companion-avatar { position: relative; display: grid; width: 3.7rem; height: 3.7rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 2px solid rgba(131,215,162,.34); border-radius: 50%; background: linear-gradient(140deg,#31543b,#547b4d); color: white; font-weight: 750; }
+.companion-avatar { position: relative; display: grid; width: 3.7rem; height: 3.7rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 2px solid rgba(var(--accent-2-rgb),.34); border-radius: 50%; background: linear-gradient(140deg,var(--accent-2),var(--accent)); color: white; font-weight: 750; }
 .companion-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .candidate-card__identity { min-width: 0; flex: 1; }
 .candidate-card__identity h2 { overflow: hidden; margin: 0; font-size: 1.05rem; text-overflow: ellipsis; white-space: nowrap; }
@@ -24,7 +24,7 @@
 .candidate-card__details span { padding: .42rem .55rem; border-radius: .55rem; background: var(--panel-raised); color: var(--muted); font-size: .7rem; }
 .candidate-card__details strong { color: var(--text); }
 .score-track { height: .28rem; margin-top: 1rem; overflow: hidden; border-radius: 999px; background: var(--border); }
-.score-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#83d7a2,#b5ed78); }
+.score-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,var(--accent-2),var(--accent)); }
 .match-lists { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem; margin-top: 1rem; }
 .match-lists h3 { margin: 0; color: var(--green); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
 .match-lists > div + div h3 { color: var(--yellow); }
