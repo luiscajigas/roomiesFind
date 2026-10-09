@@ -2,8 +2,8 @@ app-dashboard {
   display: block;
   min-height: 100vh;
   background:
-    radial-gradient(ellipse at 4% 0%, rgba(124, 108, 240, 0.13), transparent 34rem),
-    radial-gradient(ellipse at 95% 20%, rgba(255, 138, 61, 0.08), transparent 28rem),
+    radial-gradient(ellipse at 4% 0%, rgba(131, 215, 162, 0.11), transparent 34rem),
+    radial-gradient(ellipse at 95% 20%, rgba(181, 237, 120, 0.06), transparent 28rem),
     var(--bg);
   color: var(--text);
 }
@@ -15,7 +15,7 @@ app-dashboard {
   font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
 }
 
-.intro { max-width: 680px; margin: 4rem 0 2.4rem; }
+.intro { max-width: 720px; margin: 3.2rem 0 2rem; }
 app-dashboard .eyebrow { margin: 0 0 0.55rem; color: var(--accent); font-size: 0.72rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
 .intro h1 { margin: 0; font-size: clamp(2.1rem, 5vw, 3.45rem); line-height: 1.08; letter-spacing: -0.055em; }
 .intro h1 span { color: var(--accent-2); }
@@ -25,7 +25,7 @@ app-dashboard .eyebrow { margin: 0 0 0.55rem; color: var(--accent); font-size: 0
   padding: 1.4rem 1.5rem 1.5rem;
   border: 1px solid var(--border);
   border-radius: 1.2rem;
-  background: linear-gradient(125deg, rgba(184, 166, 255, 0.07), transparent 52%), var(--panel);
+  background: linear-gradient(125deg, rgba(131, 215, 162, 0.08), transparent 52%), var(--panel);
   box-shadow: 0 18px 55px rgba(0, 0, 0, 0.14);
 }
 
@@ -33,20 +33,20 @@ app-dashboard .eyebrow { margin: 0 0 0.55rem; color: var(--accent); font-size: 0
 .mi-perfil__heading .eyebrow, .section-heading .eyebrow { margin-bottom: 0.25rem; }
 .mi-perfil h2, .section-heading h2 { margin: 0; font-size: 1.2rem; letter-spacing: -0.025em; }
 .profile-status { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--green); font-size: 0.76rem; }
-.profile-status span { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: currentColor; box-shadow: 0 0 12px rgba(118, 216, 164, 0.6); }
+.profile-status span { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: currentColor; box-shadow: 0 0 12px rgba(131, 215, 162, 0.6); }
 .mi-perfil__content { display: flex; align-items: center; gap: 1.25rem; margin-top: 1.2rem; }
 .mi-perfil__info { min-width: 0; }
 .mi-perfil__info h3 { margin: 0; font-size: 1.2rem; }
 .mi-perfil__zone { margin: 0.22rem 0 0; color: var(--muted); font-size: 0.84rem; text-transform: capitalize; }
 .mi-perfil__zone span, .candidato__identity p span { padding: 0 0.2rem; color: #625c6b; }
-.mi-perfil__description { max-width: 720px; margin: 0.65rem 0 0; color: #d0cad8; font-size: 0.88rem; line-height: 1.5; }
+.mi-perfil__description { max-width: 720px; margin: 0.65rem 0 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
 .profile-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
-.profile-tags span { padding: 0.42rem 0.65rem; border: 1px solid var(--border); border-radius: 0.6rem; color: var(--muted); font-size: 0.72rem; }
+.profile-tags span { padding: 0.42rem 0.65rem; border: 1px solid var(--border); border-radius: 0.6rem; background: rgba(255,255,255,.018); color: var(--muted); font-size: 0.72rem; }
 .profile-tags strong { margin-left: 0.2rem; color: var(--text); font-weight: 600; }
 .profile-photo-edit { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin-top: 0.85rem; }
-.profile-photo-edit label { color: var(--accent-2); font-size: 0.76rem; font-weight: 650; }
+.profile-photo-edit label { color: var(--accent); font-size: 0.76rem; font-weight: 650; }
 .profile-photo-edit input { max-width: min(100%, 20rem); color: var(--muted); font: inherit; font-size: 0.72rem; }
-.profile-photo-edit input::file-selector-button { padding: 0.38rem 0.55rem; border: 1px solid var(--border); border-radius: 0.55rem; background: rgba(184, 166, 255, 0.1); color: var(--accent-2); font: inherit; cursor: pointer; }
+.profile-photo-edit input::file-selector-button { padding: 0.38rem 0.55rem; border: 1px solid var(--border); border-radius: 0.55rem; background: rgba(181, 237, 120, 0.1); color: var(--accent); font: inherit; cursor: pointer; }
 .profile-photo-edit input:disabled { opacity: 0.55; }
 .profile-photo-edit small { color: var(--muted); font-size: 0.68rem; }
 .profile-photo-edit__error { flex-basis: 100%; margin: 0; color: #ffaaaa; font-size: 0.76rem; }
@@ -57,9 +57,9 @@ app-dashboard .eyebrow { margin: 0 0 0.55rem; color: var(--accent); font-size: 0
   display: grid;
   place-items: center;
   overflow: hidden;
-  border: 2px solid rgba(184, 166, 255, 0.34);
+  border: 2px solid rgba(131, 215, 162, 0.34);
   border-radius: 50%;
-  background: linear-gradient(140deg, #514275, #bb7057);
+  background: linear-gradient(140deg, #31543b, #547b4d);
   color: white;
 }
 
@@ -112,7 +112,7 @@ app-dashboard .error { margin-top: 1.2rem; color: #ffaaaa; }
 .detail-dot--visits { background: var(--accent); }
 
 .score__track { height: 0.28rem; margin-top: 1rem; overflow: hidden; border-radius: 999px; background: #34303b; }
-.score__track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #8874ec, #cf9aff); transition: width 400ms ease; }
+.score__track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #83d7a2, #b5ed78); transition: width 400ms ease; }
 
 .listas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1rem; }
 .list-title { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--green); font-size: 0.66rem; font-weight: 750; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -123,9 +123,9 @@ app-dashboard .error { margin-top: 1.2rem; color: #ffaaaa; }
 .listas li + li { margin-top: 0.2rem; }
 
 app-dashboard button.secundario { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 1rem; padding: 0.65rem 0.75rem; border: 1px solid var(--border); border-radius: 0.7rem; background: transparent; color: var(--text); font: inherit; font-size: 0.78rem; cursor: pointer; transition: border-color 160ms ease, background 160ms ease; }
-app-dashboard button.secundario:hover { border-color: var(--accent-2); background: rgba(184, 166, 255, 0.06); }
+app-dashboard button.secundario:hover { border-color: var(--accent-2); background: rgba(131, 215, 162, 0.06); }
 app-dashboard button.secundario span { color: var(--accent-2); font-size: 1rem; }
-.explicacion { margin-top: 0.7rem; padding: 0.8rem; border: 1px solid rgba(184, 166, 255, 0.25); border-radius: 0.7rem; background: rgba(124, 108, 240, 0.08); color: #ddd5ef; font-size: 0.82rem; line-height: 1.55; }
+.explicacion { margin-top: 0.7rem; padding: 0.8rem; border: 1px solid rgba(131, 215, 162, 0.25); border-radius: 0.7rem; background: rgba(131, 215, 162, 0.08); color: #d8e7dc; font-size: 0.82rem; line-height: 1.55; }
 .explicacion p { margin: 0; }
 
 .empty-state { max-width: 440px; margin: 5rem auto 0; text-align: center; }

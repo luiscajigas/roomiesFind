@@ -1,14 +1,15 @@
-.companions-page { width: min(100% - 2.5rem, 1080px); margin: 0 auto; padding: 1.5rem 0 5rem; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; color: var(--text); }
-.page-intro { max-width: 680px; margin: 3rem 0 2rem; }
-.companions-back-link { display: inline-block; margin-bottom: 1.4rem; color: var(--accent-2); font-size: .82rem; text-decoration: none; }
+.companions-page { width: min(100% - 2.5rem, 1080px); margin: 0 auto; padding: 1.5rem 0 5rem; color: var(--text); }
+.page-intro { max-width: 720px; margin: 2.5rem 0 2rem; }
+.companions-back-link { display: inline-flex; align-items: center; min-height: 2.2rem; margin-bottom: 1.1rem; color: var(--accent-2); font-size: .8rem; text-decoration: none; }
 .back-link:hover { text-decoration: underline; }
-.eyebrow { margin: 0 0 .45rem; color: var(--accent); font-size: .72rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
-.page-intro h1 { margin: 0; font-size: clamp(2rem,5vw,3rem); letter-spacing: -.05em; }
+.eyebrow { margin: 0 0 .45rem; color: var(--accent); font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.page-intro h1 { margin: 0; font-size: clamp(2rem,5vw,3rem); font-weight: 800; }
 .page-intro > p:last-child { margin: .7rem 0 0; color: var(--muted); line-height: 1.6; }
 .candidate-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 1rem; }
-.candidate-card { min-width: 0; padding: 1.15rem; border: 1px solid var(--border); border-radius: 1.1rem; background: var(--panel); box-shadow: 0 14px 40px rgba(0,0,0,.08); }
+.candidate-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: .95rem; background: linear-gradient(150deg,rgba(131,215,162,.035),transparent 45%),var(--panel); box-shadow: 0 14px 40px rgba(0,0,0,.12); transition: transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease; }
+.candidate-card:hover { transform: translateY(-2px); border-color: rgba(131,215,162,.38); box-shadow: 0 18px 42px rgba(0,0,0,.2); }
 .candidate-card__top { display: flex; align-items: center; gap: .8rem; }
-.companion-avatar { position: relative; display: grid; width: 3.7rem; height: 3.7rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 2px solid rgba(184,166,255,.34); border-radius: 50%; background: linear-gradient(140deg,#514275,#bb7057); color: white; font-weight: 750; }
+.companion-avatar { position: relative; display: grid; width: 3.7rem; height: 3.7rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 2px solid rgba(131,215,162,.34); border-radius: 50%; background: linear-gradient(140deg,#31543b,#547b4d); color: white; font-weight: 750; }
 .companion-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .candidate-card__identity { min-width: 0; flex: 1; }
 .candidate-card__identity h2 { overflow: hidden; margin: 0; font-size: 1.05rem; text-overflow: ellipsis; white-space: nowrap; }
@@ -23,7 +24,7 @@
 .candidate-card__details span { padding: .42rem .55rem; border-radius: .55rem; background: var(--panel-raised); color: var(--muted); font-size: .7rem; }
 .candidate-card__details strong { color: var(--text); }
 .score-track { height: .28rem; margin-top: 1rem; overflow: hidden; border-radius: 999px; background: var(--border); }
-.score-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#8874ec,#cf9aff); }
+.score-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#83d7a2,#b5ed78); }
 .match-lists { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem; margin-top: 1rem; }
 .match-lists h3 { margin: 0; color: var(--green); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
 .match-lists > div + div h3 { color: var(--yellow); }
@@ -35,5 +36,7 @@
 .feedback--error { color: var(--red); }
 .empty-state { margin: 4rem auto; text-align: center; }
 .empty-state p { color: var(--muted); }
+.companions-back-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .candidate-card { transition: none; } }
 @media(max-width:760px) { .companions-page { width: min(100% - 2rem,600px); padding-top: 1rem; } .candidate-grid { grid-template-columns: 1fr; } }
 @media(max-width:480px) { .companions-page { width: min(100% - 1.25rem,600px); } .page-intro { margin-top: 2.3rem; } .candidate-card { padding: .9rem; } .companion-avatar { width: 3.2rem; height: 3.2rem; } .match-lists { gap: .55rem; } }

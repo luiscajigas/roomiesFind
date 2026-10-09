@@ -22,9 +22,9 @@
   --border: #dce5d8;
   --text: #1b2a20;
   --muted: #647367;
-  --accent: #527c2b;
-  --accent-2: #27835b;
-  --green: #27835b;
+  --accent: #477528;
+  --accent-2: #24764f;
+  --green: #24764f;
   --yellow: #93680c;
   --red: #b64d48;
   --input-bg: #ffffff;
@@ -47,25 +47,25 @@ h1, h2, h3, button, input, select, textarea {
 }
 
 html[data-theme='light'] app-dashboard .candidato {
-  box-shadow: 0 14px 40px rgba(42, 31, 65, 0.07);
+  box-shadow: 0 14px 40px rgba(24, 49, 31, 0.07);
 }
 
 html[data-theme='light'] app-dashboard .candidato:hover {
-  border-color: #c9bfdf;
-  box-shadow: 0 20px 42px rgba(42, 31, 65, 0.12);
+  border-color: #b9cfb9;
+  box-shadow: 0 20px 42px rgba(24, 49, 31, 0.12);
 }
 
 html[data-theme='light'] app-dashboard .score__track {
-  background: #e6e1ed;
+  background: #dfe8dc;
 }
 
 html[data-theme='light'] app-header .account-menu {
-  box-shadow: 0 18px 48px rgba(42, 31, 65, 0.16);
+  box-shadow: 0 18px 48px rgba(24, 49, 31, 0.16);
 }
 
 html[data-theme='light'] app-header .account-menu a:hover,
 html[data-theme='light'] app-header .account-menu__theme:hover {
-  background: rgba(105, 82, 199, 0.09);
+  background: rgba(36, 118, 79, 0.09);
 }
 
 html[data-theme='light'] app-registro input,
@@ -77,7 +77,7 @@ html[data-theme='light'] app-login input {
 }
 
 html[data-theme='light'] app-registro .selector-foto {
-  background: rgba(105, 82, 199, 0.035);
+  background: rgba(36, 118, 79, 0.035);
 }
 
 html[data-theme='light'] app-registro .selector-foto input {

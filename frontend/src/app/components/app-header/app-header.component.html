@@ -1,10 +1,15 @@
 <header class="topbar">
   <a class="brand" routerLink="/dashboard" aria-label="RoomiesFind, inicio">
     <span class="brand__mark" aria-hidden="true">
-      <img src="/logo.jpg" alt="" />
+      <img src="/logo.svg" alt="" />
     </span>
     <span>RoomiesFind<span class="brand__dot">.</span></span>
   </a>
+  <nav class="primary-nav" aria-label="Navegación principal">
+    <a routerLink="/dashboard" routerLinkActive="primary-nav__link--active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+    <a routerLink="/companeros" routerLinkActive="primary-nav__link--active">Compañeros</a>
+    <a routerLink="/perfil" routerLinkActive="primary-nav__link--active">Mi perfil</a>
+  </nav>
   <div class="topbar__user" *ngIf="usuario" #menuContainer>
     <span class="topbar__greeting">Hola, {{ usuario.nombre }}</span>
     <button #menuToggle class="menu-toggle" type="button" (click)="toggleMenu()"
