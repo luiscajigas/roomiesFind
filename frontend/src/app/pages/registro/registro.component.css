@@ -31,6 +31,21 @@ h1 {
   font-size: 1.8rem;
 }
 
+.auth__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 1.35rem;
+  font-weight: 750;
+}
+
+.auth__brand img {
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
 .subtitulo {
   color: var(--muted);
   margin-top: 0;
