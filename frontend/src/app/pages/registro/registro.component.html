@@ -100,6 +100,9 @@
     </div>
 
     <p class="error" *ngIf="error">{{ error }}</p>
+    <p class="aviso-espera" *ngIf="servidorLento" role="status">
+      El servidor está despertando (plan gratuito): la primera petición puede tardar hasta un minuto.
+    </p>
 
     <button (click)="registrar()" [disabled]="cargando || !datos.nombre || !datos.email || !datos.password || !datos.zona">
       {{ cargando ? 'Creando cuenta...' : 'Crear cuenta y buscar compañeros' }}

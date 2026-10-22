@@ -33,12 +33,15 @@ export class RegistroComponent implements OnDestroy {
   fotoSeleccionada: File | null = null;
   vistaPreviaFoto: string | null = null;
   cargando = false;
+  servidorLento = false;
   error: string | null = null;
+  private temporizadorLento: ReturnType<typeof setTimeout> | null = null;
 
   constructor(private auth: AuthService, private router: Router) {}
 
   ngOnDestroy(): void {
     this.limpiarFoto();
+    this.limpiarTemporizador();
   }
 
   seleccionarFoto(event: Event): void {
@@ -79,15 +82,30 @@ export class RegistroComponent implements OnDestroy {
   registrar(): void {
     this.cargando = true;
     this.error = null;
+    this.servidorLento = false;
+    // El plan gratuito de Render duerme el servicio: la primera petición puede tardar ~1 minuto.
+    this.temporizadorLento = setTimeout(() => {
+      if (this.cargando) this.servidorLento = true;
+    }, 8000);
     this.auth.registro(this.datos, this.fotoSeleccionada ?? undefined).subscribe({
       next: () => {
         this.cargando = false;
+        this.limpiarTemporizador();
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.cargando = false;
+        this.limpiarTemporizador();
         this.error = err.error?.error || 'No se pudo completar el registro.';
       }
     });
+  }
+
+  private limpiarTemporizador(): void {
+    if (this.temporizadorLento) {
+      clearTimeout(this.temporizadorLento);
+      this.temporizadorLento = null;
+    }
+    this.servidorLento = false;
   }
 }
