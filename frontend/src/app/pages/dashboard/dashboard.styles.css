@@ -156,6 +156,10 @@ app-dashboard button.secundario:hover { border-color: var(--accent-2); backgroun
 app-dashboard button.secundario span { color: var(--accent-2); font-size: 1rem; }
 .explicacion { margin-top: 0.7rem; padding: 0.8rem; border: 1px solid rgba(var(--accent-2-rgb), 0.25); border-radius: 0.7rem; background: rgba(var(--accent-2-rgb), 0.08); color: var(--text); font-size: 0.82rem; line-height: 1.55; }
 .explicacion p { margin: 0; }
+.explicacion__estado { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); }
+.explicacion__spinner { width: 0.85rem; height: 0.85rem; flex: 0 0 auto; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 750ms linear infinite; }
+.explicacion__error { color: var(--red); }
+.explicacion__nota { display: block; margin-top: 0.45rem; color: var(--muted); font-size: 0.68rem; }
 
 .empty-state { max-width: 440px; margin: 5rem auto 0; text-align: center; }
 .empty-state__icon { display: grid; width: 4rem; height: 4rem; margin: 0 auto 1rem; place-items: center; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
