@@ -129,8 +129,22 @@
         </button>
 
         <div class="explicacion" *ngIf="explicacionAbierta === r.candidato.id" aria-live="polite">
-          <p *ngIf="cargandoExplicacion === r.candidato.id">Preparando explicación...</p>
-          <p *ngIf="explicaciones[r.candidato.id]">{{ explicaciones[r.candidato.id].explicacion }}</p>
+          <p class="explicacion__estado" *ngIf="cargandoExplicacion === r.candidato.id">
+            <span class="explicacion__spinner" aria-hidden="true"></span>
+            Generando explicación con IA...
+          </p>
+          <p class="explicacion__error" *ngIf="erroresExplicacion[r.candidato.id]" role="alert">
+            {{ erroresExplicacion[r.candidato.id] }}
+          </p>
+          <ng-container *ngIf="explicaciones[r.candidato.id] as explicacion">
+            <p>{{ explicacion.explicacion }}</p>
+            <small class="explicacion__nota" *ngIf="explicacion.desdeCache">
+              Recuperada del historial: no se hizo una nueva llamada a la IA.
+            </small>
+            <small class="explicacion__nota" *ngIf="!explicacion.desdeCache">
+              Generada por IA a partir del puntaje calculado con reglas.
+            </small>
+          </ng-container>
         </div>
       </article>
     </div>
