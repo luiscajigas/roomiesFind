@@ -52,6 +52,7 @@ app-login .auth__form button:disabled, app-registro .auth__card > button:disable
 app-login .auth__form button span { font-size: 1.15rem; transition: transform 180ms cubic-bezier(.22,.8,.35,1); }
 app-login .auth__form button:hover:not(:disabled) span { transform: translateX(4px); }
 app-login .error, app-registro .error { margin: .2rem 0; color: var(--red); font-size: .8rem; }
+app-login .aviso-espera, app-registro .aviso-espera { margin: .2rem 0; padding: .55rem .7rem; border: 1px solid rgba(var(--accent-2-rgb), .25); border-radius: .6rem; background: rgba(var(--accent-2-rgb), .07); color: var(--muted); font-size: .74rem; line-height: 1.5; }
 app-login .link-registro, app-registro .link-registro { margin: 1.2rem 0 0; color: var(--muted); font-size: .75rem; text-align: center; }
 app-login .link-registro a, app-registro .link-registro a { color: var(--accent-2); font-weight: 700; text-underline-offset: 3px; }
 
