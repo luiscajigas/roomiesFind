@@ -34,6 +34,9 @@
           placeholder="Tu contraseña" autocomplete="current-password" required />
 
         <p class="error" *ngIf="error" role="alert">{{ error }}</p>
+        <p class="aviso-espera" *ngIf="servidorLento" role="status">
+          El servidor está despertando (plan gratuito): la primera petición puede tardar hasta un minuto.
+        </p>
 
         <button type="submit" [disabled]="cargando || !email || !password">
           {{ cargando ? 'Ingresando...' : 'Entrar a mi cuenta' }}
