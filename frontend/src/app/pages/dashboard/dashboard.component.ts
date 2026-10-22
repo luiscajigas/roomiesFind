@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   explicacionAbierta: number | null = null; // id del candidato con la explicación abierta
   explicaciones: Record<number, RespuestaExplicacion> = {};
+  erroresExplicacion: Record<number, string> = {};
   cargandoExplicacion: number | null = null;
   fotoSubiendo = false;
   errorFoto: string | null = null;
@@ -84,6 +85,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.explicaciones[id]) return; // ya la pedimos antes, no repetir llamada
 
     this.cargandoExplicacion = id;
+    delete this.erroresExplicacion[id];
     this.compatibilidadService
       .explicar(id, resultado.score, resultado.coincidencias, resultado.conflictos)
       .subscribe({
@@ -91,8 +93,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.explicaciones[id] = respuesta;
           this.cargandoExplicacion = null;
         },
-        error: () => {
+        error: (err) => {
           this.cargandoExplicacion = null;
+          this.erroresExplicacion[id] =
+            err.error?.error || 'No se pudo generar la explicación. Cierra y vuelve a intentarlo.';
         }
       });
   }
