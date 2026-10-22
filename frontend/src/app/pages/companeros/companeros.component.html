@@ -16,7 +16,7 @@
   <p class="feedback feedback--error" *ngIf="error" role="alert">{{ error }}</p>
 
   <section class="candidate-grid" *ngIf="!cargando && !error && resultados.length">
-    <article class="candidate-card" *ngFor="let resultado of resultados">
+    <article class="candidate-card" *ngFor="let resultado of resultados; let i = index" [style.animation-delay.ms]="i * 70">
       <div class="candidate-card__top">
         <div class="companion-avatar">
           <span>{{ iniciales(resultado.candidato.nombre) }}</span>
@@ -28,10 +28,16 @@
           <h2>{{ resultado.candidato.nombre }}</h2>
           <p>{{ resultado.candidato.zona }} <span>·</span> {{ resultado.candidato.horario }}</p>
         </div>
-        <strong class="score"
-          [class.score--high]="resultado.score >= 70"
-          [class.score--medium]="resultado.score >= 40 && resultado.score < 70"
-          [class.score--low]="resultado.score < 40">{{ resultado.score }}%</strong>
+        <div class="score-wrap">
+          <div class="score-ring" [style.--score]="resultado.score"
+            [class.score-ring--alto]="resultado.score >= 70"
+            [class.score-ring--medio]="resultado.score >= 40 && resultado.score < 70"
+            [class.score-ring--bajo]="resultado.score < 40"
+            role="img" [attr.aria-label]="resultado.score + '% de compatibilidad con ' + resultado.candidato.nombre">
+            <strong>{{ resultado.score }}<small>%</small></strong>
+          </div>
+          <span class="score-ring__label">compatible</span>
+        </div>
       </div>
 
       <p class="candidate-card__description" *ngIf="resultado.candidato.descripcion">
@@ -42,12 +48,6 @@
         <span>Presupuesto <strong>${{ resultado.candidato.presupuesto | number }}</strong></span>
         <span>Limpieza <strong>{{ resultado.candidato.limpieza }}/5</strong></span>
         <span>Visitas <strong>{{ resultado.candidato.frecuencia_visitas }}</strong></span>
-      </div>
-
-      <div class="score-track" role="progressbar" [attr.aria-valuenow]="resultado.score"
-        aria-valuemin="0" aria-valuemax="100"
-        [attr.aria-label]="'Compatibilidad con ' + resultado.candidato.nombre">
-        <span [style.width.%]="resultado.score"></span>
       </div>
 
       <div class="match-lists">

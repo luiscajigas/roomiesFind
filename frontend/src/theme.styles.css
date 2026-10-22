@@ -50,6 +50,78 @@ h1, h2, h3, button, input, select, textarea {
   font-family: 'Manrope', 'DM Sans', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgba(var(--accent-rgb), 0.32);
+  color: var(--text);
+}
+
+body {
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+/* Anillo de compatibilidad reutilizable: el porcentaje llega por --score */
+.score-ring {
+  --score: 0;
+  --ring-color: var(--accent-2);
+  position: relative;
+  display: grid;
+  width: 3.6rem;
+  height: 3.6rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--ring-color) calc(var(--score) * 1%), var(--border) 0);
+}
+
+.score-ring::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--panel);
+}
+
+.score-ring strong {
+  position: relative;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.score-ring small {
+  margin-left: 1px;
+  color: var(--muted);
+  font-size: 0.58em;
+}
+
+.score-ring--alto { --ring-color: var(--green); }
+.score-ring--medio { --ring-color: var(--yellow); }
+.score-ring--bajo { --ring-color: var(--red); }
+
+.score-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.score-ring__label {
+  color: var(--muted);
+  font-size: 0.58rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
 html[data-theme='light'] app-dashboard .candidato {
   box-shadow: 0 14px 40px rgba(28, 20, 13, 0.07);
 }
