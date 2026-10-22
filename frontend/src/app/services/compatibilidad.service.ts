@@ -10,6 +10,8 @@ export interface RespuestaExplicacion {
   score: number;
   coincidencias: string[];
   conflictos: string[];
+  /** true cuando el backend devolvió una explicación ya guardada sin llamar de nuevo a la IA */
+  desdeCache?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
