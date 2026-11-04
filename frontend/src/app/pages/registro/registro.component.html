@@ -30,11 +30,11 @@
       </div>
       <div class="campo">
         <label for="reg-correo">Correo</label>
-        <input id="reg-correo" type="email" [(ngModel)]="datos.email" placeholder="tucorreo@ejemplo.com" />
+        <input id="reg-correo" type="email" autocomplete="email" [(ngModel)]="datos.email" placeholder="tucorreo@ejemplo.com" />
       </div>
       <div class="campo">
         <label for="reg-clave">Contraseña</label>
-        <input id="reg-clave" type="password" [(ngModel)]="datos.password" placeholder="••••••••" />
+        <input id="reg-clave" type="password" autocomplete="new-password" minlength="6" [(ngModel)]="datos.password" placeholder="••••••••" />
       </div>
       <div class="campo campo--full">
         <label for="foto">Foto de perfil (opcional)</label>
