@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
+import { AvatarComponent } from '../../components/avatar/avatar.component';
+import { EscalaComponent } from '../../components/escala/escala.component';
 import { COMUNAS_PASTO, OTRO_BARRIO, esBarrioDeLaLista } from '../../data/barrios-pasto';
 import { Perfil } from '../../models/perfil.model';
 import { AuthService } from '../../services/auth.service';
@@ -15,7 +17,7 @@ type PerfilEditable = Pick<Perfil,
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent],
+  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, EscalaComponent],
   templateUrl: './perfil.component.html'
 })
 export class PerfilComponent implements OnInit {
@@ -57,15 +59,6 @@ export class PerfilComponent implements OnInit {
 
   get fotoSrc(): string | null {
     return this.perfilService.urlFoto(this.perfil?.foto_url, this.fotoVersion);
-  }
-
-  get iniciales(): string {
-    return this.nombre.trim().split(/\s+/).filter(Boolean).slice(0, 2)
-      .map((parte) => parte.charAt(0)).join('').toUpperCase() || '?';
-  }
-
-  ocultarImagen(event: Event): void {
-    (event.target as HTMLImageElement).hidden = true;
   }
 
   guardar(): void {

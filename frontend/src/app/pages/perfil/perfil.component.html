@@ -1,99 +1,98 @@
-<main class="profile-page">
+<main class="pagina">
   <app-header></app-header>
 
-  <section class="page-intro">
-    <a class="profile-back-link" routerLink="/dashboard">← Volver al inicio</a>
-    <p class="eyebrow">Tu espacio en RoomiesFind</p>
+  <section class="encabezado-pagina">
     <h1>Mi perfil</h1>
-    <p>Actualiza tus preferencias para que los demás sepan cómo sería compartir hogar contigo.</p>
+    <p>Entre más claro seas, mejores coincidencias vas a encontrar.</p>
   </section>
 
-  <div class="profile-loading" *ngIf="cargando" role="status">Cargando tu perfil...</div>
+  <div class="cargando" *ngIf="cargando" role="status">
+    <span class="giro" aria-hidden="true"></span>
+    <p>Cargando tu perfil...</p>
+  </div>
 
-  <form class="profile-form" *ngIf="!cargando && formulario" (ngSubmit)="guardar()">
-    <section class="profile-card profile-card--identity">
-      <div class="profile-avatar">
-        <span>{{ iniciales }}</span>
-        <img *ngIf="fotoSrc as src" [src]="src" [alt]="'Foto de ' + nombre"
-          (error)="ocultarImagen($event)" />
-      </div>
-      <div class="profile-identity">
-        <p class="eyebrow">Así te ven los demás</p>
-        <h2>{{ nombre }}</h2>
-        <p>{{ perfil?.zona }} <span>·</span> {{ perfil?.horario }}</p>
-        <label class="photo-picker" for="profile-photo">{{ fotoSubiendo ? 'Guardando foto...' : 'Cambiar foto' }}</label>
-        <input id="profile-photo" type="file"
-          accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
-          [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
-        <small>JPG, PNG, WEBP o GIF · máximo 5 MB</small>
-      </div>
-    </section>
+  <form class="perfil" *ngIf="!cargando && formulario" (ngSubmit)="guardar()">
+    <aside class="perfil__foto">
+      <app-avatar tamano="l" [nombre]="nombre" [foto]="fotoSrc" [alt]="'Foto de ' + nombre"></app-avatar>
+      <h2>{{ nombre }}</h2>
+      <p>{{ perfil?.zona }}</p>
+      <input id="profile-photo" class="oculto-visual" type="file"
+        accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
+        [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
+      <label class="btn btn--secundario" for="profile-photo">{{ fotoSubiendo ? 'Guardando...' : 'Cambiar foto' }}</label>
+      <small>JPG, PNG, WEBP o GIF, hasta 5 MB.</small>
+    </aside>
 
-    <section class="profile-card">
-      <div class="card-heading">
-        <div><p class="eyebrow">Preferencias de convivencia</p><h2>Cuéntales de ti</h2></div>
-      </div>
-      <div class="form-grid">
-        <label class="field">
-          <span>Presupuesto mensual (COP)</span>
-          <input type="number" name="presupuesto" min="0" step="10000" required [(ngModel)]="formulario.presupuesto" />
-        </label>
-        <label class="field">
-          <span>Barrio donde buscas (Pasto)</span>
-          <select name="zona" required [(ngModel)]="formulario.zona">
-            <option *ngIf="zonaAnterior" [value]="zonaAnterior">{{ zonaAnterior }} (actual)</option>
-            <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
-              <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
-            </optgroup>
-            <option [value]="otroBarrio">{{ otroBarrio }}</option>
-          </select>
-        </label>
-        <label class="field">
-          <span>Horario habitual</span>
-          <select name="horario" [(ngModel)]="formulario.horario">
-            <option value="madrugador">Madrugador</option>
-            <option value="nocturno">Nocturno</option>
-            <option value="mixto">Mixto</option>
-          </select>
-        </label>
-        <label class="field">
-          <span>Frecuencia de visitas</span>
-          <select name="frecuencia_visitas" [(ngModel)]="formulario.frecuencia_visitas">
-            <option value="nunca">Nunca</option>
-            <option value="ocasional">Ocasional</option>
-            <option value="frecuente">Frecuente</option>
-          </select>
-        </label>
-        <label class="field field--range">
-          <span>Nivel de limpieza: <strong>{{ formulario.limpieza }}/5</strong></span>
-          <input type="range" name="limpieza" min="1" max="5" [(ngModel)]="formulario.limpieza" />
-        </label>
-        <label class="field field--range">
-          <span>Tolerancia al ruido: <strong>{{ formulario.tolerancia_ruido }}/5</strong></span>
-          <input type="range" name="tolerancia_ruido" min="1" max="5" [(ngModel)]="formulario.tolerancia_ruido" />
-        </label>
-        <label class="field field--full">
-          <span>Un poco más sobre ti</span>
-          <textarea name="descripcion" rows="4" maxlength="1000"
-            placeholder="Cuéntales qué te gusta hacer o cómo imaginas tu hogar ideal."
-            [(ngModel)]="formulario.descripcion"></textarea>
-        </label>
-        <div class="checkboxes field--full">
-          <label><input type="checkbox" name="tiene_mascotas" [(ngModel)]="formulario.tiene_mascotas" /> Tengo mascotas</label>
-          <label><input type="checkbox" name="acepta_mascotas" [(ngModel)]="formulario.acepta_mascotas" /> Acepto vivir con mascotas</label>
+    <div class="perfil__campos">
+      <section class="grupo">
+        <h2>Qué estás buscando</h2>
+        <div class="grupo__rejilla">
+          <div class="campo">
+            <label for="presupuesto">Presupuesto mensual (COP)</label>
+            <input id="presupuesto" type="number" name="presupuesto" min="0" step="10000" required [(ngModel)]="formulario.presupuesto" />
+          </div>
+          <div class="campo">
+            <label for="zona">Barrio en Pasto</label>
+            <select id="zona" name="zona" required [(ngModel)]="formulario.zona">
+              <option *ngIf="zonaAnterior" [value]="zonaAnterior">{{ zonaAnterior }} (actual)</option>
+              <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
+                <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
+              </optgroup>
+              <option [value]="otroBarrio">{{ otroBarrio }}</option>
+            </select>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <p class="feedback feedback--error" *ngIf="error" role="alert">{{ error }}</p>
-    <p class="feedback feedback--success" *ngIf="exito" role="status">{{ exito }}</p>
-    <div class="form-actions">
-      <a class="secondary-button" routerLink="/dashboard">Cancelar</a>
-      <button type="submit" [disabled]="guardando">
-        {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
-      </button>
+      <section class="grupo">
+        <h2>Cómo vives</h2>
+        <div class="grupo__rejilla">
+          <div class="campo">
+            <label for="horario">Horario</label>
+            <select id="horario" name="horario" [(ngModel)]="formulario.horario">
+              <option value="madrugador">Madrugador</option>
+              <option value="nocturno">Nocturno</option>
+              <option value="mixto">Mixto</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="visitas">Visitas en casa</label>
+            <select id="visitas" name="frecuencia_visitas" [(ngModel)]="formulario.frecuencia_visitas">
+              <option value="nunca">Nunca</option>
+              <option value="ocasional">Ocasional</option>
+              <option value="frecuente">Frecuente</option>
+            </select>
+          </div>
+          <app-escala nombre="limpieza" etiqueta="Orden en casa" minimo="Relajado" maximo="Muy ordenado" [(valor)]="formulario.limpieza"></app-escala>
+          <app-escala nombre="tolerancia_ruido" etiqueta="Ruido" minimo="Necesito silencio" maximo="No me molesta" [(valor)]="formulario.tolerancia_ruido"></app-escala>
+        </div>
+        <div class="grupo__casillas">
+          <label class="casilla"><input type="checkbox" name="tiene_mascotas" [(ngModel)]="formulario.tiene_mascotas" /> Tengo mascotas</label>
+          <label class="casilla"><input type="checkbox" name="acepta_mascotas" [(ngModel)]="formulario.acepta_mascotas" /> Acepto vivir con mascotas</label>
+        </div>
+      </section>
+
+      <section class="grupo">
+        <h2>Sobre ti</h2>
+        <div class="campo">
+          <label for="descripcion">Unas líneas para quien te lea</label>
+          <textarea id="descripcion" name="descripcion" rows="4" maxlength="1000"
+            placeholder="Qué haces, qué te gusta y cómo imaginas la casa."
+            [(ngModel)]="formulario.descripcion"></textarea>
+        </div>
+      </section>
+
+      <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
+      <p class="aviso aviso--exito" *ngIf="exito" role="status">{{ exito }}</p>
+
+      <div class="perfil__acciones">
+        <button class="btn btn--primario" type="submit" [disabled]="guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+        <a class="btn btn--secundario" routerLink="/dashboard">Cancelar</a>
+      </div>
     </div>
   </form>
 
-  <p class="feedback feedback--error" *ngIf="!cargando && !formulario && error" role="alert">{{ error }}</p>
+  <p class="aviso aviso--error" *ngIf="!cargando && !formulario && error" role="alert">{{ error }}</p>
 </main>
