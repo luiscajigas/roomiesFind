@@ -5,7 +5,8 @@ import { RouterLink } from '@angular/router';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { EscalaComponent } from '../../components/escala/escala.component';
-import { COMUNAS_PASTO, OTRO_BARRIO, esBarrioDeLaLista } from '../../data/barrios-pasto';
+import { SelectorBarrioComponent } from '../../components/selector-barrio/selector-barrio.component';
+import { esBarrioDeLaLista } from '../../data/barrios-pasto';
 import { Perfil } from '../../models/perfil.model';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
@@ -17,12 +18,10 @@ type PerfilEditable = Pick<Perfil,
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, EscalaComponent],
+  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, EscalaComponent, SelectorBarrioComponent],
   templateUrl: './perfil.component.html'
 })
 export class PerfilComponent implements OnInit {
-  readonly comunas = COMUNAS_PASTO;
-  readonly otroBarrio = OTRO_BARRIO;
   /** Zona escrita a mano antes de existir la lista; se conserva hasta que elija un barrio. */
   zonaAnterior: string | null = null;
   perfil: Perfil | null = null;

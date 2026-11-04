@@ -33,13 +33,7 @@
           </div>
           <div class="campo">
             <label for="zona">Barrio en Pasto</label>
-            <select id="zona" name="zona" required [(ngModel)]="formulario.zona">
-              <option *ngIf="zonaAnterior" [value]="zonaAnterior">{{ zonaAnterior }} (actual)</option>
-              <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
-                <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
-              </optgroup>
-              <option [value]="otroBarrio">{{ otroBarrio }}</option>
-            </select>
+            <app-selector-barrio idCampo="zona" [(valor)]="formulario.zona" [zonaActual]="zonaAnterior"></app-selector-barrio>
           </div>
         </div>
       </section>
