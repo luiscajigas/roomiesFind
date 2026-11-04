@@ -1,70 +1,48 @@
-<main class="companions-page">
+<main class="pagina">
   <app-header></app-header>
 
-  <section class="page-intro">
-    <a class="companions-back-link" routerLink="/dashboard">← Volver al inicio</a>
-    <p class="eyebrow">Personas para conocer</p>
-    <h1>Descubrir compañeros</h1>
-    <p>Explora perfiles y conoce qué hábitos comparten y qué temas podrían conversar antes de vivir juntos.</p>
+  <section class="encabezado-pagina">
+    <h1>Compañeros</h1>
+    <p>Mira en qué se parecen y qué conviene hablar antes de vivir juntos.</p>
   </section>
 
-  <div class="companions-loading" *ngIf="cargando" role="status">
-    <span class="companions-loading__spinner" aria-hidden="true"></span>
-    <p>Calculando compatibilidad...</p>
+  <div class="cargando" *ngIf="cargando" role="status">
+    <span class="giro" aria-hidden="true"></span>
+    <p>Comparando hábitos...</p>
   </div>
 
-  <p class="feedback feedback--error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
 
-  <section class="candidate-grid" *ngIf="!cargando && !error && resultados.length">
-    <article class="candidate-card" *ngFor="let resultado of resultados; let i = index" [style.animation-delay.ms]="i * 70">
-      <div class="candidate-card__top">
-        <div class="companion-avatar">
-          <span>{{ iniciales(resultado.candidato.nombre) }}</span>
-          <img *ngIf="urlFoto(resultado.candidato) as src" [src]="src"
-            [alt]="'Foto de ' + resultado.candidato.nombre"
-            (error)="ocultarImagen($event)" />
-        </div>
-        <div class="candidate-card__identity">
-          <h2>{{ resultado.candidato.nombre }}</h2>
-          <p>{{ resultado.candidato.zona }} <span>·</span> {{ resultado.candidato.horario }}</p>
-        </div>
-        <div class="score-wrap">
-          <div class="score-ring" [style.--score]="resultado.score"
-            [class.score-ring--alto]="resultado.score >= 70"
-            [class.score-ring--medio]="resultado.score >= 40 && resultado.score < 70"
-            [class.score-ring--bajo]="resultado.score < 40"
-            role="img" [attr.aria-label]="resultado.score + '% de compatibilidad con ' + resultado.candidato.nombre">
-            <strong>{{ resultado.score }}<small>%</small></strong>
-          </div>
-          <span class="score-ring__label">compatible</span>
-        </div>
+  <ng-container *ngIf="!cargando && !error && resultados.length && miPerfil as yo">
+    <div class="filtros">
+      <div class="campo">
+        <label for="filtro-comuna">Comuna</label>
+        <select id="filtro-comuna" [(ngModel)]="comuna">
+          <option value="">Todas</option>
+          <option *ngFor="let opcion of comunasDisponibles" [value]="opcion">{{ opcion }}</option>
+        </select>
       </div>
-
-      <p class="candidate-card__description" *ngIf="resultado.candidato.descripcion">
-        “{{ resultado.candidato.descripcion }}”
+      <div class="campo">
+        <label for="filtro-orden">Ordenar por</label>
+        <select id="filtro-orden" [(ngModel)]="orden">
+          <option value="compatibilidad">Compatibilidad</option>
+          <option value="presupuesto">Presupuesto parecido al mío</option>
+          <option value="nombre">Nombre</option>
+        </select>
+      </div>
+      <p class="filtros__cuenta" role="status">
+        {{ visibles.length }} {{ visibles.length === 1 ? 'persona' : 'personas' }}
       </p>
+    </div>
 
-      <div class="candidate-card__details">
-        <span>Presupuesto <strong>${{ resultado.candidato.presupuesto | number }}</strong></span>
-        <span>Limpieza <strong>{{ resultado.candidato.limpieza }}/5</strong></span>
-        <span>Visitas <strong>{{ resultado.candidato.frecuencia_visitas }}</strong></span>
-      </div>
+    <section class="rejilla-companeros" *ngIf="visibles.length">
+      <app-tarjeta-companero *ngFor="let resultado of visibles" [resultado]="resultado" [yo]="yo"></app-tarjeta-companero>
+    </section>
+    <p class="vacio" *ngIf="!visibles.length">Nadie busca en esa comuna por ahora.</p>
+  </ng-container>
 
-      <div class="match-lists">
-        <div *ngIf="resultado.coincidencias.length">
-          <h3>En común</h3>
-          <ul><li *ngFor="let coincidencia of resultado.coincidencias">{{ coincidencia }}</li></ul>
-        </div>
-        <div *ngIf="resultado.conflictos.length">
-          <h3>Para conversar</h3>
-          <ul><li *ngFor="let conflicto of resultado.conflictos">{{ conflicto }}</li></ul>
-        </div>
-      </div>
-    </article>
-  </section>
-
-  <section class="empty-state" *ngIf="!cargando && !error && !resultados.length">
-    <h2>Tu comunidad está creciendo</h2>
-    <p>Cuando más personas creen su perfil, aparecerán aquí tus posibles compañeros de hogar.</p>
+  <section class="vacio" *ngIf="!cargando && !error && !resultados.length">
+    <h2>Todavía no hay con quién compararte</h2>
+    <p>Cuando más personas creen su perfil, aparecerán aquí.</p>
   </section>
 </main>

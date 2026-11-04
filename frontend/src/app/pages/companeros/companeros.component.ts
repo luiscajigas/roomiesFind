@@ -1,23 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
+import { TarjetaCompaneroComponent } from '../../components/tarjeta-companero/tarjeta-companero.component';
+import { comunaDeBarrio } from '../../data/barrios-pasto';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 import { CompatibilidadService } from '../../services/compatibilidad.service';
 import { PerfilService } from '../../services/perfil.service';
 
+type Orden = 'compatibilidad' | 'presupuesto' | 'nombre';
+
 @Component({
   selector: 'app-companeros',
   standalone: true,
-  imports: [CommonModule, RouterLink, AppHeaderComponent],
+  imports: [CommonModule, FormsModule, AppHeaderComponent, TarjetaCompaneroComponent],
   templateUrl: './companeros.component.html'
 })
 export class CompanerosComponent implements OnInit, OnDestroy {
   resultados: ResultadoCompatibilidad[] = [];
+  miPerfil: Perfil | null = null;
   cargando = true;
   error: string | null = null;
+  comuna = '';
+  orden: Orden = 'compatibilidad';
   private worker: Worker | null = null;
-  private versionFoto = Date.now();
 
   constructor(
     private perfiles: PerfilService,
@@ -39,7 +45,10 @@ export class CompanerosComponent implements OnInit, OnDestroy {
     }
 
     this.perfiles.miPerfil().subscribe({
-      next: (miPerfil) => this.cargarCandidatos(miPerfil),
+      next: (miPerfil) => {
+        this.miPerfil = miPerfil;
+        this.cargarCandidatos(miPerfil);
+      },
       error: () => {
         this.error = 'No se pudo cargar tu perfil. Intenta volver a iniciar sesión.';
         this.cargando = false;
@@ -51,17 +60,28 @@ export class CompanerosComponent implements OnInit, OnDestroy {
     this.worker?.terminate();
   }
 
-  iniciales(nombre: string): string {
-    return nombre.trim().split(/\s+/).filter(Boolean).slice(0, 2)
-      .map((parte) => parte.charAt(0)).join('').toUpperCase() || '?';
+  /** Solo se ofrecen las comunas donde hay alguien buscando. */
+  get comunasDisponibles(): string[] {
+    const comunas = new Set(this.resultados.map((r) => comunaDeBarrio(r.candidato.zona)));
+    return [...comunas]
+      .filter((comuna): comuna is string => comuna !== null)
+      .sort((a, b) => a.localeCompare(b, 'es', { numeric: true }));
   }
 
-  urlFoto(perfil: Perfil): string | null {
-    return this.perfiles.urlFoto(perfil.foto_url, this.versionFoto);
-  }
+  get visibles(): ResultadoCompatibilidad[] {
+    const filtrados = this.comuna
+      ? this.resultados.filter((r) => comunaDeBarrio(r.candidato.zona) === this.comuna)
+      : this.resultados;
 
-  ocultarImagen(event: Event): void {
-    (event.target as HTMLImageElement).hidden = true;
+    if (this.orden === 'nombre') {
+      return [...filtrados].sort((a, b) => a.candidato.nombre.localeCompare(b.candidato.nombre, 'es'));
+    }
+    if (this.orden === 'presupuesto') {
+      const mio = this.miPerfil?.presupuesto ?? 0;
+      return [...filtrados].sort((a, b) =>
+        Math.abs(a.candidato.presupuesto - mio) - Math.abs(b.candidato.presupuesto - mio));
+    }
+    return filtrados;
   }
 
   private cargarCandidatos(miPerfil: Perfil): void {
