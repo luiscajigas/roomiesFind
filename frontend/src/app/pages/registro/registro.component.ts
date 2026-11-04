@@ -4,21 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { EscalaComponent } from '../../components/escala/escala.component';
-import { COMUNAS_PASTO, OTRO_BARRIO } from '../../data/barrios-pasto';
+import { SelectorBarrioComponent } from '../../components/selector-barrio/selector-barrio.component';
 import { AuthService, DatosRegistro } from '../../services/auth.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AvatarComponent, EscalaComponent],
+  imports: [CommonModule, FormsModule, RouterLink, AvatarComponent, EscalaComponent, SelectorBarrioComponent],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
 export class RegistroComponent implements OnDestroy {
   readonly maximoFotoBytes = 5 * 1024 * 1024;
   readonly tiposFotoPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-  readonly comunas = COMUNAS_PASTO;
-  readonly otroBarrio = OTRO_BARRIO;
 
   datos: DatosRegistro = {
     nombre: '',

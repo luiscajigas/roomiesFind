@@ -52,13 +52,7 @@
           </div>
           <div class="campo">
             <label for="reg-barrio">Barrio en Pasto</label>
-            <select id="reg-barrio" [(ngModel)]="datos.zona">
-              <option value="" disabled>Elige un barrio</option>
-              <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
-                <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
-              </optgroup>
-              <option [value]="otroBarrio">{{ otroBarrio }}</option>
-            </select>
+            <app-selector-barrio idCampo="reg-barrio" [(valor)]="datos.zona"></app-selector-barrio>
           </div>
         </div>
       </section>
