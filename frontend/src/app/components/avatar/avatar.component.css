@@ -1,0 +1,25 @@
+app-avatar { display: inline-flex; flex: 0 0 auto; }
+
+.avatar {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 28%;
+  background: color-mix(in srgb, var(--tono) 20%, var(--panel));
+  color: var(--tono);
+  font-weight: 600;
+}
+
+.avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--panel-raised);
+  object-fit: cover;
+}
+
+.avatar--s { width: 2rem; height: 2rem; font-size: 0.72rem; }
+.avatar--m { width: 3.25rem; height: 3.25rem; font-size: 1.05rem; }
+.avatar--l { width: 5.5rem; height: 5.5rem; font-size: 1.7rem; }
