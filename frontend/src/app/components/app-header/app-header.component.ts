@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { PerfilService } from '../../services/perfil.service';
 import { ThemeService } from '../../services/theme.service';
 
 @Component({
@@ -12,12 +13,14 @@ import { ThemeService } from '../../services/theme.service';
 })
 export class AppHeaderComponent {
   menuAbierto = false;
+  readonly foto$ = this.perfil.fotoActual$;
 
   @ViewChild('menuContainer') private menuContainer?: ElementRef<HTMLElement>;
   @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
 
   constructor(
     private auth: AuthService,
+    private perfil: PerfilService,
     private router: Router,
     private theme: ThemeService
   ) {}
@@ -35,6 +38,10 @@ export class AppHeaderComponent {
       .map((parte) => parte.charAt(0)).join('').toUpperCase() || '?';
   }
 
+  ocultarImagen(event: Event): void {
+    (event.target as HTMLImageElement).hidden = true;
+  }
+
   toggleMenu(): void {
     this.menuAbierto = !this.menuAbierto;
   }
@@ -50,6 +57,7 @@ export class AppHeaderComponent {
   salir(): void {
     this.cerrarMenu();
     this.auth.logout();
+    this.perfil.limpiarFotoActual();
     this.router.navigate(['/login']);
   }
 

@@ -19,7 +19,11 @@
     </button>
     <nav id="account-menu" class="account-menu" *ngIf="menuAbierto" aria-label="Menú de opciones">
       <div class="account-menu__user">
-        <span class="account-menu__avatar">{{ iniciales(usuario.nombre) }}</span>
+        <span class="account-menu__avatar">
+          {{ iniciales(usuario.nombre) }}
+          <img *ngIf="foto$ | async as foto" [src]="foto" alt=""
+            referrerpolicy="no-referrer" (error)="ocultarImagen($event)" />
+        </span>
         <span class="account-menu__identity">
           <strong>{{ usuario.nombre }}</strong>
           <small>{{ usuario.email }}</small>
