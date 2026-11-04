@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ComparadorComponent, HabitosComparables } from '../../components/comparador/comparador.component';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ComparadorComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -18,6 +19,9 @@ export class LoginComponent {
   servidorLento = false;
   error: string | null = null;
   private temporizadorLento: ReturnType<typeof setTimeout> | null = null;
+
+  readonly ejemploYo: HabitosComparables = { nombre: 'Tú', presupuesto: 650000, limpieza: 4, tolerancia_ruido: 2 };
+  readonly ejemploOtro: HabitosComparables = { nombre: 'Ana', presupuesto: 600000, limpieza: 4, tolerancia_ruido: 3 };
 
   constructor(private auth: AuthService, private router: Router) {}
 
