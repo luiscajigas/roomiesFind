@@ -27,6 +27,11 @@ export const COMUNAS_PASTO: ComunaPasto[] = [
   { nombre: 'Comuna 12', barrios: ['Altos de La Carolina', 'Balcones del Este', 'Campiña de Oriente', 'Carlos Pizarro', 'Cujacal Bajo', 'El Manantial', 'El Paraíso', 'Fray Ezequiel Moreno Díaz', 'Gualcalá', 'La Carolina', 'La Florida', 'La Josefina', 'Las Orquídeas', 'María Paz', 'Monserrat', 'Parque de Baviera', 'San Diego Norte', 'San Mateo', 'Sena', 'Simón Bolívar', 'Sindagua', 'Villa Adriana María', 'Villa Ángela', 'Villa Colombia', 'Villa del Prado', 'Villa Recreo', 'Villa Rocío'] }
 ];
 
+/** Comuna a la que pertenece un barrio, o null si no está en la lista. */
+export function comunaDeBarrio(barrio: string): string | null {
+  return COMUNAS_PASTO.find((comuna) => comuna.barrios.includes(barrio))?.nombre ?? null;
+}
+
 export function esBarrioDeLaLista(zona: string): boolean {
   return zona === OTRO_BARRIO || COMUNAS_PASTO.some((comuna) => comuna.barrios.includes(zona));
 }
