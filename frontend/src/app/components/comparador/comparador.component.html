@@ -1,0 +1,24 @@
+<div class="comparador">
+  <p class="comparador__leyenda">
+    <span class="comparador__clave comparador__clave--yo">Tú</span>
+    <span class="comparador__clave comparador__clave--otro">{{ primerNombre }}</span>
+  </p>
+
+  <div class="comparador__fila" *ngFor="let fila of filas" role="img"
+    [attr.aria-label]="fila.etiqueta + ': tú ' + fila.yo + ' de 5, ' + primerNombre + ' ' + fila.otro + ' de 5'">
+    <span class="comparador__etiqueta">{{ fila.etiqueta }}</span>
+    <div class="comparador__escala">
+      <div class="comparador__pista">
+        <span class="comparador__punto comparador__punto--otro" [style.left.%]="posicion(fila.otro)"></span>
+        <span class="comparador__punto comparador__punto--yo"
+          [class.comparador__punto--junto]="fila.yo === fila.otro" [style.left.%]="posicion(fila.yo)"></span>
+      </div>
+      <div class="comparador__extremos"><span>{{ fila.minimo }}</span><span>{{ fila.maximo }}</span></div>
+    </div>
+  </div>
+
+  <p class="comparador__presupuesto">
+    <span class="comparador__etiqueta">Presupuesto</span>
+    <span><strong>${{ presupuestoOtro }}</strong><small>{{ diferenciaPresupuesto }}</small></span>
+  </p>
+</div>

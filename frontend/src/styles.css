@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import './theme.styles.css';
 @import './app/components/avatar/avatar.component.css';
+@import './app/components/comparador/comparador.component.css';
 @import './app/pages/auth.styles.css';
 @import './app/pages/dashboard/dashboard.styles.css';
 @import './app/pages/registro/registro.styles.css';

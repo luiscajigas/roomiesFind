@@ -1,0 +1,60 @@
+app-comparador { display: block; min-width: 0; }
+
+.comparador { display: grid; gap: 0.85rem; font-size: 0.85rem; }
+
+.comparador__leyenda { display: flex; gap: 1rem; margin: 0; color: var(--muted); font-size: 0.8rem; }
+.comparador__clave { display: inline-flex; align-items: center; gap: 0.4rem; }
+.comparador__clave::before { content: ''; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--color-punto); }
+.comparador__clave--yo { --color-punto: var(--accent-2); }
+.comparador__clave--otro { --color-punto: var(--accent); }
+
+.comparador__fila, .comparador__presupuesto {
+  display: grid;
+  grid-template-columns: 5.75rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: start;
+  margin: 0;
+}
+
+.comparador__etiqueta { color: var(--muted); }
+
+.comparador__escala { min-width: 0; padding-top: 0.5rem; }
+
+.comparador__pista {
+  position: relative;
+  height: 2px;
+  margin: 0 0.45rem;
+  background: var(--border);
+}
+
+.comparador__punto {
+  position: absolute;
+  top: 50%;
+  width: 0.9rem;
+  height: 0.9rem;
+  box-sizing: border-box;
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  background: var(--color-punto);
+  transform: translate(-50%, -50%);
+}
+
+.comparador__punto--yo { --color-punto: var(--accent-2); }
+.comparador__punto--otro { --color-punto: var(--accent); }
+
+/* Si coinciden se ven los dos colores en un solo punto. */
+.comparador__punto--junto {
+  background: linear-gradient(90deg, var(--accent-2) 50%, var(--accent) 50%);
+}
+
+.comparador__extremos {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.comparador__presupuesto strong { display: block; font-weight: 600; }
+.comparador__presupuesto small { display: block; color: var(--muted); font-size: 0.78rem; }
