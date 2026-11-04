@@ -7,8 +7,8 @@
       <h1>Un buen hogar empieza con una buena <span>convivencia.</span></h1>
       <p class="intro__copy">Revisa tu perfil y descubre personas compatibles con tu forma de vivir.</p>
       <div class="intro__actions">
-        <a class="intro__action intro__action--primary" href="#companeros">Ver coincidencias <span aria-hidden="true">↓</span></a>
-        <a class="intro__action" href="#mi-perfil">Revisar mi perfil</a>
+        <a class="intro__action intro__action--primary" routerLink="/dashboard" fragment="companeros" (click)="irASeccion('companeros')">Ver coincidencias <span aria-hidden="true">↓</span></a>
+        <a class="intro__action" routerLink="/dashboard" fragment="mi-perfil" (click)="irASeccion('mi-perfil')">Revisar mi perfil</a>
       </div>
     </div>
     <aside class="search-summary" aria-label="Resumen de búsqueda">

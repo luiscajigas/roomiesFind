@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AuthService } from '../../services/auth.service';
@@ -10,7 +11,7 @@ import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, AppHeaderComponent],
+  imports: [CommonModule, RouterLink, AppHeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -99,6 +100,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             err.error?.error || 'No se pudo generar la explicación. Cierra y vuelve a intentarlo.';
         }
       });
+  }
+
+  irASeccion(id: string): void {
+    document.getElementById(id)?.scrollIntoView({ block: 'start' });
   }
 
   get usuario() {
