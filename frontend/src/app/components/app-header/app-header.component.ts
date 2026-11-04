@@ -13,7 +13,6 @@ import { ThemeService } from '../../services/theme.service';
 })
 export class AppHeaderComponent {
   menuAbierto = false;
-  readonly foto$ = this.perfil.fotoActual$;
 
   @ViewChild('menuContainer') private menuContainer?: ElementRef<HTMLElement>;
   @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
@@ -24,6 +23,10 @@ export class AppHeaderComponent {
     private router: Router,
     private theme: ThemeService
   ) {}
+
+  get foto$() {
+    return this.perfil.fotoActual$;
+  }
 
   get usuario() {
     return this.auth.usuarioActual;
