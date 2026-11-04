@@ -205,3 +205,6 @@ app-dashboard button.secundario span { color: var(--accent-2); font-size: 1rem; 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Deja espacio para el encabezado fijo al saltar a una sección. */
+#mi-perfil, #companeros { scroll-margin-top: 6rem; }
