@@ -74,10 +74,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.worker?.terminate();
+    this.detenerLectura();
   }
 
   verExplicacion(resultado: ResultadoCompatibilidad): void {
     const id = resultado.candidato.id;
+    this.detenerLectura();
 
     if (this.explicacionAbierta === id) {
       this.explicacionAbierta = null;
