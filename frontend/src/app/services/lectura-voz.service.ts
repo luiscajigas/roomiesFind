@@ -3,10 +3,11 @@ import { Injectable, NgZone } from '@angular/core';
 /**
  * Lee textos en voz alta con la voz del navegador (Web Speech API).
  * Se envía frase por frase porque algunos navegadores cortan los textos largos.
+ * Solo suena una lectura a la vez: empezar otra avisa a la anterior que terminó.
  */
 @Injectable({ providedIn: 'root' })
 export class LecturaVozService {
-  private lecturaActual = 0;
+  private alTerminarActual: (() => void) | null = null;
 
   constructor(private zona: NgZone) {}
 
@@ -17,12 +18,12 @@ export class LecturaVozService {
   leer(texto: string, alTerminar: () => void): void {
     if (!this.disponible) return;
     this.detener();
-    const lectura = this.lecturaActual;
+    this.alTerminarActual = alTerminar;
+
     const voz = this.vozEnEspanol();
     const frases = texto.split(/(?<=[.!?…])\s+/).filter(Boolean);
-
     const terminar = () => {
-      if (lectura === this.lecturaActual) this.zona.run(alTerminar);
+      if (this.alTerminarActual === alTerminar) this.finalizar();
     };
 
     frases.forEach((frase, indice) => {
@@ -37,8 +38,14 @@ export class LecturaVozService {
 
   detener(): void {
     if (!this.disponible) return;
-    this.lecturaActual++;
     window.speechSynthesis.cancel();
+    this.finalizar();
+  }
+
+  private finalizar(): void {
+    const alTerminar = this.alTerminarActual;
+    this.alTerminarActual = null;
+    if (alTerminar) this.zona.run(alTerminar);
   }
 
   private vozEnEspanol(): SpeechSynthesisVoice | undefined {
