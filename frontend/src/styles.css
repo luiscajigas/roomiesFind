@@ -3,6 +3,7 @@
 @import './app/components/avatar/avatar.component.css';
 @import './app/components/comparador/comparador.component.css';
 @import './app/components/escala/escala.component.css';
+@import './app/components/tarjeta-companero/tarjeta-companero.component.css';
 @import './app/pages/auth.styles.css';
 @import './app/pages/dashboard/dashboard.styles.css';
 @import './app/pages/registro/registro.styles.css';

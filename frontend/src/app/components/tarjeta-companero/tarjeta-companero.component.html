@@ -1,0 +1,60 @@
+<article class="tarjeta" [class.tarjeta--destacada]="destacada">
+  <header class="tarjeta__cabecera">
+    <app-avatar [nombre]="candidato.nombre" [foto]="foto" [alt]="'Foto de ' + candidato.nombre"></app-avatar>
+    <div class="tarjeta__identidad">
+      <h3>{{ candidato.nombre }}</h3>
+      <p>{{ candidato.zona }} · <span class="tarjeta__horario">{{ candidato.horario }}</span></p>
+    </div>
+    <div class="puntaje" [ngClass]="'puntaje--' + nivel.clase">
+      <strong>{{ resultado.score }}<small>%</small></strong>
+      <span>{{ nivel.texto }}</span>
+    </div>
+  </header>
+
+  <p class="tarjeta__descripcion" *ngIf="candidato.descripcion">{{ candidato.descripcion }}</p>
+
+  <div class="tarjeta__cuerpo">
+    <app-comparador [yo]="yo" [otro]="candidato"></app-comparador>
+
+    <div class="tarjeta__razones">
+      <div *ngIf="resultado.coincidencias.length">
+        <h4>En común</h4>
+        <ul class="razones razones--comun"><li *ngFor="let razon of resultado.coincidencias">{{ razon }}</li></ul>
+      </div>
+      <div *ngIf="resultado.conflictos.length">
+        <h4>Para conversar</h4>
+        <ul class="razones razones--conversar"><li *ngFor="let razon of resultado.conflictos">{{ razon }}</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="tarjeta__pie">
+    <button class="tarjeta__abrir" type="button" (click)="alternarExplicacion()" [attr.aria-expanded]="explicacionAbierta">
+      {{ explicacionAbierta ? 'Ocultar explicación' : '¿Por qué hacemos match?' }}
+      <svg [class.girado]="explicacionAbierta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+    </button>
+
+    <div class="explicacion" *ngIf="explicacionAbierta" aria-live="polite">
+      <p class="explicacion__estado" *ngIf="cargandoExplicacion">
+        <span class="giro" aria-hidden="true"></span>
+        Escribiendo la explicación...
+      </p>
+      <p class="aviso aviso--error" *ngIf="errorExplicacion" role="alert">{{ errorExplicacion }}</p>
+      <ng-container *ngIf="explicacion as respuesta">
+        <p>{{ respuesta.explicacion }}</p>
+        <div class="explicacion__pie">
+          <small>{{ respuesta.desdeCache ? 'Guardada de una consulta anterior.' : 'Escrita por IA a partir del puntaje.' }}</small>
+          <button *ngIf="voz.disponible" class="explicacion__voz" type="button"
+            [class.explicacion__voz--activa]="leyendo" [attr.aria-pressed]="leyendo"
+            (click)="alternarLectura(respuesta.explicacion)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="2" width="6" height="12" rx="3" />
+              <path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8" />
+            </svg>
+            {{ leyendo ? 'Detener lectura' : 'Escuchar' }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,112 @@
+app-tarjeta-companero { display: block; min-width: 0; }
+
+.tarjeta {
+  display: flex;
+  height: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  background: var(--panel);
+  transition: border-color 140ms ease;
+}
+
+.tarjeta:hover { border-color: color-mix(in srgb, var(--border) 55%, var(--muted)); }
+
+.tarjeta__cabecera { display: flex; align-items: flex-start; gap: 0.85rem; }
+.tarjeta__identidad { min-width: 0; flex: 1; }
+.tarjeta__identidad h3 { font-size: 1.2rem; overflow-wrap: anywhere; }
+.tarjeta__identidad p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.85rem; }
+.tarjeta__horario { text-transform: capitalize; }
+
+.puntaje { display: flex; flex: 0 0 auto; flex-direction: column; align-items: flex-end; text-align: right; }
+.puntaje strong { color: var(--tono-puntaje); font-family: var(--font-display); font-size: 1.9rem; font-weight: 400; line-height: 1; }
+.puntaje small { margin-left: 0.05rem; font-size: 0.55em; }
+.puntaje span { margin-top: 0.25rem; color: var(--muted); font-size: 0.72rem; white-space: nowrap; }
+.puntaje--alto { --tono-puntaje: var(--green); }
+.puntaje--medio { --tono-puntaje: var(--yellow); }
+.puntaje--bajo { --tono-puntaje: var(--red); }
+
+.tarjeta__descripcion { margin: 0; font-size: 0.95rem; }
+
+.tarjeta__cuerpo { display: grid; gap: 1.1rem; }
+
+.tarjeta__razones { display: grid; gap: 0.85rem; }
+.tarjeta__razones h4 { margin: 0 0 0.35rem; font-size: 0.85rem; font-weight: 600; }
+
+.razones { display: grid; gap: 0.25rem; margin: 0; padding: 0; color: var(--muted); font-size: 0.85rem; list-style: none; }
+.razones li { position: relative; padding-left: 1.05rem; }
+.razones li::before { content: ''; position: absolute; top: 0.55em; left: 0.1rem; width: 0.4rem; height: 0.4rem; border-radius: 50%; }
+.razones--comun li::before { background: var(--accent-2); }
+.razones--conversar li::before { background: var(--yellow); }
+
+.tarjeta__pie { margin-top: auto; }
+
+.tarjeta__abrir {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent-2);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tarjeta__abrir:hover { color: var(--text); }
+.tarjeta__abrir svg { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; transition: transform 160ms ease; }
+.tarjeta__abrir svg.girado { transform: rotate(180deg); }
+
+.explicacion { margin-top: 0.85rem; font-size: 0.95rem; line-height: 1.6; }
+.explicacion > p { margin: 0; }
+.explicacion__estado { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); }
+.explicacion__pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem; margin-top: 0.85rem; }
+.explicacion__pie small { color: var(--muted); font-size: 0.75rem; }
+
+.explicacion__voz {
+  display: inline-flex;
+  min-height: 2.25rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.explicacion__voz:hover { border-color: var(--muted); }
+.explicacion__voz svg { width: 1rem; height: 1rem; }
+.explicacion__voz--activa, .explicacion__voz--activa:hover { border-color: var(--accent); background: rgba(var(--accent-rgb), 0.12); color: var(--accent); }
+
+/* La mejor opción aprovecha el ancho: comparador a un lado, razones al otro. */
+.tarjeta--destacada { padding: 1.6rem; border-color: rgba(var(--accent-rgb), 0.55); }
+.tarjeta--destacada:hover { border-color: var(--accent); }
+.tarjeta--destacada .tarjeta__identidad h3 { font-size: 1.5rem; }
+.tarjeta--destacada .puntaje strong { font-size: 2.6rem; }
+.tarjeta--destacada .tarjeta__cuerpo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+
+@media (max-width: 720px) {
+  .tarjeta--destacada { padding: 1.35rem; }
+  .tarjeta--destacada .tarjeta__cuerpo { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
+  .tarjeta--destacada .tarjeta__identidad h3 { font-size: 1.2rem; }
+  .tarjeta--destacada .puntaje strong { font-size: 1.9rem; }
+}
+
+@media (max-width: 420px) {
+  .tarjeta { padding: 1.1rem; }
+}
