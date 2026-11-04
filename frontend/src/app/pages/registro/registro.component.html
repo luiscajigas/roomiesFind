@@ -25,16 +25,16 @@
 
     <div class="grid">
       <div class="campo">
-        <label>Nombre</label>
-        <input type="text" [(ngModel)]="datos.nombre" placeholder="Tu nombre" />
+        <label for="reg-nombre">Nombre</label>
+        <input id="reg-nombre" type="text" [(ngModel)]="datos.nombre" placeholder="Tu nombre" />
       </div>
       <div class="campo">
-        <label>Correo</label>
-        <input type="email" [(ngModel)]="datos.email" placeholder="tucorreo@ejemplo.com" />
+        <label for="reg-correo">Correo</label>
+        <input id="reg-correo" type="email" [(ngModel)]="datos.email" placeholder="tucorreo@ejemplo.com" />
       </div>
       <div class="campo">
-        <label>Contraseña</label>
-        <input type="password" [(ngModel)]="datos.password" placeholder="••••••••" />
+        <label for="reg-clave">Contraseña</label>
+        <input id="reg-clave" type="password" [(ngModel)]="datos.password" placeholder="••••••••" />
       </div>
       <div class="campo campo--full">
         <label for="foto">Foto de perfil (opcional)</label>
@@ -58,12 +58,12 @@
         </div>
       </div>
       <div class="campo">
-        <label>Presupuesto mensual (COP)</label>
-        <input type="number" [(ngModel)]="datos.presupuesto" step="10000" />
+        <label for="reg-presupuesto">Presupuesto mensual (COP)</label>
+        <input id="reg-presupuesto" type="number" [(ngModel)]="datos.presupuesto" step="10000" />
       </div>
       <div class="campo">
-        <label>Barrio donde buscas (Pasto)</label>
-        <select [(ngModel)]="datos.zona">
+        <label for="reg-barrio">Barrio donde buscas (Pasto)</label>
+        <select id="reg-barrio" [(ngModel)]="datos.zona">
           <option value="" disabled>Elige un barrio</option>
           <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
             <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
@@ -72,8 +72,8 @@
         </select>
       </div>
       <div class="campo">
-        <label>Horario</label>
-        <select [(ngModel)]="datos.horario">
+        <label for="reg-horario">Horario</label>
+        <select id="reg-horario" [(ngModel)]="datos.horario">
           <option value="madrugador">Madrugador</option>
           <option value="nocturno">Nocturno</option>
           <option value="mixto">Mixto</option>
@@ -88,8 +88,8 @@
         <input type="range" min="1" max="5" [(ngModel)]="datos.tolerancia_ruido" />
       </div>
       <div class="campo">
-        <label>Frecuencia de visitas</label>
-        <select [(ngModel)]="datos.frecuencia_visitas">
+        <label for="reg-visitas">Frecuencia de visitas</label>
+        <select id="reg-visitas" [(ngModel)]="datos.frecuencia_visitas">
           <option value="nunca">Nunca</option>
           <option value="ocasional">Ocasional</option>
           <option value="frecuente">Frecuente</option>
