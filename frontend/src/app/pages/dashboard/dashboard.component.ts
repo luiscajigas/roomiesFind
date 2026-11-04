@@ -3,16 +3,20 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
+import { AvatarComponent } from '../../components/avatar/avatar.component';
+import { TarjetaCompaneroComponent } from '../../components/tarjeta-companero/tarjeta-companero.component';
 import { AuthService } from '../../services/auth.service';
-import { LecturaVozService } from '../../services/lectura-voz.service';
 import { PerfilService } from '../../services/perfil.service';
-import { CompatibilidadService, RespuestaExplicacion } from '../../services/compatibilidad.service';
+import { CompatibilidadService } from '../../services/compatibilidad.service';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
+
+const PUNTAJE_BUENA_OPCION = 65;
+const OTRAS_EN_INICIO = 4;
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, AppHeaderComponent],
+  imports: [CommonModule, RouterLink, AppHeaderComponent, AvatarComponent, TarjetaCompaneroComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -21,12 +25,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   resultados: ResultadoCompatibilidad[] = [];
   cargando = true;
   error: string | null = null;
-
-  explicacionAbierta: number | null = null; // id del candidato con la explicación abierta
-  explicaciones: Record<number, RespuestaExplicacion> = {};
-  erroresExplicacion: Record<number, string> = {};
-  cargandoExplicacion: number | null = null;
-  leyendo: number | null = null; // id del candidato cuya explicación se está leyendo
   fotoSubiendo = false;
   errorFoto: string | null = null;
   private versionFoto = Date.now();
@@ -36,8 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private perfilService: PerfilService,
     private compatibilidadService: CompatibilidadService,
-    private auth: AuthService,
-    readonly voz: LecturaVozService
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -74,51 +71,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.worker?.terminate();
-    this.detenerLectura();
   }
 
-  verExplicacion(resultado: ResultadoCompatibilidad): void {
-    const id = resultado.candidato.id;
-    this.detenerLectura();
-
-    if (this.explicacionAbierta === id) {
-      this.explicacionAbierta = null;
-      return;
-    }
-
-    this.explicacionAbierta = id;
-
-    if (this.explicaciones[id]) return; // ya la pedimos antes, no repetir llamada
-
-    this.cargandoExplicacion = id;
-    delete this.erroresExplicacion[id];
-    this.compatibilidadService
-      .explicar(id, resultado.score, resultado.coincidencias, resultado.conflictos)
-      .subscribe({
-        next: (respuesta) => {
-          this.explicaciones[id] = respuesta;
-          this.cargandoExplicacion = null;
-        },
-        error: (err) => {
-          this.cargandoExplicacion = null;
-          this.erroresExplicacion[id] =
-            err.error?.error || 'No se pudo generar la explicación. Cierra y vuelve a intentarlo.';
-        }
-      });
+  get nombre(): string {
+    return this.usuario?.nombre || 'Tu perfil';
   }
 
-  alternarLectura(id: number, texto: string): void {
-    if (this.leyendo === id) {
-      this.detenerLectura();
-      return;
-    }
-    this.leyendo = id;
-    this.voz.leer(texto, () => (this.leyendo = null));
+  get titulo(): string {
+    const primerNombre = this.nombre.trim().split(/\s+/)[0];
+    const buenas = this.resultados.filter((r) => r.score >= PUNTAJE_BUENA_OPCION).length;
+    if (this.cargando || buenas === 0) return `Hola, ${primerNombre}.`;
+    return buenas === 1
+      ? `${primerNombre}, una persona encaja contigo.`
+      : `${primerNombre}, ${buenas} personas encajan contigo.`;
   }
 
-  private detenerLectura(): void {
-    this.voz.detener();
-    this.leyendo = null;
+  get mejorOpcion(): ResultadoCompatibilidad | null {
+    return this.resultados[0] ?? null;
+  }
+
+  get otrasOpciones(): ResultadoCompatibilidad[] {
+    return this.resultados.slice(1, 1 + OTRAS_EN_INICIO);
+  }
+
+  get hayMasOpciones(): boolean {
+    return this.resultados.length > 1 + OTRAS_EN_INICIO;
   }
 
   irASeccion(id: string): void {
@@ -127,21 +104,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   get usuario() {
     return this.auth.usuarioActual;
-  }
-
-  iniciales(nombre: string): string {
-    return nombre
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((parte) => parte.charAt(0))
-      .join('')
-      .toUpperCase() || '?';
-  }
-
-  ocultarImagen(event: Event): void {
-    (event.target as HTMLImageElement).hidden = true;
   }
 
   urlFoto(fotoUrl: string | null | undefined): string | null {

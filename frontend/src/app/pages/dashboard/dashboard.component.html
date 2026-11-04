@@ -1,173 +1,70 @@
-<main class="page">
+<main class="pagina inicio">
   <app-header></app-header>
 
-  <section class="intro">
-    <div class="intro__main">
-      <p class="eyebrow">ROOMIESFIND <span>·</span> TU ESPACIO DE BÚSQUEDA</p>
-      <h1>Un buen hogar empieza con una buena <span>convivencia.</span></h1>
-      <p class="intro__copy">Revisa tu perfil y descubre personas compatibles con tu forma de vivir.</p>
-      <div class="intro__actions">
-        <a class="intro__action intro__action--primary" routerLink="/dashboard" fragment="companeros" (click)="irASeccion('companeros')">Ver coincidencias <span aria-hidden="true">↓</span></a>
-        <a class="intro__action" routerLink="/dashboard" fragment="mi-perfil" (click)="irASeccion('mi-perfil')">Revisar mi perfil</a>
-      </div>
+  <section class="inicio__saludo">
+    <h1>{{ titulo }}</h1>
+    <p>Las ordenamos por cómo viven, no por cómo se ven.</p>
+    <div class="inicio__acciones">
+      <a class="btn btn--primario" routerLink="/dashboard" fragment="companeros" (click)="irASeccion('companeros')">
+        Ver coincidencias
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+      </a>
+      <a class="btn btn--secundario" routerLink="/perfil">Revisar mi perfil</a>
     </div>
-    <aside class="search-summary" aria-label="Resumen de búsqueda">
-      <p class="eyebrow">ESTADO DE BÚSQUEDA</p>
-      <div class="search-summary__metric">{{ cargando || error ? '—' : resultados.length }}</div>
-      <p class="search-summary__label">{{ error ? 'No disponible ahora' : 'perfiles compatibles' }}</p>
-      <div class="search-summary__details" *ngIf="miPerfil">
-        <span>{{ miPerfil.zona }}</span>
-        <span>{{ miPerfil.horario }}</span>
+  </section>
+
+  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
+
+  <div class="inicio__columnas">
+    <div class="inicio__principal">
+      <div class="cargando" *ngIf="cargando" role="status">
+        <span class="giro" aria-hidden="true"></span>
+        <p>Comparando hábitos...</p>
       </div>
+
+      <section id="companeros" *ngIf="!cargando && miPerfil && mejorOpcion as mejor">
+        <div class="encabezado-seccion"><h2>Tu mejor opción</h2></div>
+        <app-tarjeta-companero [resultado]="mejor" [yo]="miPerfil" [destacada]="true"></app-tarjeta-companero>
+
+        <ng-container *ngIf="otrasOpciones.length">
+          <div class="encabezado-seccion inicio__otras">
+            <h2>Otras personas</h2>
+            <a class="enlace" *ngIf="hayMasOpciones" routerLink="/companeros">Ver las {{ resultados.length }}</a>
+          </div>
+          <div class="rejilla-companeros">
+            <app-tarjeta-companero *ngFor="let r of otrasOpciones" [resultado]="r" [yo]="miPerfil"></app-tarjeta-companero>
+          </div>
+        </ng-container>
+      </section>
+
+      <section id="companeros" class="vacio" *ngIf="!cargando && !resultados.length && !error">
+        <h2>Todavía no hay con quién compararte</h2>
+        <p>Cuando más personas creen su perfil, aparecerán aquí. Mientras tanto, comparte RoomiesFind con quien también esté buscando.</p>
+      </section>
+    </div>
+
+    <aside id="mi-perfil" class="ficha" *ngIf="miPerfil" aria-label="Tu perfil">
+      <app-avatar tamano="l" [nombre]="nombre" [foto]="urlFoto(miPerfil.foto_url)" [alt]="'Tu foto de perfil'"></app-avatar>
+      <h2>{{ nombre }}</h2>
+      <p class="ficha__zona">{{ miPerfil.zona }}</p>
+      <p class="ficha__descripcion" *ngIf="miPerfil.descripcion">{{ miPerfil.descripcion }}</p>
+
+      <dl class="ficha__datos">
+        <div><dt>Presupuesto</dt><dd>${{ miPerfil.presupuesto | number:'1.0-0' }}</dd></div>
+        <div><dt>Horario</dt><dd class="ficha__capital">{{ miPerfil.horario }}</dd></div>
+        <div><dt>Orden</dt><dd>{{ miPerfil.limpieza }} de 5</dd></div>
+        <div><dt>Ruido</dt><dd>{{ miPerfil.tolerancia_ruido }} de 5</dd></div>
+        <div><dt>Visitas</dt><dd class="ficha__capital">{{ miPerfil.frecuencia_visitas }}</dd></div>
+      </dl>
+
+      <div class="ficha__acciones">
+        <input id="mi-foto" class="oculto-visual" type="file"
+          accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
+          [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
+        <label class="btn btn--secundario" for="mi-foto">{{ fotoSubiendo ? 'Guardando...' : 'Cambiar foto' }}</label>
+        <a class="btn btn--secundario" routerLink="/perfil">Editar</a>
+      </div>
+      <p class="aviso aviso--error" *ngIf="errorFoto" role="alert">{{ errorFoto }}</p>
     </aside>
-  </section>
-
-  <section id="mi-perfil" class="mi-perfil" *ngIf="miPerfil">
-    <div class="mi-perfil__heading">
-      <div>
-        <p class="eyebrow">Así te ven los demás</p>
-        <h2>Tu perfil de roomie</h2>
-      </div>
-      <span class="profile-status"><span></span> Perfil activo</span>
-    </div>
-
-    <div class="mi-perfil__content">
-      <div class="avatar avatar--large" aria-label="Tu foto de perfil">
-        <span class="avatar__fallback">{{ iniciales(usuario?.nombre || 'Tú') }}</span>
-        <img *ngIf="urlFoto(miPerfil.foto_url) as fotoSrc" [src]="fotoSrc"
-          [alt]="'Foto de perfil de ' + (usuario?.nombre || 'ti')"
-          referrerpolicy="no-referrer" (error)="ocultarImagen($event)" />
-      </div>
-      <div class="mi-perfil__info">
-        <h3>{{ usuario?.nombre || 'Tu perfil' }}</h3>
-        <p class="mi-perfil__zone">{{ miPerfil.zona }} <span>·</span> {{ miPerfil.horario }}</p>
-        <p class="mi-perfil__description" *ngIf="miPerfil.descripcion">{{ miPerfil.descripcion }}</p>
-        <div class="profile-tags">
-          <span>Presupuesto <strong>${{ miPerfil.presupuesto | number }}</strong></span>
-          <span>Limpieza <strong>{{ miPerfil.limpieza }}/5</strong></span>
-          <span>Ruido <strong>{{ miPerfil.tolerancia_ruido }}/5</strong></span>
-          <span>Visitas <strong>{{ miPerfil.frecuencia_visitas }}</strong></span>
-        </div>
-        <div class="profile-photo-edit">
-          <label for="mi-foto">{{ fotoSubiendo ? 'Guardando foto...' : 'Cambiar foto de perfil' }}</label>
-          <input id="mi-foto" type="file"
-            accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
-            aria-label="Cambiar foto de perfil desde el dispositivo"
-            [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
-          <small>JPG, PNG, WEBP o GIF · máximo 5 MB</small>
-          <p class="profile-photo-edit__error" *ngIf="errorFoto" role="alert">{{ errorFoto }}</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <p class="error" *ngIf="error">{{ error }}</p>
-  <div class="loading-state" *ngIf="cargando">
-    <span class="loading-state__spinner" aria-hidden="true"></span>
-    <p>Buscando personas compatibles contigo...</p>
   </div>
-
-  <section id="companeros" class="candidatos" *ngIf="!cargando && resultados.length">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Personas para conocer</p>
-        <h2>Compañeros compatibles</h2>
-      </div>
-      <span class="section-heading__count">{{ resultados.length }} {{ resultados.length === 1 ? 'perfil' : 'perfiles' }}</span>
-    </div>
-
-    <div class="candidatos__grid">
-      <article class="candidato" *ngFor="let r of resultados; let i = index" [style.animation-delay.ms]="i * 70">
-        <div class="candidato__top">
-          <div class="avatar avatar--candidate">
-            <span class="avatar__fallback">{{ iniciales(r.candidato.nombre) }}</span>
-            <img *ngIf="urlFoto(r.candidato.foto_url) as fotoSrc" [src]="fotoSrc"
-              [alt]="'Foto de ' + r.candidato.nombre" loading="lazy"
-              referrerpolicy="no-referrer" (error)="ocultarImagen($event)" />
-          </div>
-          <div class="candidato__identity">
-            <h3>{{ r.candidato.nombre }}</h3>
-            <p>{{ r.candidato.zona }} <span>·</span> {{ r.candidato.horario }}</p>
-          </div>
-          <div class="score-wrap">
-            <div class="score-ring" [style.--score]="r.score"
-              [class.score-ring--alto]="r.score >= 70"
-              [class.score-ring--medio]="r.score >= 40 && r.score < 70"
-              [class.score-ring--bajo]="r.score < 40"
-              role="img" [attr.aria-label]="r.score + '% de compatibilidad con ' + r.candidato.nombre">
-              <strong>{{ r.score }}<small>%</small></strong>
-            </div>
-            <span class="score-ring__label">compatible</span>
-          </div>
-        </div>
-
-        <p class="candidato__description" *ngIf="r.candidato.descripcion">
-          “{{ r.candidato.descripcion }}”
-        </p>
-
-        <div class="candidato__details">
-          <span><span class="detail-dot detail-dot--budget"></span> Presupuesto <strong>${{ r.candidato.presupuesto | number }}</strong></span>
-          <span><span class="detail-dot detail-dot--home"></span> Limpieza <strong>{{ r.candidato.limpieza }}/5</strong></span>
-          <span><span class="detail-dot detail-dot--visits"></span> Visitas <strong>{{ r.candidato.frecuencia_visitas }}</strong></span>
-        </div>
-
-        <div class="listas">
-          <div *ngIf="r.coincidencias.length">
-            <strong class="list-title"><span aria-hidden="true">+</span> En común</strong>
-            <ul><li *ngFor="let c of r.coincidencias">{{ c }}</li></ul>
-          </div>
-          <div *ngIf="r.conflictos.length">
-            <strong class="list-title list-title--conflict"><span aria-hidden="true">!</span> Para conversar</strong>
-            <ul><li *ngFor="let c of r.conflictos">{{ c }}</li></ul>
-          </div>
-        </div>
-
-        <button class="secundario" type="button" (click)="verExplicacion(r)"
-          [attr.aria-expanded]="explicacionAbierta === r.candidato.id">
-          {{ explicacionAbierta === r.candidato.id ? 'Ocultar explicación' : '¿Por qué hacemos match?' }}
-          <span aria-hidden="true">{{ explicacionAbierta === r.candidato.id ? '−' : '→' }}</span>
-        </button>
-
-        <div class="explicacion" *ngIf="explicacionAbierta === r.candidato.id" aria-live="polite">
-          <p class="explicacion__estado" *ngIf="cargandoExplicacion === r.candidato.id">
-            <span class="explicacion__spinner" aria-hidden="true"></span>
-            Generando explicación con IA...
-          </p>
-          <p class="explicacion__error" *ngIf="erroresExplicacion[r.candidato.id]" role="alert">
-            {{ erroresExplicacion[r.candidato.id] }}
-          </p>
-          <ng-container *ngIf="explicaciones[r.candidato.id] as explicacion">
-            <button *ngIf="voz.disponible" class="explicacion__voz" type="button"
-              [class.explicacion__voz--activa]="leyendo === r.candidato.id"
-              [attr.aria-pressed]="leyendo === r.candidato.id"
-              (click)="alternarLectura(r.candidato.id, explicacion.explicacion)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="2" width="6" height="12" rx="3" />
-                <path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8" />
-              </svg>
-              {{ leyendo === r.candidato.id ? 'Detener lectura' : 'Escuchar' }}
-            </button>
-            <p>{{ explicacion.explicacion }}</p>
-            <small class="explicacion__nota" *ngIf="explicacion.desdeCache">
-              Recuperada del historial: no se hizo una nueva llamada a la IA.
-            </small>
-            <small class="explicacion__nota" *ngIf="!explicacion.desdeCache">
-              Generada por IA a partir del puntaje calculado con reglas.
-            </small>
-          </ng-container>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="companeros" class="empty-state" *ngIf="!cargando && !resultados.length && !error">
-    <span class="empty-state__icon" aria-hidden="true">
-      <svg viewBox="0 0 48 48" fill="none">
-        <circle cx="19" cy="16" r="7" />
-        <path d="M5 39c0-7.18 5.82-13 13-13h2c3.13 0 6 1.1 8.25 2.94M34 18v12m-6-6h12" />
-      </svg>
-    </span>
-    <h2>Tu comunidad está creciendo</h2>
-    <p>Cuando más personas creen su perfil, aparecerán aquí tus posibles compañeros de hogar.</p>
-  </section>
 </main>
