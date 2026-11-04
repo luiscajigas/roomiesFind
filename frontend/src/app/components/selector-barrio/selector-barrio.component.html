@@ -1,0 +1,30 @@
+<div class="selector-barrio" (focusout)="alSalir($event)">
+  <input #campo [id]="idCampo" type="text" role="combobox" autocomplete="off" spellcheck="false"
+    placeholder="Escribe tu barrio"
+    aria-autocomplete="list"
+    [attr.aria-expanded]="abierto"
+    [attr.aria-controls]="idLista"
+    [attr.aria-activedescendant]="abierto ? idOpcion(activa) : null"
+    [value]="texto"
+    (focus)="alEnfocar(campo)"
+    (click)="abrir()"
+    (input)="alEscribir(campo.value)"
+    (keydown)="alPresionarTecla($event)" />
+  <svg class="selector-barrio__flecha" [class.selector-barrio__flecha--abierta]="abierto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+
+  <div class="selector-barrio__lista" *ngIf="abierto" [id]="idLista" role="listbox" aria-label="Barrios de Pasto"
+    (mousedown)="$event.preventDefault()">
+    <p class="selector-barrio__vacio" *ngIf="sinCoincidencias">No encontramos «{{ consulta }}». Si tu barrio no está, elige esta opción:</p>
+    <ng-container *ngFor="let opcion of opciones; let i = index">
+      <p class="selector-barrio__comuna" *ngIf="opcion.encabezado" role="presentation">{{ opcion.encabezado }}</p>
+      <div class="selector-barrio__opcion" role="option" [id]="idOpcion(i)"
+        [class.selector-barrio__opcion--activa]="i === activa"
+        [attr.aria-selected]="opcion.valor === valor"
+        (mouseenter)="activa = i"
+        (click)="elegir(opcion)">
+        <span>{{ opcion.antes }}<mark *ngIf="opcion.resaltado">{{ opcion.resaltado }}</mark>{{ opcion.despues }}</span>
+        <small *ngIf="opcion.detalle">{{ opcion.detalle }}</small>
+      </div>
+    </ng-container>
+  </div>
+</div>
