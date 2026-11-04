@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AvatarComponent } from '../avatar/avatar.component';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
 import { ThemeService } from '../../services/theme.service';
@@ -8,7 +9,7 @@ import { ThemeService } from '../../services/theme.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, AvatarComponent],
   templateUrl: './app-header.component.html'
 })
 export class AppHeaderComponent {
@@ -34,15 +35,6 @@ export class AppHeaderComponent {
 
   get modoClaro(): boolean {
     return this.theme.modoClaro;
-  }
-
-  iniciales(nombre: string): string {
-    return nombre.trim().split(/\s+/).filter(Boolean).slice(0, 2)
-      .map((parte) => parte.charAt(0)).join('').toUpperCase() || '?';
-  }
-
-  ocultarImagen(event: Event): void {
-    (event.target as HTMLImageElement).hidden = true;
   }
 
   toggleMenu(): void {
