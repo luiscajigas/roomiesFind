@@ -1,120 +1,112 @@
-<main class="auth auth--register">
-  <div class="auth__layout">
-    <header class="auth__masthead">
-      <a class="auth__brand" routerLink="/login" aria-label="RoomiesFind, inicio">
-        <span class="auth__brand-mark"><img src="/logo.svg" alt="" /></span>
-        <span>RoomiesFind</span>
-      </a>
-      <span class="auth__masthead-note">Tu próximo hogar empieza con una buena conversación.</span>
-    </header>
-
-    <section class="auth__story">
-      <p class="auth__eyebrow">Un hogar que encaja contigo</p>
+<main class="acceso acceso--registro">
+  <section class="acceso__historia">
+    <a class="acceso__marca" routerLink="/login" aria-label="RoomiesFind, inicio">
+      <img src="/logo.svg" alt="" />
+      <span>RoomiesFind</span>
+    </a>
+    <div class="acceso__mensaje">
       <h1>Primero, cuéntanos <em>cómo convives.</em></h1>
-      <p class="auth__story-copy">Tus preferencias nos ayudan a encontrar personas con hábitos compatibles y expectativas claras.</p>
-      <ul class="auth__benefits">
-        <li><span>01</span> Comparte solo lo que importa para convivir</li>
-        <li><span>02</span> Edita tus preferencias cuando quieras</li>
-      </ul>
-    </section>
-
-    <section class="auth__card auth__card--register" aria-labelledby="register-title">
-      <p class="auth__eyebrow">Empieza por ti</p>
-      <h2 id="register-title">Crea tu perfil</h2>
-      <p class="auth__card-copy">Cuéntanos cómo eres para encontrar compañeros compatibles.</p>
-
-    <div class="grid">
-      <div class="campo">
-        <label for="reg-nombre">Nombre</label>
-        <input id="reg-nombre" type="text" [(ngModel)]="datos.nombre" placeholder="Tu nombre" />
-      </div>
-      <div class="campo">
-        <label for="reg-correo">Correo</label>
-        <input id="reg-correo" type="email" autocomplete="email" [(ngModel)]="datos.email" placeholder="tucorreo@ejemplo.com" />
-      </div>
-      <div class="campo">
-        <label for="reg-clave">Contraseña</label>
-        <input id="reg-clave" type="password" autocomplete="new-password" minlength="6" [(ngModel)]="datos.password" placeholder="••••••••" />
-      </div>
-      <div class="campo campo--full">
-        <label for="foto">Foto de perfil (opcional)</label>
-        <div class="selector-foto">
-          <div class="selector-foto__preview" *ngIf="vistaPreviaFoto; else sinFoto">
-            <img [src]="vistaPreviaFoto" alt="Vista previa de tu foto de perfil" />
-          </div>
-          <ng-template #sinFoto>
-            <div class="selector-foto__placeholder" aria-hidden="true">+</div>
-          </ng-template>
-          <div class="selector-foto__acciones">
-            <input #fotoInput id="foto" name="foto" type="file"
-              accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
-              aria-label="Elegir foto de perfil desde el dispositivo"
-              (change)="seleccionarFoto($event)" />
-            <small>JPG, PNG, WEBP o GIF · máximo 5 MB</small>
-            <small *ngIf="fotoSeleccionada" class="selector-foto__nombre">{{ fotoSeleccionada.name }}</small>
-          </div>
-          <button *ngIf="vistaPreviaFoto" class="selector-foto__quitar" type="button"
-            (click)="quitarFoto(fotoInput)">Quitar</button>
-        </div>
-      </div>
-      <div class="campo">
-        <label for="reg-presupuesto">Presupuesto mensual (COP)</label>
-        <input id="reg-presupuesto" type="number" [(ngModel)]="datos.presupuesto" step="10000" />
-      </div>
-      <div class="campo">
-        <label for="reg-barrio">Barrio donde buscas (Pasto)</label>
-        <select id="reg-barrio" [(ngModel)]="datos.zona">
-          <option value="" disabled>Elige un barrio</option>
-          <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
-            <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
-          </optgroup>
-          <option [value]="otroBarrio">{{ otroBarrio }}</option>
-        </select>
-      </div>
-      <div class="campo">
-        <label for="reg-horario">Horario</label>
-        <select id="reg-horario" [(ngModel)]="datos.horario">
-          <option value="madrugador">Madrugador</option>
-          <option value="nocturno">Nocturno</option>
-          <option value="mixto">Mixto</option>
-        </select>
-      </div>
-      <div class="campo">
-        <label>Nivel de limpieza que manejas: {{ datos.limpieza }}/5</label>
-        <input type="range" min="1" max="5" [(ngModel)]="datos.limpieza" />
-      </div>
-      <div class="campo">
-        <label>Tolerancia al ruido: {{ datos.tolerancia_ruido }}/5</label>
-        <input type="range" min="1" max="5" [(ngModel)]="datos.tolerancia_ruido" />
-      </div>
-      <div class="campo">
-        <label for="reg-visitas">Frecuencia de visitas</label>
-        <select id="reg-visitas" [(ngModel)]="datos.frecuencia_visitas">
-          <option value="nunca">Nunca</option>
-          <option value="ocasional">Ocasional</option>
-          <option value="frecuente">Frecuente</option>
-        </select>
-      </div>
-      <div class="campo campo--check">
-        <label><input type="checkbox" [(ngModel)]="datos.tiene_mascotas" /> Tengo mascotas</label>
-        <label><input type="checkbox" [(ngModel)]="datos.acepta_mascotas" /> Acepto vivir con mascotas</label>
-      </div>
-      <div class="campo campo--full">
-        <label>Cuéntanos un poco más (opcional)</label>
-        <textarea rows="2" [(ngModel)]="datos.descripcion"></textarea>
-      </div>
+      <p>Con esto te comparamos con otras personas. Lo puedes cambiar cuando quieras.</p>
     </div>
+  </section>
 
-    <p class="error" *ngIf="error">{{ error }}</p>
-    <p class="aviso-espera" *ngIf="servidorLento" role="status">
-      El servidor está despertando (plan gratuito): la primera petición puede tardar hasta un minuto.
-    </p>
+  <section class="acceso__panel" aria-labelledby="register-title">
+    <div class="acceso__contenido">
+      <h2 id="register-title">Crea tu cuenta</h2>
 
-    <button (click)="registrar()" [disabled]="cargando || !datos.nombre || !datos.email || !datos.password || !datos.zona">
-      {{ cargando ? 'Creando cuenta...' : 'Crear cuenta y buscar compañeros' }}
-    </button>
+      <section class="grupo">
+        <h3>Tus datos</h3>
+        <div class="selector-foto">
+          <app-avatar tamano="l" [nombre]="datos.nombre" [foto]="vistaPreviaFoto" alt="Vista previa de tu foto"></app-avatar>
+          <div class="selector-foto__acciones">
+            <input #fotoInput id="foto" class="oculto-visual" name="foto" type="file"
+              accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
+              (change)="seleccionarFoto($event)" />
+            <label class="btn btn--secundario" for="foto">{{ fotoSeleccionada ? 'Cambiar foto' : 'Agregar foto' }}</label>
+            <button *ngIf="vistaPreviaFoto" class="btn btn--secundario" type="button" (click)="quitarFoto(fotoInput)">Quitar</button>
+            <small>Opcional. JPG, PNG, WEBP o GIF, hasta 5 MB.</small>
+          </div>
+        </div>
+        <div class="grupo__rejilla">
+          <div class="campo grupo__ancho">
+            <label for="reg-nombre">Nombre</label>
+            <input id="reg-nombre" type="text" autocomplete="name" [(ngModel)]="datos.nombre" />
+          </div>
+          <div class="campo">
+            <label for="reg-correo">Correo</label>
+            <input id="reg-correo" type="email" autocomplete="email" [(ngModel)]="datos.email" placeholder="tucorreo@ejemplo.com" />
+          </div>
+          <div class="campo">
+            <label for="reg-clave">Contraseña</label>
+            <input id="reg-clave" type="password" autocomplete="new-password" minlength="6" [(ngModel)]="datos.password" placeholder="Mínimo 6 caracteres" />
+          </div>
+        </div>
+      </section>
 
-      <p class="link-registro">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
-    </section>
-  </div>
+      <section class="grupo">
+        <h3>Qué estás buscando</h3>
+        <div class="grupo__rejilla">
+          <div class="campo">
+            <label for="reg-presupuesto">Presupuesto mensual (COP)</label>
+            <input id="reg-presupuesto" type="number" min="0" step="10000" [(ngModel)]="datos.presupuesto" />
+          </div>
+          <div class="campo">
+            <label for="reg-barrio">Barrio en Pasto</label>
+            <select id="reg-barrio" [(ngModel)]="datos.zona">
+              <option value="" disabled>Elige un barrio</option>
+              <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
+                <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
+              </optgroup>
+              <option [value]="otroBarrio">{{ otroBarrio }}</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="grupo">
+        <h3>Cómo vives</h3>
+        <div class="grupo__rejilla">
+          <div class="campo">
+            <label for="reg-horario">Horario</label>
+            <select id="reg-horario" [(ngModel)]="datos.horario">
+              <option value="madrugador">Madrugador</option>
+              <option value="nocturno">Nocturno</option>
+              <option value="mixto">Mixto</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="reg-visitas">Visitas en casa</label>
+            <select id="reg-visitas" [(ngModel)]="datos.frecuencia_visitas">
+              <option value="nunca">Nunca</option>
+              <option value="ocasional">Ocasional</option>
+              <option value="frecuente">Frecuente</option>
+            </select>
+          </div>
+          <app-escala nombre="limpieza" etiqueta="Orden en casa" minimo="Relajado" maximo="Muy ordenado" [(valor)]="datos.limpieza"></app-escala>
+          <app-escala nombre="tolerancia_ruido" etiqueta="Ruido" minimo="Necesito silencio" maximo="No me molesta" [(valor)]="datos.tolerancia_ruido"></app-escala>
+        </div>
+        <div class="grupo__casillas">
+          <label class="casilla"><input type="checkbox" [(ngModel)]="datos.tiene_mascotas" /> Tengo mascotas</label>
+          <label class="casilla"><input type="checkbox" [(ngModel)]="datos.acepta_mascotas" /> Acepto vivir con mascotas</label>
+        </div>
+      </section>
+
+      <div class="campo">
+        <label for="reg-descripcion">Unas líneas sobre ti (opcional)</label>
+        <textarea id="reg-descripcion" rows="3" placeholder="Qué haces, qué te gusta y cómo imaginas la casa." [(ngModel)]="datos.descripcion"></textarea>
+      </div>
+
+      <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
+      <p class="aviso aviso--espera" *ngIf="servidorLento" role="status">
+        El servidor está despertando (plan gratuito): la primera petición puede tardar hasta un minuto.
+      </p>
+
+      <button class="btn btn--primario acceso__enviar" type="button" (click)="registrar()"
+        [disabled]="cargando || !datos.nombre || !datos.email || !datos.password || !datos.zona">
+        {{ cargando ? 'Creando cuenta...' : 'Crear cuenta' }}
+      </button>
+
+      <p class="acceso__alterno">¿Ya tienes cuenta? <a class="enlace" routerLink="/login">Inicia sesión</a></p>
+    </div>
+  </section>
 </main>

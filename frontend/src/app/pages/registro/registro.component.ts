@@ -2,13 +2,15 @@ import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AvatarComponent } from '../../components/avatar/avatar.component';
+import { EscalaComponent } from '../../components/escala/escala.component';
 import { COMUNAS_PASTO, OTRO_BARRIO } from '../../data/barrios-pasto';
 import { AuthService, DatosRegistro } from '../../services/auth.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, AvatarComponent, EscalaComponent],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
