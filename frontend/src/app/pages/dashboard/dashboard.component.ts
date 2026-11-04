@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AuthService } from '../../services/auth.service';
+import { LecturaVozService } from '../../services/lectura-voz.service';
 import { PerfilService } from '../../services/perfil.service';
 import { CompatibilidadService, RespuestaExplicacion } from '../../services/compatibilidad.service';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
@@ -25,6 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   explicaciones: Record<number, RespuestaExplicacion> = {};
   erroresExplicacion: Record<number, string> = {};
   cargandoExplicacion: number | null = null;
+  leyendo: number | null = null; // id del candidato cuya explicación se está leyendo
   fotoSubiendo = false;
   errorFoto: string | null = null;
   private versionFoto = Date.now();
@@ -34,7 +36,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private perfilService: PerfilService,
     private compatibilidadService: CompatibilidadService,
-    private auth: AuthService
+    private auth: AuthService,
+    readonly voz: LecturaVozService
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +103,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
             err.error?.error || 'No se pudo generar la explicación. Cierra y vuelve a intentarlo.';
         }
       });
+  }
+
+  alternarLectura(id: number, texto: string): void {
+    if (this.leyendo === id) {
+      this.detenerLectura();
+      return;
+    }
+    this.leyendo = id;
+    this.voz.leer(texto, () => (this.leyendo = null));
+  }
+
+  private detenerLectura(): void {
+    this.voz.detener();
+    this.leyendo = null;
   }
 
   irASeccion(id: string): void {

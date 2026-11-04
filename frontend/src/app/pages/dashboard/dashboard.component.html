@@ -137,6 +137,16 @@
             {{ erroresExplicacion[r.candidato.id] }}
           </p>
           <ng-container *ngIf="explicaciones[r.candidato.id] as explicacion">
+            <button *ngIf="voz.disponible" class="explicacion__voz" type="button"
+              [class.explicacion__voz--activa]="leyendo === r.candidato.id"
+              [attr.aria-pressed]="leyendo === r.candidato.id"
+              (click)="alternarLectura(r.candidato.id, explicacion.explicacion)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="2" width="6" height="12" rx="3" />
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8" />
+              </svg>
+              {{ leyendo === r.candidato.id ? 'Detener lectura' : 'Escuchar' }}
+            </button>
             <p>{{ explicacion.explicacion }}</p>
             <small class="explicacion__nota" *ngIf="explicacion.desdeCache">
               Recuperada del historial: no se hizo una nueva llamada a la IA.
