@@ -1,0 +1,61 @@
+app-selector-barrio { display: block; min-width: 0; }
+
+.selector-barrio { position: relative; }
+.campo .selector-barrio input { padding-right: 2.2rem; scroll-margin-top: 5.5rem; }
+
+.selector-barrio__flecha {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.7rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  color: var(--muted);
+  pointer-events: none;
+  transition: transform 140ms ease;
+}
+
+.selector-barrio__flecha--abierta { transform: rotate(180deg); }
+
+.selector-barrio__lista {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 0.3rem);
+  right: 0;
+  left: 0;
+  overflow-y: auto;
+  max-height: 18rem;
+  padding: 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  background: var(--panel-raised);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  overscroll-behavior: contain;
+}
+
+.selector-barrio__comuna {
+  margin: 0;
+  padding: 0.55rem 0.55rem 0.25rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.selector-barrio__opcion {
+  display: flex;
+  min-height: 2.5rem;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.35rem;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.selector-barrio__opcion--activa { background: rgba(var(--accent-2-rgb), 0.2); }
+.selector-barrio__opcion[aria-selected='true'] { font-weight: 600; }
+.selector-barrio__opcion mark { background: transparent; color: var(--accent); font-weight: 600; }
+.selector-barrio__opcion small { flex: 0 0 auto; color: var(--muted); font-size: 0.75rem; }
+
+.selector-barrio__vacio { margin: 0; padding: 0.5rem 0.55rem; color: var(--muted); font-size: 0.85rem; }
