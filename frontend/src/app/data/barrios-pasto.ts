@@ -27,6 +27,39 @@ export const COMUNAS_PASTO: ComunaPasto[] = [
   { nombre: 'Comuna 12', barrios: ['Altos de La Carolina', 'Balcones del Este', 'Campiña de Oriente', 'Carlos Pizarro', 'Cujacal Bajo', 'El Manantial', 'El Paraíso', 'Fray Ezequiel Moreno Díaz', 'Gualcalá', 'La Carolina', 'La Florida', 'La Josefina', 'Las Orquídeas', 'María Paz', 'Monserrat', 'Parque de Baviera', 'San Diego Norte', 'San Mateo', 'Sena', 'Simón Bolívar', 'Sindagua', 'Villa Adriana María', 'Villa Ángela', 'Villa Colombia', 'Villa del Prado', 'Villa Recreo', 'Villa Rocío'] }
 ];
 
+/** Pasa a minúsculas y quita tildes, para que "bolivar" encuentre "Bolívar". */
+export function normalizarTexto(texto: string): string {
+  return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+/**
+ * Busca barrios por nombre o comuna. Primero van los que empiezan por lo
+ * escrito, luego los que tienen una palabra que empieza así y al final el resto.
+ */
+export function buscarBarrios(consulta: string): { barrio: string; comuna: string }[] {
+  const buscado = normalizarTexto(consulta).trim();
+  const palabras = buscado.split(/\s+/);
+  const encontrados: { barrio: string; comuna: string; prioridad: number }[] = [];
+
+  for (const comuna of COMUNAS_PASTO) {
+    for (const barrio of comuna.barrios) {
+      const nombre = normalizarTexto(barrio);
+      const completo = `${nombre} ${normalizarTexto(comuna.nombre)}`;
+      if (!palabras.every((palabra) => completo.includes(palabra))) continue;
+
+      let prioridad = 3;
+      if (nombre.startsWith(buscado)) prioridad = 0;
+      else if (nombre.includes(` ${buscado}`)) prioridad = 1;
+      else if (nombre.includes(buscado)) prioridad = 2;
+      encontrados.push({ barrio, comuna: comuna.nombre, prioridad });
+    }
+  }
+
+  return encontrados
+    .sort((a, b) => a.prioridad - b.prioridad || a.barrio.localeCompare(b.barrio, 'es'))
+    .map(({ barrio, comuna }) => ({ barrio, comuna }));
+}
+
 /** Comuna a la que pertenece un barrio, o null si no está en la lista. */
 export function comunaDeBarrio(barrio: string): string | null {
   return COMUNAS_PASTO.find((comuna) => comuna.barrios.includes(barrio))?.nombre ?? null;
