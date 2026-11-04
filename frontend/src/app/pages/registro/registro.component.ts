@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { COMUNAS_PASTO, OTRO_BARRIO } from '../../data/barrios-pasto';
 import { AuthService, DatosRegistro } from '../../services/auth.service';
 
 @Component({
@@ -14,6 +15,8 @@ import { AuthService, DatosRegistro } from '../../services/auth.service';
 export class RegistroComponent implements OnDestroy {
   readonly maximoFotoBytes = 5 * 1024 * 1024;
   readonly tiposFotoPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  readonly comunas = COMUNAS_PASTO;
+  readonly otroBarrio = OTRO_BARRIO;
 
   datos: DatosRegistro = {
     nombre: '',

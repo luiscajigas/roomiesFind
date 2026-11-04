@@ -39,8 +39,14 @@
           <input type="number" name="presupuesto" min="0" step="10000" required [(ngModel)]="formulario.presupuesto" />
         </label>
         <label class="field">
-          <span>Zona donde buscas</span>
-          <input type="text" name="zona" required maxlength="160" [(ngModel)]="formulario.zona" />
+          <span>Barrio donde buscas (Pasto)</span>
+          <select name="zona" required [(ngModel)]="formulario.zona">
+            <option *ngIf="zonaAnterior" [value]="zonaAnterior">{{ zonaAnterior }} (actual)</option>
+            <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
+              <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
+            </optgroup>
+            <option [value]="otroBarrio">{{ otroBarrio }}</option>
+          </select>
         </label>
         <label class="field">
           <span>Horario habitual</span>

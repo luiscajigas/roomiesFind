@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
+import { COMUNAS_PASTO, OTRO_BARRIO, esBarrioDeLaLista } from '../../data/barrios-pasto';
 import { Perfil } from '../../models/perfil.model';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
@@ -18,6 +19,10 @@ type PerfilEditable = Pick<Perfil,
   templateUrl: './perfil.component.html'
 })
 export class PerfilComponent implements OnInit {
+  readonly comunas = COMUNAS_PASTO;
+  readonly otroBarrio = OTRO_BARRIO;
+  /** Zona escrita a mano antes de existir la lista; se conserva hasta que elija un barrio. */
+  zonaAnterior: string | null = null;
   perfil: Perfil | null = null;
   formulario: PerfilEditable | null = null;
   cargando = true;
@@ -119,6 +124,7 @@ export class PerfilComponent implements OnInit {
   }
 
   private extraerFormulario(perfil: Perfil): PerfilEditable {
+    this.zonaAnterior = esBarrioDeLaLista(perfil.zona) ? null : perfil.zona;
     return {
       presupuesto: perfil.presupuesto,
       zona: perfil.zona,

@@ -1,3 +1,5 @@
+import { OTRO_BARRIO } from '../data/barrios-pasto';
+
 /// <reference lib="webworker" />
 
 /**
@@ -47,7 +49,9 @@ function calcularCompatibilidad(yo: Perfil, candidato: Perfil) {
   }
 
   // Zona (20 pts): exacta o nada, es la más determinante para convivir.
-  if (yo.zona.trim().toLowerCase() === candidato.zona.trim().toLowerCase()) {
+  if (yo.zona === OTRO_BARRIO || candidato.zona === OTRO_BARRIO) {
+    // "Otro barrio" no dice dónde buscan: ni suma puntos ni se marca como conflicto.
+  } else if (yo.zona.trim().toLowerCase() === candidato.zona.trim().toLowerCase()) {
     puntos += 20;
     coincidencias.push(`Ambos buscan en ${candidato.zona}`);
   } else {

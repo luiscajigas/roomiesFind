@@ -62,8 +62,14 @@
         <input type="number" [(ngModel)]="datos.presupuesto" step="10000" />
       </div>
       <div class="campo">
-        <label>Zona donde buscas</label>
-        <input type="text" [(ngModel)]="datos.zona" placeholder="Ej: Centro, Pasto" />
+        <label>Barrio donde buscas (Pasto)</label>
+        <select [(ngModel)]="datos.zona">
+          <option value="" disabled>Elige un barrio</option>
+          <optgroup *ngFor="let comuna of comunas" [label]="comuna.nombre">
+            <option *ngFor="let barrio of comuna.barrios" [value]="barrio">{{ barrio }}</option>
+          </optgroup>
+          <option [value]="otroBarrio">{{ otroBarrio }}</option>
+        </select>
       </div>
       <div class="campo">
         <label>Horario</label>
