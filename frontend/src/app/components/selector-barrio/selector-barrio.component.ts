@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { COMUNAS_PASTO, OTRO_BARRIO, buscarBarrios, normalizarTexto } from '../../data/barrios-pasto';
+import { TraducirPipe } from '../../i18n/traducir.pipe';
+import { IdiomaService } from '../../services/idioma.service';
 
 interface Opcion {
   valor: string;
@@ -19,7 +21,7 @@ interface Opcion {
 @Component({
   selector: 'app-selector-barrio',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TraducirPipe],
   templateUrl: './selector-barrio.component.html'
 })
 export class SelectorBarrioComponent implements OnChanges {
@@ -35,14 +37,14 @@ export class SelectorBarrioComponent implements OnChanges {
   opciones: Opcion[] = [];
   activa = 0;
 
-  constructor(private anfitrion: ElementRef<HTMLElement>) {}
+  constructor(private anfitrion: ElementRef<HTMLElement>, private i18n: IdiomaService) {}
 
   ngOnChanges(): void {
     this.actualizarOpciones();
   }
 
   get texto(): string {
-    return this.consulta ?? this.valor;
+    return this.consulta ?? this.i18n.zona(this.valor);
   }
 
   get idLista(): string {
@@ -153,7 +155,7 @@ export class SelectorBarrioComponent implements OnChanges {
   }
 
   private todasLasOpciones(): Opcion[] {
-    const opciones = this.zonaActual ? [this.opcionSimple(this.zonaActual, 'actual')] : [];
+    const opciones = this.zonaActual ? [this.opcionSimple(this.zonaActual, this.i18n.t('barrio.actual'))] : [];
     for (const comuna of COMUNAS_PASTO) {
       comuna.barrios.forEach((barrio, indice) => {
         opciones.push({ ...this.opcionSimple(barrio), encabezado: indice === 0 ? comuna.nombre : null });
@@ -181,6 +183,7 @@ export class SelectorBarrioComponent implements OnChanges {
   }
 
   private opcionSimple(valor: string, detalle: string | null = null): Opcion {
-    return { valor, etiqueta: valor, detalle, encabezado: null, antes: valor, resaltado: '', despues: '' };
+    const etiqueta = this.i18n.zona(valor);
+    return { valor, etiqueta, detalle, encabezado: null, antes: etiqueta, resaltado: '', despues: '' };
   }
 }
