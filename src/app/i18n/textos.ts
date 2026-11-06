@@ -6,6 +6,7 @@ export const TEXTOS = {
   'nav.principal': { es: 'Navegación principal', en: 'Main navigation' },
   'nav.inicio': { es: 'Inicio', en: 'Home' },
   'nav.companeros': { es: 'Compañeros', en: 'Roommates' },
+  'nav.mensajes': { es: 'Mensajes', en: 'Messages' },
   'nav.perfil': { es: 'Mi perfil', en: 'My profile' },
   'menu.abrir': { es: 'Abrir menú de opciones', en: 'Open options menu' },
   'menu.cerrar': { es: 'Cerrar menú de opciones', en: 'Close options menu' },
@@ -143,6 +144,7 @@ export const TEXTOS = {
   'nivel.buena': { es: 'Buena opción', en: 'Good match' },
   'nivel.conversar': { es: 'Hay que conversar', en: 'Worth talking' },
   'nivel.distintos': { es: 'Muy distintos', en: 'Very different' },
+  'tarjeta.mensaje': { es: 'Enviar mensaje', en: 'Send message' },
   'tarjeta.enComun': { es: 'En común', en: 'In common' },
   'tarjeta.paraConversar': { es: 'Para conversar', en: 'Worth discussing' },
   'tarjeta.porQue': { es: '¿Por qué hacemos match?', en: 'Why are we a match?' },
@@ -184,6 +186,31 @@ export const TEXTOS = {
   'foto.peso': { es: 'La foto debe pesar 5 MB o menos.', en: 'The photo must be 5 MB or less.' },
   'foto.error': { es: 'No se pudo guardar la foto. Inténtalo de nuevo.', en: 'Could not save the photo. Please try again.' },
 
+  'chat.titulo': { es: 'Mensajes', en: 'Messages' },
+  'chat.conversaciones': { es: 'Conversaciones', en: 'Conversations' },
+  'chat.buscar': { es: 'Buscar persona', en: 'Search for a person' },
+  'chat.cargando': { es: 'Cargando...', en: 'Loading...' },
+  'chat.tu': { es: 'Tú:', en: 'You:' },
+  'chat.empezar': { es: 'Empezar conversación', en: 'Start a conversation' },
+  'chat.sinResultados': { es: 'No encontramos a esa persona.', en: "We couldn't find that person." },
+  'chat.volver': { es: 'Volver a las conversaciones', en: 'Back to conversations' },
+  'chat.reconectando': { es: 'Reconectando...', en: 'Reconnecting...' },
+  'chat.anteriores': { es: 'Ver mensajes anteriores', en: 'Show earlier messages' },
+  'chat.inicio': { es: 'Saluda y cuenta cómo imaginas la convivencia.', en: 'Say hi and share how you picture living together.' },
+  'chat.hoy': { es: 'Hoy', en: 'Today' },
+  'chat.ayer': { es: 'Ayer', en: 'Yesterday' },
+  'chat.enviando': { es: 'Enviando', en: 'Sending' },
+  'chat.enviado': { es: 'Enviado', en: 'Sent' },
+  'chat.leido': { es: 'Leído', en: 'Read' },
+  'chat.escribiendo': { es: '{nombre} está escribiendo', en: '{nombre} is typing' },
+  'chat.placeholder': { es: 'Escribe un mensaje', en: 'Type a message' },
+  'chat.enviar': { es: 'Enviar mensaje', en: 'Send message' },
+  'chat.sinConexion': { es: 'Sin conexión. Espera a que se reconecte e inténtalo de nuevo.', en: 'No connection. Wait for it to reconnect and try again.' },
+  'chat.errorEnvio': { es: 'No se pudo enviar el mensaje. Inténtalo de nuevo.', en: 'Could not send the message. Please try again.' },
+  'chat.eligeTitulo': { es: 'Elige una conversación', en: 'Choose a conversation' },
+  'chat.eligeTexto': { es: 'Antes de mudarte, habla con la otra persona y acuerden cómo sería vivir juntos.', en: 'Before moving in, talk to the other person and agree on how living together would work.' },
+  'chat.noDisponible': { es: 'Esta persona no está disponible', en: 'This person is not available' },
+
   'zona.otra': { es: 'Otro barrio de Pasto', en: 'Other neighborhood in Pasto' }
 } as const;
 
@@ -223,7 +250,13 @@ export const ERRORES_API: Record<string, string> = {
   'Un servicio no está disponible. Inténtalo de nuevo en unos segundos.': 'A service is unavailable. Please try again in a few seconds.',
   'La solicitud no es válida.': 'The request is not valid.',
   'Error interno del servidor.': 'Internal server error.',
-  'Ruta no encontrada.': 'Route not found.'
+  'Ruta no encontrada.': 'Route not found.',
+  'La persona no existe.': 'That person does not exist.',
+  'No puedes enviar mensajes a tu propia cuenta.': 'You cannot send messages to yourself.',
+  'Escribe un mensaje antes de enviarlo.': 'Write a message before sending it.',
+  'El mensaje puede tener máximo 2000 caracteres.': 'A message can have at most 2000 characters.',
+  'Estás enviando mensajes muy rápido. Espera unos segundos.': 'You are sending messages too quickly. Wait a few seconds.',
+  'No se pudo enviar el mensaje. Inténtalo de nuevo.': 'Could not send the message. Please try again.'
 };
 
 /** Razones que calcula el Web Worker. */
