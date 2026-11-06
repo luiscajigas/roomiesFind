@@ -1,6 +1,11 @@
 <article class="tarjeta" [class.tarjeta--destacada]="destacada">
   <header class="tarjeta__cabecera">
-    <app-avatar [nombre]="candidato.nombre" [foto]="foto" [alt]="'tarjeta.foto' | t: { nombre: candidato.nombre }"></app-avatar>
+    <button *ngIf="foto; else sinFoto" class="tarjeta__foto" type="button"
+      [attr.aria-label]="'visor.ampliar' | t: { nombre: candidato.nombre }" (click)="fotoAbierta = true">
+      <app-avatar [nombre]="candidato.nombre" [foto]="foto"></app-avatar>
+    </button>
+    <ng-template #sinFoto><app-avatar [nombre]="candidato.nombre"></app-avatar></ng-template>
+    <app-visor-foto *ngIf="fotoAbierta && foto as src" [foto]="src" [nombre]="candidato.nombre" (cerrado)="fotoAbierta = false"></app-visor-foto>
     <div class="tarjeta__identidad">
       <h3>{{ candidato.nombre }}</h3>
       <p>{{ i18n.zona(candidato.zona) }} · {{ i18n.horario(candidato.horario) }}</p>

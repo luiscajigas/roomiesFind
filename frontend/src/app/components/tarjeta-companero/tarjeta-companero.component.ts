@@ -11,11 +11,12 @@ import { NivelCompatibilidad, nivelDe } from '../../utils/nivel-compatibilidad';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { DescripcionComponent } from '../descripcion/descripcion.component';
 import { ComparadorComponent } from '../comparador/comparador.component';
+import { VisorFotoComponent } from '../visor-foto/visor-foto.component';
 
 @Component({
   selector: 'app-tarjeta-companero',
   standalone: true,
-  imports: [CommonModule, TraducirPipe, AvatarComponent, ComparadorComponent, DescripcionComponent],
+  imports: [CommonModule, TraducirPipe, AvatarComponent, ComparadorComponent, DescripcionComponent, VisorFotoComponent],
   templateUrl: './tarjeta-companero.component.html'
 })
 export class TarjetaCompaneroComponent implements OnInit, OnDestroy {
@@ -28,6 +29,7 @@ export class TarjetaCompaneroComponent implements OnInit, OnDestroy {
   errorApi: string | null | undefined;
   huboError = false;
   leyendo = false;
+  fotoAbierta = false;
 
   /** La explicación se guarda por idioma, para no pedirla otra vez al volver a uno ya visto. */
   private explicaciones: Partial<Record<Idioma, RespuestaExplicacion>> = {};
