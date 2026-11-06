@@ -5,6 +5,8 @@ import { forkJoin } from 'rxjs';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { TarjetaCompaneroComponent } from '../../components/tarjeta-companero/tarjeta-companero.component';
+import { TraducirPipe } from '../../i18n/traducir.pipe';
+import { IdiomaService } from '../../services/idioma.service';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
 import { CompatibilidadService } from '../../services/compatibilidad.service';
@@ -16,7 +18,7 @@ const OTRAS_EN_INICIO = 4;
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, AppHeaderComponent, AvatarComponent, TarjetaCompaneroComponent],
+  imports: [CommonModule, RouterLink, AppHeaderComponent, AvatarComponent, TarjetaCompaneroComponent, TraducirPipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -24,7 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   miPerfil: Perfil | null = null;
   resultados: ResultadoCompatibilidad[] = [];
   cargando = true;
-  error: string | null = null;
+  hayErrorCarga = false;
   fotoSubiendo = false;
   errorFoto: string | null = null;
   private versionFoto = Date.now();
@@ -34,7 +36,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private perfilService: PerfilService,
     private compatibilidadService: CompatibilidadService,
-    private auth: AuthService
+    private auth: AuthService,
+    readonly i18n: IdiomaService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +66,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       },
       error: () => {
-        this.error = 'No se pudo cargar tu perfil o la lista de candidatos.';
+        this.hayErrorCarga = true;
         this.cargando = false;
       }
     });
@@ -74,16 +77,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   get nombre(): string {
-    return this.usuario?.nombre || 'Tu perfil';
+    return this.usuario?.nombre || this.i18n.t('inicio.tuPerfil');
   }
 
   get titulo(): string {
     const primerNombre = this.nombre.trim().split(/\s+/)[0];
     const buenas = this.resultados.filter((r) => r.score >= PUNTAJE_BUENA_OPCION).length;
-    if (this.cargando || buenas === 0) return `Hola, ${primerNombre}.`;
+    if (this.cargando || buenas === 0) return this.i18n.t('inicio.hola', { nombre: primerNombre });
     return buenas === 1
-      ? `${primerNombre}, una persona encaja contigo.`
-      : `${primerNombre}, ${buenas} personas encajan contigo.`;
+      ? this.i18n.t('inicio.una', { nombre: primerNombre })
+      : this.i18n.t('inicio.varias', { nombre: primerNombre, cantidad: buenas });
   }
 
   get mejorOpcion(): ResultadoCompatibilidad | null {
@@ -117,12 +120,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!tiposPermitidos.includes(foto.type)) {
-      this.errorFoto = 'Elige una imagen JPG, PNG, WEBP o GIF.';
+      this.errorFoto = this.i18n.t('foto.tipo');
       input.value = '';
       return;
     }
     if (foto.size > 5 * 1024 * 1024) {
-      this.errorFoto = 'La foto debe pesar 5 MB o menos.';
+      this.errorFoto = this.i18n.t('foto.peso');
       input.value = '';
       return;
     }
@@ -139,7 +142,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         input.value = '';
       },
       error: (error) => {
-        this.errorFoto = error.error?.error || 'No se pudo guardar la foto. Inténtalo de nuevo.';
+        this.errorFoto = this.i18n.errorApi(error.error?.error, 'foto.error');
         this.fotoSubiendo = false;
         input.value = '';
       }

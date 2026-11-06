@@ -3,33 +3,33 @@
 
   <section class="inicio__saludo">
     <h1>{{ titulo }}</h1>
-    <p>Las ordenamos por cómo viven, no por cómo se ven.</p>
+    <p>{{ 'inicio.lema' | t }}</p>
     <div class="inicio__acciones">
       <a class="btn btn--primario" routerLink="/dashboard" fragment="companeros" (click)="irASeccion('companeros')">
-        Ver coincidencias
+        {{ 'inicio.verCoincidencias' | t }}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
       </a>
-      <a class="btn btn--secundario" routerLink="/perfil">Revisar mi perfil</a>
+      <a class="btn btn--secundario" routerLink="/perfil">{{ 'inicio.revisarPerfil' | t }}</a>
     </div>
   </section>
 
-  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="aviso aviso--error" *ngIf="hayErrorCarga" role="alert">{{ 'inicio.errorCarga' | t }}</p>
 
   <div class="inicio__columnas">
     <div class="inicio__principal">
       <div class="cargando" *ngIf="cargando" role="status">
         <span class="giro" aria-hidden="true"></span>
-        <p>Comparando hábitos...</p>
+        <p>{{ 'comun.comparando' | t }}</p>
       </div>
 
       <section id="companeros" *ngIf="!cargando && miPerfil && mejorOpcion as mejor">
-        <div class="encabezado-seccion"><h2>Tu mejor opción</h2></div>
+        <div class="encabezado-seccion"><h2>{{ 'inicio.mejorOpcion' | t }}</h2></div>
         <app-tarjeta-companero [resultado]="mejor" [yo]="miPerfil" [destacada]="true"></app-tarjeta-companero>
 
         <ng-container *ngIf="otrasOpciones.length">
           <div class="encabezado-seccion inicio__otras">
-            <h2>Otras personas</h2>
-            <a class="enlace" *ngIf="hayMasOpciones" routerLink="/companeros">Ver las {{ resultados.length }}</a>
+            <h2>{{ 'inicio.otras' | t }}</h2>
+            <a class="enlace" *ngIf="hayMasOpciones" routerLink="/companeros">{{ 'inicio.verTodas' | t: { cantidad: resultados.length } }}</a>
           </div>
           <div class="rejilla-companeros">
             <app-tarjeta-companero *ngFor="let r of otrasOpciones" [resultado]="r" [yo]="miPerfil"></app-tarjeta-companero>
@@ -37,32 +37,32 @@
         </ng-container>
       </section>
 
-      <section id="companeros" class="vacio" *ngIf="!cargando && !resultados.length && !error">
-        <h2>Todavía no hay con quién compararte</h2>
-        <p>Cuando más personas creen su perfil, aparecerán aquí. Mientras tanto, comparte RoomiesFind con quien también esté buscando.</p>
+      <section id="companeros" class="vacio" *ngIf="!cargando && !resultados.length && !hayErrorCarga">
+        <h2>{{ 'comun.vacioTitulo' | t }}</h2>
+        <p>{{ 'inicio.vacioTexto' | t }}</p>
       </section>
     </div>
 
-    <aside id="mi-perfil" class="ficha" *ngIf="miPerfil" aria-label="Tu perfil">
-      <app-avatar tamano="l" [nombre]="nombre" [foto]="urlFoto(miPerfil.foto_url)" [alt]="'Tu foto de perfil'"></app-avatar>
+    <aside id="mi-perfil" class="ficha" *ngIf="miPerfil" [attr.aria-label]="'inicio.tuPerfil' | t">
+      <app-avatar tamano="l" [nombre]="nombre" [foto]="urlFoto(miPerfil.foto_url)" [alt]="'inicio.tuFoto' | t"></app-avatar>
       <h2>{{ nombre }}</h2>
-      <p class="ficha__zona">{{ miPerfil.zona }}</p>
+      <p class="ficha__zona">{{ i18n.zona(miPerfil.zona) }}</p>
       <p class="ficha__descripcion" *ngIf="miPerfil.descripcion">{{ miPerfil.descripcion }}</p>
 
       <dl class="ficha__datos">
-        <div><dt>Presupuesto</dt><dd>${{ miPerfil.presupuesto | number:'1.0-0' }}</dd></div>
-        <div><dt>Horario</dt><dd class="ficha__capital">{{ miPerfil.horario }}</dd></div>
-        <div><dt>Orden</dt><dd>{{ miPerfil.limpieza }} de 5</dd></div>
-        <div><dt>Ruido</dt><dd>{{ miPerfil.tolerancia_ruido }} de 5</dd></div>
-        <div><dt>Visitas</dt><dd class="ficha__capital">{{ miPerfil.frecuencia_visitas }}</dd></div>
+        <div><dt>{{ 'dato.presupuesto' | t }}</dt><dd>${{ miPerfil.presupuesto | number:'1.0-0' }}</dd></div>
+        <div><dt>{{ 'dato.horario' | t }}</dt><dd>{{ i18n.horario(miPerfil.horario) }}</dd></div>
+        <div><dt>{{ 'dato.orden' | t }}</dt><dd>{{ 'dato.deCinco' | t: { valor: miPerfil.limpieza } }}</dd></div>
+        <div><dt>{{ 'dato.ruido' | t }}</dt><dd>{{ 'dato.deCinco' | t: { valor: miPerfil.tolerancia_ruido } }}</dd></div>
+        <div><dt>{{ 'dato.visitas' | t }}</dt><dd>{{ i18n.visitas(miPerfil.frecuencia_visitas) }}</dd></div>
       </dl>
 
       <div class="ficha__acciones">
         <input id="mi-foto" class="oculto-visual" type="file"
           accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
           [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
-        <label class="btn btn--secundario" for="mi-foto">{{ fotoSubiendo ? 'Guardando...' : 'Cambiar foto' }}</label>
-        <a class="btn btn--secundario" routerLink="/perfil">Editar</a>
+        <label class="btn btn--secundario" for="mi-foto">{{ (fotoSubiendo ? 'comun.guardando' : 'comun.cambiarFoto') | t }}</label>
+        <a class="btn btn--secundario" routerLink="/perfil">{{ 'inicio.editar' | t }}</a>
       </div>
       <p class="aviso aviso--error" *ngIf="errorFoto" role="alert">{{ errorFoto }}</p>
     </aside>
