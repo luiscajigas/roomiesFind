@@ -1,0 +1,21 @@
+app-selector-idioma { display: inline-flex; flex: 0 0 auto; }
+
+.selector-idioma { display: inline-flex; overflow: hidden; border: 1px solid var(--border); border-radius: 999px; }
+
+.selector-idioma button {
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.selector-idioma button:hover { color: var(--text); }
+.selector-idioma button.selector-idioma__opcion--activa { background: var(--accent-2); color: #fff; }
+.selector-idioma button:focus-visible { outline: 2px solid var(--accent-2); outline-offset: -2px; }

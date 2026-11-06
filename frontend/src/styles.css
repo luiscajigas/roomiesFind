@@ -4,6 +4,7 @@
 @import './app/components/comparador/comparador.component.css';
 @import './app/components/escala/escala.component.css';
 @import './app/components/selector-barrio/selector-barrio.component.css';
+@import './app/components/selector-idioma/selector-idioma.component.css';
 @import './app/components/tarjeta-companero/tarjeta-companero.component.css';
 @import './app/pages/auth.styles.css';
 @import './app/pages/dashboard/dashboard.styles.css';
