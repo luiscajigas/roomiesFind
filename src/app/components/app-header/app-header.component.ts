@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { SelectorIdiomaComponent } from '../selector-idioma/selector-idioma.component';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { AuthService } from '../../services/auth.service';
+import { ChatService } from '../../services/chat.service';
 import { PerfilService } from '../../services/perfil.service';
 import { ThemeService } from '../../services/theme.service';
 
@@ -14,7 +15,7 @@ import { ThemeService } from '../../services/theme.service';
   imports: [CommonModule, RouterLink, RouterLinkActive, AvatarComponent, SelectorIdiomaComponent, TraducirPipe],
   templateUrl: './app-header.component.html'
 })
-export class AppHeaderComponent {
+export class AppHeaderComponent implements OnInit {
   menuAbierto = false;
 
   @ViewChild('menuContainer') private menuContainer?: ElementRef<HTMLElement>;
@@ -24,8 +25,18 @@ export class AppHeaderComponent {
     private auth: AuthService,
     private perfil: PerfilService,
     private router: Router,
-    private theme: ThemeService
+    private theme: ThemeService,
+    private chat: ChatService
   ) {}
+
+  /** La conexión queda abierta en toda la app para avisar de mensajes nuevos. */
+  ngOnInit(): void {
+    if (this.auth.estaAutenticado) this.chat.conectar();
+  }
+
+  get noLeidos$() {
+    return this.chat.noLeidos$;
+  }
 
   get foto$() {
     return this.perfil.fotoActual$;
@@ -53,6 +64,7 @@ export class AppHeaderComponent {
 
   salir(): void {
     this.cerrarMenu();
+    this.chat.desconectar();
     this.auth.logout();
     this.perfil.limpiarFotoActual();
     this.router.navigate(['/login']);

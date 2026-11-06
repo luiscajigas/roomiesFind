@@ -6,6 +6,10 @@
   <nav class="primary-nav" [attr.aria-label]="'nav.principal' | t">
     <a routerLink="/dashboard" routerLinkActive="primary-nav__link--active" [routerLinkActiveOptions]="{ exact: true }">{{ 'nav.inicio' | t }}</a>
     <a routerLink="/companeros" routerLinkActive="primary-nav__link--active">{{ 'nav.companeros' | t }}</a>
+    <a routerLink="/chat" routerLinkActive="primary-nav__link--active">
+      {{ 'nav.mensajes' | t }}
+      <span class="contador-mensajes" *ngIf="noLeidos$ | async as cantidad">{{ cantidad }}</span>
+    </a>
     <a routerLink="/perfil" routerLinkActive="primary-nav__link--active">{{ 'nav.perfil' | t }}</a>
   </nav>
   <app-selector-idioma></app-selector-idioma>
@@ -14,6 +18,7 @@
       [attr.aria-label]="(menuAbierto ? 'menu.cerrar' : 'menu.abrir') | t"
       aria-controls="account-menu" [attr.aria-expanded]="menuAbierto" (keydown.escape)="cerrarMenu()">
       <span class="menu-toggle__lineas" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="menu-toggle__aviso" *ngIf="noLeidos$ | async" aria-hidden="true"></span>
       <app-avatar tamano="s" [nombre]="usuario.nombre" [foto]="foto$ | async"></app-avatar>
     </button>
     <nav id="account-menu" class="account-menu" *ngIf="menuAbierto" [attr.aria-label]="'menu.opciones' | t">
@@ -27,6 +32,11 @@
       <a class="account-menu__solo-movil" routerLink="/dashboard" (click)="cerrarMenu()">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10" /></svg>
         {{ 'nav.inicio' | t }}
+      </a>
+      <a class="account-menu__solo-movil" routerLink="/chat" (click)="cerrarMenu()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.500c0 4.700-4 8.500-9 8.500-1.300 0-2.500-.2-3.600-.7L3 21l1.300-4.200C3.500 15.300 3 13.500 3 11.500 3 6.800 7 3 12 3s9 3.800 9 8.500Z" /></svg>
+        {{ 'nav.mensajes' | t }}
+        <span class="contador-mensajes account-menu__contador" *ngIf="noLeidos$ | async as cantidad">{{ cantidad }}</span>
       </a>
       <a routerLink="/perfil" (click)="cerrarMenu()">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg>
