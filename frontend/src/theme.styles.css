@@ -21,7 +21,8 @@
   --radius-s: 0.5rem;
   --radius-m: 0.875rem;
   --radius-l: 1.25rem;
-  --ancho-pagina: 1120px;
+  --ancho-pagina: 2240px;
+  --margen-pagina: clamp(1rem, 4vw, 5rem);
 }
 
 :root[data-theme='light'] {
@@ -43,8 +44,10 @@
   --on-accent: #ffffff;
 }
 
+/* El texto crece un poco en monitores grandes, sin ignorar el tamaño elegido en el navegador. */
 html {
   overflow-x: clip;
+  font-size: clamp(100%, 0.4vw + 65%, 118%);
   scroll-behavior: smooth;
 }
 
@@ -88,18 +91,18 @@ button, input, select, textarea {
 
 /* Página */
 .pagina {
-  width: min(100% - 2.5rem, var(--ancho-pagina));
+  width: min(100% - 2 * var(--margen-pagina), var(--ancho-pagina));
   margin: 0 auto;
   padding-bottom: 5rem;
 }
 
 .encabezado-pagina {
-  max-width: 44rem;
-  margin: 3rem 0 2.25rem;
+  max-width: 60rem;
+  margin: clamp(2.5rem, 4vw, 4.5rem) 0 clamp(2rem, 3vw, 3rem);
 }
 
 .encabezado-pagina h1 {
-  font-size: clamp(2.1rem, 4.5vw, 3.1rem);
+  font-size: clamp(2.2rem, 4.2vw, 4.25rem);
 }
 
 .encabezado-pagina p {
@@ -315,7 +318,6 @@ button, input, select, textarea {
 }
 
 @media (max-width: 480px) {
-  .pagina { width: min(100% - 2rem, var(--ancho-pagina)); }
   .encabezado-pagina { margin: 2rem 0 1.5rem; }
 }
 
