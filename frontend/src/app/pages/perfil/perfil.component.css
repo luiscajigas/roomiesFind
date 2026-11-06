@@ -1,26 +1,37 @@
 .perfil {
   display: grid;
-  grid-template-columns: 15rem minmax(0, 1fr);
-  gap: 3rem;
+  grid-template-columns: clamp(14rem, 18vw, 20rem) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 5rem);
   align-items: start;
 }
 
 .perfil__foto { position: sticky; top: 5.75rem; display: flex; flex-direction: column; align-items: flex-start; }
-.perfil__foto h2 { margin-top: 0.9rem; font-size: 1.35rem; }
-.perfil__foto p { margin: 0.2rem 0 1rem; color: var(--muted); font-size: 0.92rem; }
+.perfil__foto h2 { margin-top: 1rem; font-size: 1.55rem; }
+.perfil__foto p { margin: 0.25rem 0 1rem; color: var(--muted); font-size: 0.95rem; }
 .perfil__foto small { margin-top: 0.5rem; color: var(--muted); font-size: 0.78rem; }
 .perfil__foto .btn { min-height: 2.4rem; padding: 0.4rem 0.85rem; font-size: 0.85rem; }
 .perfil__foto input:focus-visible + label { outline: 2px solid var(--accent-2); outline-offset: 2px; }
 
-.perfil__campos { display: grid; min-width: 0; gap: 1.5rem; }
+.perfil__campos { display: grid; min-width: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 1.5vw, 1.75rem); align-items: stretch; }
+.perfil__campos > .aviso, .perfil__acciones { grid-column: 1 / -1; }
+.perfil__campos > .grupo { padding: clamp(1.25rem, 1.8vw, 2rem); border: 1px solid var(--border); border-radius: var(--radius-m); background: var(--panel); }
+.perfil__campos > .grupo:nth-of-type(2) { grid-column: 2; grid-row: 1 / span 2; }
+.perfil__campos > .grupo:nth-of-type(1) { grid-column: 1; }
+.perfil__campos > .grupo:nth-of-type(3) { grid-column: 1; }
+.perfil__campos > .grupo textarea { min-height: 7rem; }
 
 .perfil__acciones { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
 /* Grupo de campos, compartido por el registro y el perfil. */
 .grupo { min-width: 0; padding-bottom: 1.75rem; border-bottom: 1px solid var(--border); }
-.grupo h2 { margin-bottom: 1.1rem; font-size: 1.3rem; }
+.grupo h2 { margin-bottom: 1.1rem; font-size: 1.35rem; }
 .grupo__rejilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; }
 .grupo__casillas { display: flex; flex-wrap: wrap; gap: 0.7rem 1.5rem; margin-top: 1.25rem; }
+
+@media (max-width: 1180px) {
+  .perfil__campos { grid-template-columns: minmax(0, 1fr); }
+  .perfil__campos > .grupo:nth-of-type(n) { grid-column: 1; grid-row: auto; }
+}
 
 @media (max-width: 800px) {
   .perfil { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
