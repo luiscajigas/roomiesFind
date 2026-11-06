@@ -69,6 +69,8 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   otroEscribiendo = false;
   errorEnvio: string | null = null;
   errorCarga = false;
+  /** Persona sin conversación cuyo perfil se está pidiendo. */
+  private buscandoId: number | null = null;
 
   private suscripciones = new Subscription();
   private ultimoAvisoEscribiendo = 0;
@@ -90,16 +92,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnInit(): void {
     this.chat.conectar();
-    this.perfiles.candidatos().subscribe({
-      next: (lista) => {
-        this.personas = new Map(lista.map((persona) => [persona.id, persona]));
-        this.cargando = false;
-      },
-      error: () => {
-        this.errorCarga = true;
-        this.cargando = false;
-      }
-    });
     this.cargarConversaciones();
 
     this.suscripciones.add(this.ruta.queryParamMap.subscribe((parametros) => {
@@ -149,7 +141,11 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   get otraPersona(): Perfil | null {
-    return this.otroId ? this.personas.get(this.otroId) ?? null : null;
+    return this.otroId && this.otroId !== this.miId ? this.personas.get(this.otroId) ?? null : null;
+  }
+
+  get esperandoPersona(): boolean {
+    return !!this.otroId && !this.otraPersona && (this.cargando || this.buscandoId === this.otroId);
   }
 
   get fotoOtra(): string | null {
@@ -164,18 +160,18 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     return this.i18n.idioma === 'en' ? 'en-US' : 'es-CO';
   }
 
-  /** Primero las conversaciones con mensajes y luego el resto de personas, para poder empezar una nueva. */
+  /**
+   * Solo las personas con las que ya se ha conversado. Quien se abre desde "Enviar mensaje"
+   * aparece arriba mientras está abierta y se queda en la lista con el primer mensaje.
+   */
   get filas(): FilaConversacion[] {
     const consulta = this.busqueda.trim().toLowerCase();
-    const conMensajes = this.conversaciones
-      .filter((conversacion) => this.personas.has(conversacion.otroId))
+    const filas = this.conversaciones
       .map((conversacion) => this.fila(conversacion.otroId, conversacion.ultimoMensaje, conversacion.noLeidos));
-    const conMensajesIds = new Set(conMensajes.map((fila) => fila.otroId));
-    const sinMensajes = [...this.personas.keys()]
-      .filter((id) => !conMensajesIds.has(id))
-      .map((id) => this.fila(id, null, 0))
-      .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
-    return [...conMensajes, ...sinMensajes].filter((fila) => !consulta || fila.nombre.toLowerCase().includes(consulta));
+    if (this.otraPersona && !filas.some((fila) => fila.otroId === this.otroId)) {
+      filas.unshift(this.fila(this.otraPersona.id, null, 0));
+    }
+    return filas.filter((fila) => !consulta || fila.nombre.toLowerCase().includes(consulta));
   }
 
   esDiaNuevo(indice: number): boolean {
@@ -277,6 +273,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.otroEscribiendo = false;
     this.pegadoAlFinal = true;
     if (id) this.cargarMensajes(id);
+    if (!this.cargando) this.buscarPersonaAbierta();
   }
 
   private cargarMensajes(otroId: number): void {
@@ -295,15 +292,41 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
       },
       error: () => {
         this.cargandoMensajes = false;
-        this.errorCarga = true;
+        if (this.otroId === otroId) this.errorEnvio = this.i18n.t('chat.errorCarga');
       }
     });
   }
 
   private cargarConversaciones(): void {
     this.chat.conversaciones().subscribe({
-      next: (lista) => (this.conversaciones = lista),
-      error: () => {}
+      next: (lista) => {
+        this.conversaciones = lista;
+        lista.forEach((conversacion) => this.personas.set(conversacion.otroId, conversacion.persona));
+        this.cargando = false;
+        this.errorCarga = false;
+        this.buscarPersonaAbierta();
+      },
+      error: () => {
+        this.cargando = false;
+        this.errorCarga = true;
+        this.buscarPersonaAbierta();
+      }
+    });
+  }
+
+  /** Para escribirle a alguien por primera vez basta con su perfil, sin traer a todos los usuarios. */
+  private buscarPersonaAbierta(): void {
+    const id = this.otroId;
+    if (!id || id === this.miId || this.personas.has(id) || this.buscandoId === id) return;
+    this.buscandoId = id;
+    this.perfiles.obtener(id).subscribe({
+      next: (persona) => {
+        this.personas.set(id, persona);
+        if (this.buscandoId === id) this.buscandoId = null;
+      },
+      error: () => {
+        if (this.buscandoId === id) this.buscandoId = null;
+      }
     });
   }
 

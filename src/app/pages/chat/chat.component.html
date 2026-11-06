@@ -5,7 +5,7 @@
     <aside class="chat__panel" [attr.aria-label]="'chat.conversaciones' | t">
       <div class="chat__panel-cabecera">
         <h1>{{ 'chat.titulo' | t }}</h1>
-        <div class="campo">
+        <div class="campo" *ngIf="conversaciones.length">
           <label class="oculto-visual" for="chat-buscar">{{ 'chat.buscar' | t }}</label>
           <input id="chat-buscar" type="search" autocomplete="off" [placeholder]="'chat.buscar' | t" [(ngModel)]="busqueda" />
         </div>
@@ -38,7 +38,13 @@
             </span>
           </a>
         </li>
-        <li class="chat__nadie" *ngIf="!filas.length">{{ 'chat.sinResultados' | t }}</li>
+        <li class="chat__nadie" *ngIf="!filas.length && busqueda.trim()">{{ 'chat.sinResultados' | t }}</li>
+        <li class="chat__nadie" *ngIf="!filas.length && !busqueda.trim() && errorCarga" role="alert">{{ 'chat.errorCarga' | t }}</li>
+        <li class="chat__sin-conversaciones" *ngIf="!filas.length && !busqueda.trim() && !errorCarga">
+          <strong>{{ 'chat.sinConversaciones' | t }}</strong>
+          <p>{{ 'chat.sinConversacionesTexto' | t }}</p>
+          <a class="btn btn--secundario" routerLink="/companeros">{{ 'chat.verCompaneros' | t }}</a>
+        </li>
       </ul>
     </aside>
 
@@ -117,11 +123,18 @@
       </ng-container>
 
       <ng-template #sinSeleccion>
-        <div class="chat__vacio">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M42 23c0 9.4-8 17-18 17-2.6 0-5-.5-7.300-1.400L7 41l2.600-8.300C7.300 29.900 6 26.600 6 23 6 13.600 14 6 24 6s18 7.600 18 17Z" /></svg>
-          <h2>{{ (otroId && !cargando ? 'chat.noDisponible' : 'chat.eligeTitulo') | t }}</h2>
-          <p *ngIf="!(otroId && !cargando)">{{ 'chat.eligeTexto' | t }}</p>
+        <div class="cargando chat__cargando" *ngIf="esperandoPersona; else vacio" role="status">
+          <span class="giro" aria-hidden="true"></span>
+          <p>{{ 'chat.cargando' | t }}</p>
         </div>
+        <ng-template #vacio>
+          <div class="chat__vacio">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M42 23c0 9.4-8 17-18 17-2.6 0-5-.5-7.300-1.400L7 41l2.600-8.300C7.300 29.900 6 26.600 6 23 6 13.600 14 6 24 6s18 7.600 18 17Z" /></svg>
+            <h2 *ngIf="otroId || conversaciones.length">{{ (otroId ? 'chat.noDisponible' : 'chat.eligeTitulo') | t }}</h2>
+            <p *ngIf="!otroId">{{ 'chat.eligeTexto' | t }}</p>
+            <a *ngIf="otroId" class="btn btn--secundario" routerLink="/chat">{{ 'chat.volver' | t }}</a>
+          </div>
+        </ng-template>
       </ng-template>
     </section>
   </div>
