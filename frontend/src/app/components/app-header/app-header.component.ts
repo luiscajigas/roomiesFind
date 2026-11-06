@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AvatarComponent } from '../avatar/avatar.component';
+import { SelectorIdiomaComponent } from '../selector-idioma/selector-idioma.component';
+import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
 import { ThemeService } from '../../services/theme.service';
@@ -9,7 +11,7 @@ import { ThemeService } from '../../services/theme.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, AvatarComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, AvatarComponent, SelectorIdiomaComponent, TraducirPipe],
   templateUrl: './app-header.component.html'
 })
 export class AppHeaderComponent {

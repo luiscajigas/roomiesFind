@@ -26,9 +26,11 @@ app-header { display: block; }
 }
 
 .brand { display: inline-flex; align-items: center; gap: 0.55rem; color: var(--text); font-family: var(--font-display); font-size: 1.2rem; text-decoration: none; }
-.brand img { width: 2rem; height: 2rem; object-fit: contain; }
+.brand img { width: 2.75rem; height: 2.75rem; object-fit: contain; }
 
 .primary-nav { display: flex; align-self: stretch; gap: 1.6rem; margin-left: auto; }
+app-selector-idioma { margin-left: auto; }
+.primary-nav + app-selector-idioma { margin-left: 0; }
 .primary-nav a { display: flex; align-items: center; border-bottom: 2px solid transparent; color: var(--muted); font-size: 0.92rem; font-weight: 500; text-decoration: none; transition: color 140ms ease, border-color 140ms ease; }
 .primary-nav a:hover { color: var(--text); }
 .primary-nav a.primary-nav__link--active { border-bottom-color: var(--accent); color: var(--text); }
@@ -57,5 +59,8 @@ app-header { display: block; }
 
 @media (max-width: 640px) {
   .primary-nav { display: none; }
+  .primary-nav + app-selector-idioma { margin-left: auto; }
+  .topbar { gap: 0.6rem; }
+  .brand > span { font-size: 1.05rem; }
   .account-menu__solo-movil { display: flex !important; }
 }
