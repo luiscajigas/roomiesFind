@@ -20,19 +20,19 @@
 .acceso__marca { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--text); font-family: var(--font-display); font-size: 1.2rem; text-decoration: none; }
 .acceso__marca img { width: 3.5rem; height: 3.5rem; object-fit: contain; }
 
-.acceso__mensaje { max-width: 34rem; margin-block: auto; padding-block: 2rem; }
-.acceso__mensaje h1 { font-size: clamp(2.5rem, 4.8vw, 4.1rem); line-height: 1.08; }
+.acceso__mensaje { max-width: 46rem; margin-block: auto; padding-block: 2rem; }
+.acceso__mensaje h1 { font-size: clamp(2.5rem, 4.8vw, 5.5rem); line-height: 1.08; }
 .acceso__mensaje h1 em { color: var(--accent); font-style: normal; }
-.acceso__mensaje > p { max-width: 28rem; margin: 1.1rem 0 0; color: var(--muted); font-size: 1.1rem; }
+.acceso__mensaje > p { max-width: 36rem; margin: 1.1rem 0 0; color: var(--muted); font-size: 1.1rem; }
 
-.acceso__ejemplo { max-width: 24rem; margin: 2.25rem 0 0; padding: 1.1rem 1.2rem; border: 1px solid var(--border); border-radius: var(--radius-m); background: var(--panel); }
+.acceso__ejemplo { max-width: 32rem; margin: 2.25rem 0 0; padding: 1.1rem 1.2rem; border: 1px solid var(--border); border-radius: var(--radius-m); background: var(--panel); }
 .acceso__ejemplo figcaption { margin-top: 0.85rem; padding-top: 0.7rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; }
 
 .acceso__panel { display: flex; align-items: center; justify-content: center; padding: 2.5rem clamp(1.5rem, 5vw, 4.5rem); border-left: 1px solid var(--border); background: var(--panel); }
 .acceso--registro .acceso__panel { align-items: flex-start; }
 
-.acceso__contenido { display: grid; width: 100%; max-width: 24rem; gap: 1.5rem; }
-.acceso--registro .acceso__contenido { max-width: 38rem; }
+.acceso__contenido { display: grid; width: 100%; max-width: 27rem; gap: 1.5rem; }
+.acceso--registro .acceso__contenido { max-width: 50rem; }
 .acceso__contenido > h2 { font-size: 2rem; }
 
 .acceso__formulario { display: grid; gap: 1.1rem; }
