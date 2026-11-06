@@ -5,8 +5,8 @@ app-tarjeta-companero { display: block; min-width: 0; }
   height: 100%;
   box-sizing: border-box;
   flex-direction: column;
-  gap: 1.1rem;
-  padding: 1.35rem;
+  gap: 1.2rem;
+  padding: clamp(1.25rem, 1.5vw, 1.75rem);
   border: 1px solid var(--border);
   border-radius: var(--radius-m);
   background: var(--panel);
@@ -66,7 +66,8 @@ app-tarjeta-companero { display: block; min-width: 0; }
 .tarjeta__abrir svg { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; transition: transform 160ms ease; }
 .tarjeta__abrir svg.girado { transform: rotate(180deg); }
 
-.explicacion { margin-top: 0.85rem; font-size: 0.95rem; line-height: 1.6; }
+.explicacion { margin-top: 0.85rem; font-size: 0.95rem; line-height: 1.65; }
+.explicacion > p { max-width: 72ch; }
 .explicacion > p { margin: 0; }
 .explicacion__estado { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); }
 .explicacion__pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem; margin-top: 0.85rem; }
@@ -94,11 +95,11 @@ app-tarjeta-companero { display: block; min-width: 0; }
 .explicacion__voz--activa, .explicacion__voz--activa:hover { border-color: var(--accent); background: rgba(var(--accent-rgb), 0.12); color: var(--accent); }
 
 /* La mejor opción aprovecha el ancho: comparador a un lado, razones al otro. */
-.tarjeta--destacada { padding: 1.6rem; border-color: rgba(var(--accent-rgb), 0.55); }
+.tarjeta--destacada { padding: clamp(1.5rem, 2vw, 2.5rem); border-color: rgba(var(--accent-rgb), 0.55); }
 .tarjeta--destacada:hover { border-color: var(--accent); }
 .tarjeta--destacada .tarjeta__identidad h3 { font-size: 1.5rem; }
 .tarjeta--destacada .puntaje strong { font-size: 2.6rem; }
-.tarjeta--destacada .tarjeta__cuerpo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+.tarjeta--destacada .tarjeta__cuerpo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 3.5vw, 4rem); }
 
 @media (max-width: 720px) {
   .tarjeta--destacada { padding: 1.35rem; }
