@@ -34,6 +34,10 @@
   </div>
 
   <div class="tarjeta__pie">
+    <a class="btn btn--secundario tarjeta__mensaje" routerLink="/chat" [queryParams]="{ con: candidato.id }">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.500c0 4.700-4 8.500-9 8.500-1.300 0-2.500-.2-3.600-.7L3 21l1.300-4.200C3.500 15.300 3 13.500 3 11.500 3 6.800 7 3 12 3s9 3.800 9 8.500Z" /></svg>
+      {{ 'tarjeta.mensaje' | t }}
+    </a>
     <button class="tarjeta__abrir" type="button" (click)="alternarExplicacion()" [attr.aria-expanded]="explicacionAbierta">
       {{ (explicacionAbierta ? 'tarjeta.ocultar' : 'tarjeta.porQue') | t }}
       <svg [class.girado]="explicacionAbierta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>

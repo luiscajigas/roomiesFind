@@ -43,6 +43,7 @@ app-tarjeta-companero { display: block; min-width: 0; }
 .razones--conversar li::before { background: var(--yellow); }
 
 .tarjeta__pie { margin-top: auto; }
+.tarjeta__mensaje { width: 100%; margin-bottom: 0.75rem; }
 
 .tarjeta__abrir {
   display: flex;

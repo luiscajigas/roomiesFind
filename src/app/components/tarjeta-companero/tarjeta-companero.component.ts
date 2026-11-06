@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, skip } from 'rxjs';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
@@ -16,7 +17,7 @@ import { VisorFotoComponent } from '../visor-foto/visor-foto.component';
 @Component({
   selector: 'app-tarjeta-companero',
   standalone: true,
-  imports: [CommonModule, TraducirPipe, AvatarComponent, ComparadorComponent, DescripcionComponent, VisorFotoComponent],
+  imports: [CommonModule, RouterLink, TraducirPipe, AvatarComponent, ComparadorComponent, DescripcionComponent, VisorFotoComponent],
   templateUrl: './tarjeta-companero.component.html'
 })
 export class TarjetaCompaneroComponent implements OnInit, OnDestroy {
