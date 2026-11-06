@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://roomiesfindback.onrender.com/api'
+  apiUrl: 'https://roomiesfind.eastus.cloudapp.azure.com/api'
 };
