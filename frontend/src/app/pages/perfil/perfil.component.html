@@ -2,76 +2,76 @@
   <app-header></app-header>
 
   <section class="encabezado-pagina">
-    <h1>Mi perfil</h1>
-    <p>Entre más claro seas, mejores coincidencias vas a encontrar.</p>
+    <h1>{{ 'perfil.titulo' | t }}</h1>
+    <p>{{ 'perfil.texto' | t }}</p>
   </section>
 
   <div class="cargando" *ngIf="cargando" role="status">
     <span class="giro" aria-hidden="true"></span>
-    <p>Cargando tu perfil...</p>
+    <p>{{ 'perfil.cargando' | t }}</p>
   </div>
 
   <form class="perfil" *ngIf="!cargando && formulario" (ngSubmit)="guardar()">
     <aside class="perfil__foto">
-      <app-avatar tamano="l" [nombre]="nombre" [foto]="fotoSrc" [alt]="'Foto de ' + nombre"></app-avatar>
+      <app-avatar tamano="l" [nombre]="nombre" [foto]="fotoSrc" [alt]="'tarjeta.foto' | t: { nombre: nombre }"></app-avatar>
       <h2>{{ nombre }}</h2>
-      <p>{{ perfil?.zona }}</p>
+      <p>{{ i18n.zona(perfil?.zona) }}</p>
       <input id="profile-photo" class="oculto-visual" type="file"
         accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
         [disabled]="fotoSubiendo" (change)="actualizarFoto($event)" />
-      <label class="btn btn--secundario" for="profile-photo">{{ fotoSubiendo ? 'Guardando...' : 'Cambiar foto' }}</label>
-      <small>JPG, PNG, WEBP o GIF, hasta 5 MB.</small>
+      <label class="btn btn--secundario" for="profile-photo">{{ (fotoSubiendo ? 'comun.guardando' : 'comun.cambiarFoto') | t }}</label>
+      <small>{{ 'comun.formatosFoto' | t }}</small>
     </aside>
 
     <div class="perfil__campos">
       <section class="grupo">
-        <h2>Qué estás buscando</h2>
+        <h2>{{ 'form.buscando' | t }}</h2>
         <div class="grupo__rejilla">
           <div class="campo">
-            <label for="presupuesto">Presupuesto mensual (COP)</label>
+            <label for="presupuesto">{{ 'form.presupuesto' | t }}</label>
             <input id="presupuesto" type="number" name="presupuesto" min="0" step="10000" required [(ngModel)]="formulario.presupuesto" />
           </div>
           <div class="campo">
-            <label for="zona">Barrio en Pasto</label>
+            <label for="zona">{{ 'form.barrio' | t }}</label>
             <app-selector-barrio idCampo="zona" [(valor)]="formulario.zona" [zonaActual]="zonaAnterior"></app-selector-barrio>
           </div>
         </div>
       </section>
 
       <section class="grupo">
-        <h2>Cómo vives</h2>
+        <h2>{{ 'form.comoVives' | t }}</h2>
         <div class="grupo__rejilla">
           <div class="campo">
-            <label for="horario">Horario</label>
+            <label for="horario">{{ 'form.horario' | t }}</label>
             <select id="horario" name="horario" [(ngModel)]="formulario.horario">
-              <option value="madrugador">Madrugador</option>
-              <option value="nocturno">Nocturno</option>
-              <option value="mixto">Mixto</option>
+              <option value="madrugador">{{ 'horario.madrugador' | t }}</option>
+              <option value="nocturno">{{ 'horario.nocturno' | t }}</option>
+              <option value="mixto">{{ 'horario.mixto' | t }}</option>
             </select>
           </div>
           <div class="campo">
-            <label for="visitas">Visitas en casa</label>
+            <label for="visitas">{{ 'form.visitas' | t }}</label>
             <select id="visitas" name="frecuencia_visitas" [(ngModel)]="formulario.frecuencia_visitas">
-              <option value="nunca">Nunca</option>
-              <option value="ocasional">Ocasional</option>
-              <option value="frecuente">Frecuente</option>
+              <option value="nunca">{{ 'visitas.nunca' | t }}</option>
+              <option value="ocasional">{{ 'visitas.ocasional' | t }}</option>
+              <option value="frecuente">{{ 'visitas.frecuente' | t }}</option>
             </select>
           </div>
-          <app-escala nombre="limpieza" etiqueta="Orden en casa" minimo="Relajado" maximo="Muy ordenado" [(valor)]="formulario.limpieza"></app-escala>
-          <app-escala nombre="tolerancia_ruido" etiqueta="Ruido" minimo="Necesito silencio" maximo="No me molesta" [(valor)]="formulario.tolerancia_ruido"></app-escala>
+          <app-escala nombre="limpieza" [etiqueta]="'form.orden' | t" [minimo]="'form.relajado' | t" [maximo]="'form.muyOrdenado' | t" [(valor)]="formulario.limpieza"></app-escala>
+          <app-escala nombre="tolerancia_ruido" [etiqueta]="'form.ruido' | t" [minimo]="'form.necesitoSilencio' | t" [maximo]="'form.noMeMolesta' | t" [(valor)]="formulario.tolerancia_ruido"></app-escala>
         </div>
         <div class="grupo__casillas">
-          <label class="casilla"><input type="checkbox" name="tiene_mascotas" [(ngModel)]="formulario.tiene_mascotas" /> Tengo mascotas</label>
-          <label class="casilla"><input type="checkbox" name="acepta_mascotas" [(ngModel)]="formulario.acepta_mascotas" /> Acepto vivir con mascotas</label>
+          <label class="casilla"><input type="checkbox" name="tiene_mascotas" [(ngModel)]="formulario.tiene_mascotas" /> {{ 'form.tengoMascotas' | t }}</label>
+          <label class="casilla"><input type="checkbox" name="acepta_mascotas" [(ngModel)]="formulario.acepta_mascotas" /> {{ 'form.aceptoMascotas' | t }}</label>
         </div>
       </section>
 
       <section class="grupo">
-        <h2>Sobre ti</h2>
+        <h2>{{ 'perfil.sobreTi' | t }}</h2>
         <div class="campo">
-          <label for="descripcion">Unas líneas para quien te lea</label>
+          <label for="descripcion">{{ 'perfil.lineas' | t }}</label>
           <textarea id="descripcion" name="descripcion" rows="4" maxlength="1000"
-            placeholder="Qué haces, qué te gusta y cómo imaginas la casa."
+            [placeholder]="'form.descripcionEjemplo' | t"
             [(ngModel)]="formulario.descripcion"></textarea>
         </div>
       </section>
@@ -81,9 +81,9 @@
 
       <div class="perfil__acciones">
         <button class="btn btn--primario" type="submit" [disabled]="guardando">
-          {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+          {{ (guardando ? 'comun.guardando' : 'perfil.guardar') | t }}
         </button>
-        <a class="btn btn--secundario" routerLink="/dashboard">Cancelar</a>
+        <a class="btn btn--secundario" routerLink="/dashboard">{{ 'perfil.cancelar' | t }}</a>
       </div>
     </div>
   </form>

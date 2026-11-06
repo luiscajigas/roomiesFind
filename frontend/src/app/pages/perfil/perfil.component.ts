@@ -7,6 +7,8 @@ import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { EscalaComponent } from '../../components/escala/escala.component';
 import { SelectorBarrioComponent } from '../../components/selector-barrio/selector-barrio.component';
 import { esBarrioDeLaLista } from '../../data/barrios-pasto';
+import { TraducirPipe } from '../../i18n/traducir.pipe';
+import { IdiomaService } from '../../services/idioma.service';
 import { Perfil } from '../../models/perfil.model';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
@@ -18,7 +20,7 @@ type PerfilEditable = Pick<Perfil,
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, EscalaComponent, SelectorBarrioComponent],
+  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, EscalaComponent, SelectorBarrioComponent, TraducirPipe],
   templateUrl: './perfil.component.html'
 })
 export class PerfilComponent implements OnInit {
@@ -35,7 +37,8 @@ export class PerfilComponent implements OnInit {
 
   constructor(
     private perfilService: PerfilService,
-    private auth: AuthService
+    private auth: AuthService,
+    readonly i18n: IdiomaService
   ) {}
 
   ngOnInit(): void {
@@ -46,14 +49,14 @@ export class PerfilComponent implements OnInit {
         this.cargando = false;
       },
       error: () => {
-        this.error = 'No se pudo cargar tu perfil. Intenta volver a iniciar sesión.';
+        this.error = this.i18n.t('companeros.errorPerfil');
         this.cargando = false;
       }
     });
   }
 
   get nombre(): string {
-    return this.auth.usuarioActual?.nombre || this.perfil?.nombre || 'Mi perfil';
+    return this.auth.usuarioActual?.nombre || this.perfil?.nombre || this.i18n.t('perfil.titulo');
   }
 
   get fotoSrc(): string | null {
@@ -70,11 +73,11 @@ export class PerfilComponent implements OnInit {
         this.perfil = { ...this.perfil, ...perfil };
         this.formulario = this.extraerFormulario(this.perfil);
         this.guardando = false;
-        this.exito = 'Tu perfil se guardó correctamente.';
+        this.exito = this.i18n.t('perfil.guardado');
       },
       error: (error) => {
         this.guardando = false;
-        this.error = error.error?.error || 'No se pudo guardar tu perfil. Inténtalo de nuevo.';
+        this.error = this.i18n.errorApi(error.error?.error, 'perfil.errorGuardar');
       }
     });
   }
@@ -86,12 +89,12 @@ export class PerfilComponent implements OnInit {
 
     const permitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!permitidos.includes(foto.type)) {
-      this.error = 'Elige una imagen JPG, PNG, WEBP o GIF.';
+      this.error = this.i18n.t('foto.tipo');
       input.value = '';
       return;
     }
     if (foto.size > 5 * 1024 * 1024) {
-      this.error = 'La foto debe pesar 5 MB o menos.';
+      this.error = this.i18n.t('foto.peso');
       input.value = '';
       return;
     }
@@ -104,12 +107,12 @@ export class PerfilComponent implements OnInit {
         if (this.perfil) this.perfil = { ...this.perfil, foto_url };
         this.fotoVersion = Date.now();
         this.fotoSubiendo = false;
-        this.exito = 'Tu foto de perfil se actualizó.';
+        this.exito = this.i18n.t('perfil.fotoActualizada');
         input.value = '';
       },
       error: (error) => {
         this.fotoSubiendo = false;
-        this.error = error.error?.error || 'No se pudo actualizar tu foto.';
+        this.error = this.i18n.errorApi(error.error?.error, 'perfil.errorFoto');
         input.value = '';
       }
     });
