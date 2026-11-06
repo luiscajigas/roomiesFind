@@ -1,0 +1,128 @@
+<main class="pagina pagina--chat">
+  <app-header></app-header>
+
+  <div class="chat" [class.chat--con-hilo]="otroId">
+    <aside class="chat__panel" [attr.aria-label]="'chat.conversaciones' | t">
+      <div class="chat__panel-cabecera">
+        <h1>{{ 'chat.titulo' | t }}</h1>
+        <div class="campo">
+          <label class="oculto-visual" for="chat-buscar">{{ 'chat.buscar' | t }}</label>
+          <input id="chat-buscar" type="search" autocomplete="off" [placeholder]="'chat.buscar' | t" [(ngModel)]="busqueda" />
+        </div>
+      </div>
+
+      <div class="cargando chat__cargando" *ngIf="cargando" role="status">
+        <span class="giro" aria-hidden="true"></span>
+        <p>{{ 'chat.cargando' | t }}</p>
+      </div>
+
+      <ul class="chat__lista" *ngIf="!cargando">
+        <li *ngFor="let fila of filas">
+          <a class="chat__fila" routerLink="/chat" [queryParams]="{ con: fila.otroId }"
+            [class.chat__fila--activa]="fila.otroId === otroId" [attr.aria-current]="fila.otroId === otroId ? 'true' : null">
+            <app-avatar [nombre]="fila.nombre" [foto]="fila.foto"></app-avatar>
+            <span class="chat__fila-texto">
+              <strong>{{ fila.nombre }}</strong>
+              <small [class.chat__sin-leer]="fila.noLeidos > 0">
+                <ng-container *ngIf="fila.ultimo as ultimo; else nueva">
+                  <ng-container *ngIf="ultimo.remitenteId === miId">{{ 'chat.tu' | t }} </ng-container>{{ ultimo.contenido }}
+                </ng-container>
+                <ng-template #nueva>{{ 'chat.empezar' | t }}</ng-template>
+              </small>
+            </span>
+            <span class="chat__fila-meta">
+              <time *ngIf="fila.ultimo as ultimo" [attr.datetime]="ultimo.creadoEn">
+                {{ ultimo.creadoEn | date: (esHoy(ultimo.creadoEn) ? 'shortTime' : 'dd/MM') : undefined : localeFechas }}
+              </time>
+              <span class="chat__contador" *ngIf="fila.noLeidos > 0">{{ fila.noLeidos }}</span>
+            </span>
+          </a>
+        </li>
+        <li class="chat__nadie" *ngIf="!filas.length">{{ 'chat.sinResultados' | t }}</li>
+      </ul>
+    </aside>
+
+    <section class="chat__hilo" [attr.aria-label]="otraPersona?.nombre">
+      <ng-container *ngIf="otroId && otraPersona as persona; else sinSeleccion">
+        <header class="chat__hilo-cabecera">
+          <button class="chat__volver" type="button" [attr.aria-label]="'chat.volver' | t" (click)="volverALista()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+          </button>
+          <app-avatar [nombre]="persona.nombre" [foto]="fotoOtra"></app-avatar>
+          <div class="chat__hilo-persona">
+            <h2>{{ persona.nombre }}</h2>
+            <p>{{ i18n.zona(persona.zona) }} · {{ i18n.horario(persona.horario) }}</p>
+          </div>
+        </header>
+
+        <p class="chat__aviso" *ngIf="!conectado" role="status">
+          <span class="giro" aria-hidden="true"></span>
+          {{ 'chat.reconectando' | t }}
+        </p>
+
+        <div #lista class="chat__mensajes" role="log" aria-live="polite" (scroll)="alDesplazar()">
+          <button *ngIf="hayMas" class="btn btn--secundario chat__anteriores" type="button" [disabled]="cargandoAnteriores" (click)="cargarAnteriores()">
+            {{ (cargandoAnteriores ? 'chat.cargando' : 'chat.anteriores') | t }}
+          </button>
+
+          <div class="cargando chat__cargando" *ngIf="cargandoMensajes && !mensajes.length" role="status">
+            <span class="giro" aria-hidden="true"></span>
+            <p>{{ 'chat.cargando' | t }}</p>
+          </div>
+
+          <div class="chat__inicio" *ngIf="!cargandoMensajes && !mensajes.length">
+            <app-avatar tamano="l" [nombre]="persona.nombre" [foto]="fotoOtra"></app-avatar>
+            <h3>{{ persona.nombre }}</h3>
+            <p>{{ 'chat.inicio' | t }}</p>
+          </div>
+
+          <ng-container *ngFor="let mensaje of mensajes; let i = index; trackBy: seguir">
+            <p class="chat__dia" *ngIf="esDiaNuevo(i)">
+              <span>{{ etiquetaDia(mensaje.creadoEn) ?? (mensaje.creadoEn | date: 'longDate' : undefined : localeFechas) }}</span>
+            </p>
+            <div class="burbuja" [class.burbuja--mia]="mensaje.remitenteId === miId" [class.burbuja--seguida]="continuaGrupo(i)" [class.burbuja--enviando]="mensaje.enviando">
+              <p>{{ mensaje.contenido }}</p>
+              <span class="burbuja__meta">
+                <time [attr.datetime]="mensaje.creadoEn">{{ mensaje.creadoEn | date: 'shortTime' : undefined : localeFechas }}</time>
+                <ng-container *ngIf="mensaje.remitenteId === miId">
+                  <svg *ngIf="mensaje.enviando; else entregado" class="burbuja__estado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" [attr.aria-label]="'chat.enviando' | t"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                  <ng-template #entregado>
+                    <svg class="burbuja__estado" [class.burbuja__estado--leido]="mensaje.leidoEn" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" [attr.aria-label]="(mensaje.leidoEn ? 'chat.leido' : 'chat.enviado') | t">
+                      <path d="m3 13 4 4 9-10" />
+                      <path *ngIf="mensaje.leidoEn" d="m14 16 1 1 9-10" />
+                    </svg>
+                  </ng-template>
+                </ng-container>
+              </span>
+            </div>
+          </ng-container>
+
+          <div class="chat__escribiendo" *ngIf="otroEscribiendo" role="status" [attr.aria-label]="'chat.escribiendo' | t: { nombre: persona.nombre }">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <form class="chat__redactor" (ngSubmit)="enviar()">
+          <p class="aviso aviso--error chat__error" *ngIf="errorEnvio" role="alert">{{ errorEnvio }}</p>
+          <div class="chat__redactor-fila">
+            <label class="oculto-visual" for="chat-mensaje">{{ 'chat.placeholder' | t }}</label>
+            <textarea #campo id="chat-mensaje" name="mensaje" rows="1" [maxLength]="largoMaximo"
+              [placeholder]="'chat.placeholder' | t" [(ngModel)]="texto"
+              (input)="alEscribir()" (keydown)="alPresionarTecla($event)"></textarea>
+            <button class="chat__enviar" type="submit" [disabled]="!texto.trim() || !conectado" [attr.aria-label]="'chat.enviar' | t">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+            </button>
+          </div>
+        </form>
+      </ng-container>
+
+      <ng-template #sinSeleccion>
+        <div class="chat__vacio">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M42 23c0 9.4-8 17-18 17-2.6 0-5-.5-7.300-1.400L7 41l2.600-8.300C7.300 29.900 6 26.600 6 23 6 13.600 14 6 24 6s18 7.600 18 17Z" /></svg>
+          <h2>{{ (otroId && !cargando ? 'chat.noDisponible' : 'chat.eligeTitulo') | t }}</h2>
+          <p *ngIf="!(otroId && !cargando)">{{ 'chat.eligeTexto' | t }}</p>
+        </div>
+      </ng-template>
+    </section>
+  </div>
+</main>
