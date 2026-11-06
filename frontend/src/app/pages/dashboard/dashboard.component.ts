@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
+import { DescripcionComponent } from '../../components/descripcion/descripcion.component';
 import { TarjetaCompaneroComponent } from '../../components/tarjeta-companero/tarjeta-companero.component';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { IdiomaService } from '../../services/idioma.service';
@@ -11,14 +12,15 @@ import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
 import { CompatibilidadService } from '../../services/compatibilidad.service';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
+import { NIVELES, NivelCompatibilidad, nivelDe } from '../../utils/nivel-compatibilidad';
 
 const PUNTAJE_BUENA_OPCION = 65;
-const OTRAS_EN_INICIO = 4;
+const OTRAS_EN_INICIO = 6;
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, AppHeaderComponent, AvatarComponent, TarjetaCompaneroComponent, TraducirPipe],
+  imports: [CommonModule, RouterLink, AppHeaderComponent, AvatarComponent, DescripcionComponent, TarjetaCompaneroComponent, TraducirPipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -87,6 +89,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return buenas === 1
       ? this.i18n.t('inicio.una', { nombre: primerNombre })
       : this.i18n.t('inicio.varias', { nombre: primerNombre, cantidad: buenas });
+  }
+
+  /** Cuántas personas hay en cada nivel de compatibilidad. */
+  get resumen(): { nivel: NivelCompatibilidad; cantidad: number }[] {
+    return NIVELES
+      .map((nivel) => ({ nivel, cantidad: this.resultados.filter((r) => nivelDe(r.score).id === nivel.id).length }))
+      .filter((fila) => fila.cantidad > 0);
   }
 
   get mejorOpcion(): ResultadoCompatibilidad | null {

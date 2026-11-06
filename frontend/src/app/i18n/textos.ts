@@ -111,6 +111,8 @@ export const TEXTOS = {
     es: 'Cuando más personas creen su perfil, aparecerán aquí. Mientras tanto, comparte RoomiesFind con quien también esté buscando.',
     en: 'When more people create a profile, they will appear here. In the meantime, share RoomiesFind with anyone else who is looking.'
   },
+  'inicio.resumen': { es: 'Resumen de tus coincidencias', en: 'Summary of your matches' },
+  'inicio.comparadas': { es: 'personas comparadas contigo', en: 'people compared with you' },
   'inicio.tuPerfil': { es: 'Tu perfil', en: 'Your profile' },
   'inicio.tuFoto': { es: 'Tu foto de perfil', en: 'Your profile photo' },
   'inicio.editar': { es: 'Editar', en: 'Edit' },
