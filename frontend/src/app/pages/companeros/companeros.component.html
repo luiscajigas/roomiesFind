@@ -2,47 +2,47 @@
   <app-header></app-header>
 
   <section class="encabezado-pagina">
-    <h1>Compañeros</h1>
-    <p>Mira en qué se parecen y qué conviene hablar antes de vivir juntos.</p>
+    <h1>{{ 'companeros.titulo' | t }}</h1>
+    <p>{{ 'companeros.texto' | t }}</p>
   </section>
 
   <div class="cargando" *ngIf="cargando" role="status">
     <span class="giro" aria-hidden="true"></span>
-    <p>Comparando hábitos...</p>
+    <p>{{ 'comun.comparando' | t }}</p>
   </div>
 
-  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
+  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error | t }}</p>
 
   <ng-container *ngIf="!cargando && !error && resultados.length && miPerfil as yo">
     <div class="filtros">
       <div class="campo">
-        <label for="filtro-comuna">Comuna</label>
+        <label for="filtro-comuna">{{ 'companeros.comuna' | t }}</label>
         <select id="filtro-comuna" [(ngModel)]="comuna">
-          <option value="">Todas</option>
+          <option value="">{{ 'companeros.todas' | t }}</option>
           <option *ngFor="let opcion of comunasDisponibles" [value]="opcion">{{ opcion }}</option>
         </select>
       </div>
       <div class="campo">
-        <label for="filtro-orden">Ordenar por</label>
+        <label for="filtro-orden">{{ 'companeros.ordenar' | t }}</label>
         <select id="filtro-orden" [(ngModel)]="orden">
-          <option value="compatibilidad">Compatibilidad</option>
-          <option value="presupuesto">Presupuesto parecido al mío</option>
-          <option value="nombre">Nombre</option>
+          <option value="compatibilidad">{{ 'companeros.compatibilidad' | t }}</option>
+          <option value="presupuesto">{{ 'companeros.presupuesto' | t }}</option>
+          <option value="nombre">{{ 'companeros.nombre' | t }}</option>
         </select>
       </div>
       <p class="filtros__cuenta" role="status">
-        {{ visibles.length }} {{ visibles.length === 1 ? 'persona' : 'personas' }}
+        {{ (visibles.length === 1 ? 'companeros.persona' : 'companeros.personas') | t: { cantidad: visibles.length } }}
       </p>
     </div>
 
     <section class="rejilla-companeros" *ngIf="visibles.length">
       <app-tarjeta-companero *ngFor="let resultado of visibles" [resultado]="resultado" [yo]="yo"></app-tarjeta-companero>
     </section>
-    <p class="vacio" *ngIf="!visibles.length">Nadie busca en esa comuna por ahora.</p>
+    <p class="vacio" *ngIf="!visibles.length">{{ 'companeros.sinComuna' | t }}</p>
   </ng-container>
 
   <section class="vacio" *ngIf="!cargando && !error && !resultados.length">
-    <h2>Todavía no hay con quién compararte</h2>
-    <p>Cuando más personas creen su perfil, aparecerán aquí.</p>
+    <h2>{{ 'comun.vacioTitulo' | t }}</h2>
+    <p>{{ 'comun.vacioTexto' | t }}</p>
   </section>
 </main>

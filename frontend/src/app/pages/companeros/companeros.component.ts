@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { TarjetaCompaneroComponent } from '../../components/tarjeta-companero/tarjeta-companero.component';
 import { comunaDeBarrio } from '../../data/barrios-pasto';
+import { TraducirPipe } from '../../i18n/traducir.pipe';
+import { ClaveTexto } from '../../i18n/textos';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 import { CompatibilidadService } from '../../services/compatibilidad.service';
 import { PerfilService } from '../../services/perfil.service';
@@ -13,14 +15,14 @@ type Orden = 'compatibilidad' | 'presupuesto' | 'nombre';
 @Component({
   selector: 'app-companeros',
   standalone: true,
-  imports: [CommonModule, FormsModule, AppHeaderComponent, TarjetaCompaneroComponent],
+  imports: [CommonModule, FormsModule, AppHeaderComponent, TarjetaCompaneroComponent, TraducirPipe],
   templateUrl: './companeros.component.html'
 })
 export class CompanerosComponent implements OnInit, OnDestroy {
   resultados: ResultadoCompatibilidad[] = [];
   miPerfil: Perfil | null = null;
   cargando = true;
-  error: string | null = null;
+  error: ClaveTexto | null = null;
   comuna = '';
   orden: Orden = 'compatibilidad';
   private worker: Worker | null = null;
@@ -50,7 +52,7 @@ export class CompanerosComponent implements OnInit, OnDestroy {
         this.cargarCandidatos(miPerfil);
       },
       error: () => {
-        this.error = 'No se pudo cargar tu perfil. Intenta volver a iniciar sesión.';
+        this.error = 'companeros.errorPerfil';
         this.cargando = false;
       }
     });
@@ -90,12 +92,12 @@ export class CompanerosComponent implements OnInit, OnDestroy {
         if (this.worker) {
           this.worker.postMessage({ yo: miPerfil, candidatos });
         } else {
-          this.error = 'Tu navegador no permite iniciar el cálculo de compatibilidad.';
+          this.error = 'companeros.errorNavegador';
           this.cargando = false;
         }
       },
       error: () => {
-        this.error = 'No se pudieron cargar los compañeros. Inténtalo de nuevo.';
+        this.error = 'companeros.errorLista';
         this.cargando = false;
       }
     });
