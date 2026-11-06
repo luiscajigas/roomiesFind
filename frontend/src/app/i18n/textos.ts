@@ -136,6 +136,8 @@ export const TEXTOS = {
     en: '{etiqueta}: you {yo} out of 5, {otro} {valor} out of 5'
   },
 
+  'visor.cerrar': { es: 'Cerrar foto', en: 'Close photo' },
+  'visor.ampliar': { es: 'Ver la foto de {nombre} en grande', en: "View {nombre}'s photo larger" },
   'tarjeta.foto': { es: 'Foto de {nombre}', en: 'Photo of {nombre}' },
   'nivel.muyBien': { es: 'Encajan muy bien', en: 'Great match' },
   'nivel.buena': { es: 'Buena opción', en: 'Good match' },
