@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Perfil } from '../models/perfil.model';
 import { AuthService } from './auth.service';
 
 export interface MensajeChat {
@@ -15,6 +16,7 @@ export interface MensajeChat {
 
 export interface ConversacionChat {
   otroId: number;
+  persona: Perfil;
   ultimoMensaje: MensajeChat;
   noLeidos: number;
 }
