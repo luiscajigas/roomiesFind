@@ -23,7 +23,16 @@ export class LoginComponent {
   readonly ejemploYo: HabitosComparables = { nombre: 'Tú', presupuesto: 650000, limpieza: 4, tolerancia_ruido: 2 };
   readonly ejemploOtro: HabitosComparables = { nombre: 'Ana', presupuesto: 600000, limpieza: 4, tolerancia_ruido: 3 };
 
+  /** Cuenta pública para quien revisa el proyecto. Se muestra en la pantalla de ingreso. */
+  readonly cuentaDemo = { email: 'test@gmail.com', password: '123456' };
+
   constructor(private auth: AuthService, private router: Router) {}
+
+  usarCuentaDemo(): void {
+    this.email = this.cuentaDemo.email;
+    this.password = this.cuentaDemo.password;
+    this.error = null;
+  }
 
   ingresar(): void {
     this.cargando = true;

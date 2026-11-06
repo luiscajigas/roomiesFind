@@ -41,6 +41,15 @@
       </form>
 
       <p class="acceso__alterno">¿Todavía no tienes cuenta? <a class="enlace" routerLink="/registro">Crea una</a></p>
+
+      <aside class="acceso__demo" aria-labelledby="demo-title">
+        <h3 id="demo-title">Cuenta de demostración</h3>
+        <dl>
+          <div><dt>Correo</dt><dd>{{ cuentaDemo.email }}</dd></div>
+          <div><dt>Contraseña</dt><dd>{{ cuentaDemo.password }}</dd></div>
+        </dl>
+        <button class="btn btn--secundario" type="button" (click)="usarCuentaDemo()">Usar esta cuenta</button>
+      </aside>
     </div>
   </section>
 </main>
