@@ -1,27 +1,35 @@
-# Frontend
+# RoomiesFind: frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+Aplicación Angular para encontrar con quién compartir hogar en Pasto. Compara hábitos de convivencia como orden, ruido, horarios y presupuesto, y explica con IA por qué dos personas son compatibles.
 
-## Development server
+**Demo:** [roomies-find.vercel.app](https://roomies-find.vercel.app)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4300/`. The application will automatically reload if you change any of the source files.
+El backend, con los microservicios Java y gRPC, está en [roomiesFindBack](https://github.com/luiscajigas/roomiesFindBack).
 
-## Code scaffolding
+## Funciones
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Compatibilidad calculada con reglas en un Web Worker.
+- Explicación escrita por IA, con lectura en voz alta.
+- Interfaz en español e inglés, con tema claro y oscuro.
+- Buscador de barrios de Pasto por nombre o comuna.
+- Filtros por comuna y orden de compañeros.
+- Fotos de perfil que se amplían al hacer clic.
 
-## Build
+## Ejecutar
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Necesitas Node.js y el backend corriendo en `http://localhost:3001/api`.
 
-## Running unit tests
+```bash
+npm install
+npm start
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+La app queda en `http://localhost:4300`.
 
-## Running end-to-end tests
+## Compilar
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```bash
+npm run build
+```
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+El resultado queda en `dist/frontend/browser`. La API de producción se configura en `src/environments/environment.prod.ts`.
