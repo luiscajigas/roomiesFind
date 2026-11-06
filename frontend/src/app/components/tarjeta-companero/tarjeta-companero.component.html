@@ -1,13 +1,13 @@
 <article class="tarjeta" [class.tarjeta--destacada]="destacada">
   <header class="tarjeta__cabecera">
-    <app-avatar [nombre]="candidato.nombre" [foto]="foto" [alt]="'Foto de ' + candidato.nombre"></app-avatar>
+    <app-avatar [nombre]="candidato.nombre" [foto]="foto" [alt]="'tarjeta.foto' | t: { nombre: candidato.nombre }"></app-avatar>
     <div class="tarjeta__identidad">
       <h3>{{ candidato.nombre }}</h3>
-      <p>{{ candidato.zona }} · <span class="tarjeta__horario">{{ candidato.horario }}</span></p>
+      <p>{{ i18n.zona(candidato.zona) }} · {{ i18n.horario(candidato.horario) }}</p>
     </div>
     <div class="puntaje" [ngClass]="'puntaje--' + nivel.clase">
       <strong>{{ resultado.score }}<small>%</small></strong>
-      <span>{{ nivel.texto }}</span>
+      <span>{{ nivel.texto | t }}</span>
     </div>
   </header>
 
@@ -18,32 +18,32 @@
 
     <div class="tarjeta__razones">
       <div *ngIf="resultado.coincidencias.length">
-        <h4>En común</h4>
-        <ul class="razones razones--comun"><li *ngFor="let razon of resultado.coincidencias">{{ razon }}</li></ul>
+        <h4>{{ 'tarjeta.enComun' | t }}</h4>
+        <ul class="razones razones--comun"><li *ngFor="let razon of resultado.coincidencias">{{ i18n.razon(razon) }}</li></ul>
       </div>
       <div *ngIf="resultado.conflictos.length">
-        <h4>Para conversar</h4>
-        <ul class="razones razones--conversar"><li *ngFor="let razon of resultado.conflictos">{{ razon }}</li></ul>
+        <h4>{{ 'tarjeta.paraConversar' | t }}</h4>
+        <ul class="razones razones--conversar"><li *ngFor="let razon of resultado.conflictos">{{ i18n.razon(razon) }}</li></ul>
       </div>
     </div>
   </div>
 
   <div class="tarjeta__pie">
     <button class="tarjeta__abrir" type="button" (click)="alternarExplicacion()" [attr.aria-expanded]="explicacionAbierta">
-      {{ explicacionAbierta ? 'Ocultar explicación' : '¿Por qué hacemos match?' }}
+      {{ (explicacionAbierta ? 'tarjeta.ocultar' : 'tarjeta.porQue') | t }}
       <svg [class.girado]="explicacionAbierta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
     </button>
 
     <div class="explicacion" *ngIf="explicacionAbierta" aria-live="polite">
-      <p class="explicacion__estado" *ngIf="cargandoExplicacion">
+      <p class="explicacion__estado" *ngIf="cargandoExplicacion && !explicacion">
         <span class="giro" aria-hidden="true"></span>
-        Escribiendo la explicación...
+        {{ 'tarjeta.escribiendo' | t }}
       </p>
-      <p class="aviso aviso--error" *ngIf="errorExplicacion" role="alert">{{ errorExplicacion }}</p>
+      <p class="aviso aviso--error" *ngIf="errorExplicacion as mensaje" role="alert">{{ mensaje }}</p>
       <ng-container *ngIf="explicacion as respuesta">
         <p>{{ respuesta.explicacion }}</p>
         <div class="explicacion__pie">
-          <small>{{ respuesta.desdeCache ? 'Guardada de una consulta anterior.' : 'Escrita por IA a partir del puntaje.' }}</small>
+          <small>{{ (respuesta.desdeCache ? 'tarjeta.guardada' : 'tarjeta.porIa') | t }}</small>
           <button *ngIf="voz.disponible" class="explicacion__voz" type="button"
             [class.explicacion__voz--activa]="leyendo" [attr.aria-pressed]="leyendo"
             (click)="alternarLectura(respuesta.explicacion)">
@@ -51,7 +51,7 @@
               <rect x="9" y="2" width="6" height="12" rx="3" />
               <path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8" />
             </svg>
-            {{ leyendo ? 'Detener lectura' : 'Escuchar' }}
+            {{ (leyendo ? 'tarjeta.detenerLectura' : 'tarjeta.escuchar') | t }}
           </button>
         </div>
       </ng-container>

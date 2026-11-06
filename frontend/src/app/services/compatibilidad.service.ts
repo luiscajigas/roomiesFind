@@ -31,13 +31,15 @@ export class CompatibilidadService {
     candidatoId: number,
     score: number,
     coincidencias: string[],
-    conflictos: string[]
+    conflictos: string[],
+    idioma: 'es' | 'en'
   ): Observable<RespuestaExplicacion> {
     return this.http.post<RespuestaExplicacion>(`${this.apiUrl}/ia/explicar`, {
       candidatoId,
       score,
       coincidencias,
-      conflictos
+      conflictos,
+      idioma
     });
   }
 }
