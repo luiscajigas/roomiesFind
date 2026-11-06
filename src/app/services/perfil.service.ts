@@ -29,6 +29,10 @@ export class PerfilService {
     return this.http.get<Perfil[]>(`${this.apiUrl}/perfiles/candidatos`);
   }
 
+  obtener(id: number): Observable<Perfil> {
+    return this.http.get<Perfil>(`${this.apiUrl}/perfiles/${id}`);
+  }
+
   actualizarFoto(foto: File): Observable<{ foto_url: string }> {
     const formulario = new FormData();
     formulario.append('foto', foto);
