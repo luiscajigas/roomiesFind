@@ -2,19 +2,20 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, skip } from 'rxjs';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
-import { ClaveTexto } from '../../i18n/textos';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 import { CompatibilidadService, RespuestaExplicacion } from '../../services/compatibilidad.service';
 import { Idioma, IdiomaService } from '../../services/idioma.service';
 import { LecturaVozService } from '../../services/lectura-voz.service';
 import { PerfilService } from '../../services/perfil.service';
+import { NivelCompatibilidad, nivelDe } from '../../utils/nivel-compatibilidad';
 import { AvatarComponent } from '../avatar/avatar.component';
+import { DescripcionComponent } from '../descripcion/descripcion.component';
 import { ComparadorComponent } from '../comparador/comparador.component';
 
 @Component({
   selector: 'app-tarjeta-companero',
   standalone: true,
-  imports: [CommonModule, TraducirPipe, AvatarComponent, ComparadorComponent],
+  imports: [CommonModule, TraducirPipe, AvatarComponent, ComparadorComponent, DescripcionComponent],
   templateUrl: './tarjeta-companero.component.html'
 })
 export class TarjetaCompaneroComponent implements OnInit, OnDestroy {
@@ -67,12 +68,8 @@ export class TarjetaCompaneroComponent implements OnInit, OnDestroy {
     return this.huboError ? this.i18n.errorApi(this.errorApi, 'tarjeta.errorExplicacion') : null;
   }
 
-  get nivel(): { texto: ClaveTexto; clase: string } {
-    const { score } = this.resultado;
-    if (score >= 85) return { texto: 'nivel.muyBien', clase: 'alto' };
-    if (score >= 65) return { texto: 'nivel.buena', clase: 'alto' };
-    if (score >= 40) return { texto: 'nivel.conversar', clase: 'medio' };
-    return { texto: 'nivel.distintos', clase: 'bajo' };
+  get nivel(): NivelCompatibilidad {
+    return nivelDe(this.resultado.score);
   }
 
   alternarExplicacion(): void {

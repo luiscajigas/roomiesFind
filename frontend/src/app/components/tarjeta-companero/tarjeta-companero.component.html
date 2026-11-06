@@ -11,7 +11,7 @@
     </div>
   </header>
 
-  <p class="tarjeta__descripcion" *ngIf="candidato.descripcion">{{ candidato.descripcion }}</p>
+  <p class="tarjeta__descripcion" *ngIf="candidato.descripcion as texto"><app-descripcion [usuarioId]="candidato.id" [texto]="texto"></app-descripcion></p>
 
   <div class="tarjeta__cuerpo">
     <app-comparador [yo]="yo" [otro]="candidato"></app-comparador>
