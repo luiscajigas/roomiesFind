@@ -1,44 +1,67 @@
 app-dashboard { display: block; min-height: 100vh; }
 
-.inicio__saludo { max-width: 46rem; margin: 3.25rem 0 2.75rem; }
-.inicio__saludo h1 { font-size: clamp(2.3rem, 5vw, 3.6rem); }
-.inicio__saludo p { margin: 0.8rem 0 0; color: var(--muted); font-size: 1.1rem; }
-.inicio__acciones { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+.inicio__cabecera {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(19rem, 26vw, 28rem);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 6rem);
+  margin: clamp(2.5rem, 4vw, 4.5rem) 0 clamp(2.5rem, 3.5vw, 4rem);
+}
+
+.inicio__saludo { max-width: 56rem; }
+.inicio__saludo h1 { font-size: clamp(2.3rem, 4.4vw, 4.75rem); }
+.inicio__saludo p { margin: 1rem 0 0; color: var(--muted); font-size: 1.15rem; }
+.inicio__acciones { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.75rem; }
+
+/* Resumen de la búsqueda: cuántas personas hay en cada nivel. */
+.resumen { padding: 1.5rem 1.6rem; border: 1px solid var(--border); border-radius: var(--radius-l); background: var(--panel); }
+.resumen__total { display: flex; align-items: baseline; gap: 0.6rem; margin: 0; color: var(--muted); font-size: 0.95rem; }
+.resumen__total strong { color: var(--text); font-family: var(--font-display); font-size: 2.8rem; font-weight: 400; line-height: 1; }
+.resumen__barra { display: flex; height: 0.5rem; gap: 2px; overflow: hidden; margin: 1.1rem 0 1.15rem; border-radius: 999px; background: var(--border); }
+.resumen__barra span { min-width: 0.4rem; background: var(--tono-nivel); }
+.resumen__niveles { display: grid; gap: 0.55rem; margin: 0; padding: 0; font-size: 0.92rem; list-style: none; }
+.resumen__niveles li { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); }
+.resumen__niveles strong { margin-left: auto; color: var(--text); font-weight: 600; }
+.resumen__punto { width: 0.6rem; height: 0.6rem; flex: 0 0 auto; border-radius: 50%; background: var(--tono-nivel); }
+.nivel--muy-bien { --tono-nivel: var(--accent-2); }
+.nivel--buena { --tono-nivel: color-mix(in srgb, var(--accent-2) 55%, var(--panel)); }
+.nivel--conversar { --tono-nivel: var(--yellow); }
+.nivel--distintos { --tono-nivel: var(--red); }
 
 .inicio__columnas {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 19rem;
-  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1fr) clamp(19rem, 22vw, 25rem);
+  gap: clamp(2rem, 4vw, 5rem);
   align-items: start;
 }
 
 .inicio__principal { min-width: 0; }
-.inicio__otras { margin-top: 2.5rem; }
+.inicio__otras { margin-top: clamp(2.5rem, 3vw, 3.5rem); }
 
 #companeros, #mi-perfil { scroll-margin-top: 5.5rem; }
 
-.rejilla-companeros { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: 1rem; }
+.rejilla-companeros { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: clamp(1rem, 1.4vw, 1.75rem); }
 
-.ficha { position: sticky; top: 5.75rem; display: flex; flex-direction: column; align-items: flex-start; padding-left: 2.5rem; border-left: 1px solid var(--border); }
-.ficha h2 { margin-top: 0.9rem; font-size: 1.4rem; }
-.ficha__zona { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.92rem; }
-.ficha__descripcion { margin: 0.8rem 0 0; font-size: 0.92rem; }
-.ficha__datos { display: grid; width: 100%; gap: 0.55rem; margin: 1.2rem 0; padding: 1rem 0; border-block: 1px solid var(--border); font-size: 0.88rem; }
+.ficha { position: sticky; top: 5.75rem; display: flex; flex-direction: column; align-items: flex-start; padding-left: clamp(2rem, 3vw, 3.5rem); border-left: 1px solid var(--border); }
+.ficha h2 { margin-top: 1rem; font-size: 1.55rem; }
+.ficha__zona { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.95rem; }
+.ficha__descripcion { margin: 0.9rem 0 0; font-size: 0.95rem; }
+.ficha__datos { display: grid; width: 100%; gap: 0.65rem; margin: 1.4rem 0; padding: 1.15rem 0; border-block: 1px solid var(--border); font-size: 0.92rem; }
 .ficha__datos > div { display: flex; justify-content: space-between; gap: 1rem; }
 .ficha__datos dt { color: var(--muted); }
 .ficha__datos dd { margin: 0; font-weight: 500; text-align: right; }
-.ficha__capital { text-transform: capitalize; }
 .ficha__acciones { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .ficha__acciones .btn { min-height: 2.4rem; padding: 0.4rem 0.85rem; font-size: 0.85rem; }
 .ficha__acciones input:focus-visible + label { outline: 2px solid var(--accent-2); outline-offset: 2px; }
 .ficha .aviso { margin-top: 0.6rem; }
 
 @media (max-width: 960px) {
+  .inicio__cabecera { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .inicio__columnas { grid-template-columns: minmax(0, 1fr); gap: 3rem; }
   .ficha { position: static; padding: 2rem 0 0; border-top: 1px solid var(--border); border-left: 0; }
 }
 
 @media (max-width: 480px) {
-  .inicio__saludo { margin: 2rem 0 2rem; }
+  .inicio__cabecera { margin: 2rem 0; }
   .inicio__acciones .btn { flex: 1 1 auto; }
 }
