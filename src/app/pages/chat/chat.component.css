@@ -29,6 +29,9 @@
 .chat__fila-meta { display: flex; flex: 0 0 auto; flex-direction: column; align-items: flex-end; gap: 0.3rem; color: var(--muted); font-size: 0.72rem; }
 .chat__contador, .contador-mensajes { display: grid; min-width: 1.25rem; height: 1.25rem; box-sizing: border-box; place-items: center; padding: 0 0.3rem; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: 0.7rem; font-weight: 700; line-height: 1; }
 .chat__nadie { padding: 1.5rem 1rem; color: var(--muted); font-size: 0.9rem; text-align: center; }
+.chat__sin-conversaciones { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 2.5rem 1.25rem; text-align: center; }
+.chat__sin-conversaciones strong { font-size: 1rem; font-weight: 600; }
+.chat__sin-conversaciones p { margin: 0 0 0.5rem; color: var(--muted); font-size: 0.9rem; }
 .chat__cargando { justify-content: center; margin: 2rem 1rem; }
 
 /* Conversación abierta */
