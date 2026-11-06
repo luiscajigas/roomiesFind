@@ -5,12 +5,15 @@ import { Router, RouterLink } from '@angular/router';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { EscalaComponent } from '../../components/escala/escala.component';
 import { SelectorBarrioComponent } from '../../components/selector-barrio/selector-barrio.component';
+import { SelectorIdiomaComponent } from '../../components/selector-idioma/selector-idioma.component';
+import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { AuthService, DatosRegistro } from '../../services/auth.service';
+import { IdiomaService } from '../../services/idioma.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AvatarComponent, EscalaComponent, SelectorBarrioComponent],
+  imports: [CommonModule, FormsModule, RouterLink, AvatarComponent, EscalaComponent, SelectorBarrioComponent, SelectorIdiomaComponent, TraducirPipe],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -40,7 +43,7 @@ export class RegistroComponent implements OnDestroy {
   error: string | null = null;
   private temporizadorLento: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private i18n: IdiomaService) {}
 
   ngOnDestroy(): void {
     this.limpiarFoto();
@@ -54,12 +57,12 @@ export class RegistroComponent implements OnDestroy {
 
     if (!this.tiposFotoPermitidos.includes(archivo.type)) {
       input.value = '';
-      this.error = 'No se pudo agregar la foto. Elige una imagen JPG, PNG, WEBP o GIF.';
+      this.error = this.i18n.t('registro.fotoTipo');
       return;
     }
     if (archivo.size > this.maximoFotoBytes) {
       input.value = '';
-      this.error = 'No se pudo agregar la foto. El archivo debe pesar 5 MB o menos.';
+      this.error = this.i18n.t('registro.fotoPeso');
       return;
     }
 
@@ -86,7 +89,7 @@ export class RegistroComponent implements OnDestroy {
     this.cargando = true;
     this.error = null;
     this.servidorLento = false;
-    // El plan gratuito de Render duerme el servicio: la primera petición puede tardar ~1 minuto.
+    // Si el servidor tarda en responder, se avisa para que la persona no crea que falló.
     this.temporizadorLento = setTimeout(() => {
       if (this.cargando) this.servidorLento = true;
     }, 8000);
@@ -99,7 +102,7 @@ export class RegistroComponent implements OnDestroy {
       error: (err) => {
         this.cargando = false;
         this.limpiarTemporizador();
-        this.error = err.error?.error || 'No se pudo completar el registro.';
+        this.error = this.i18n.errorApi(err.error?.error, 'registro.error');
       }
     });
   }

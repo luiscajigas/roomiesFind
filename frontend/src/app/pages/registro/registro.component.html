@@ -1,106 +1,107 @@
 <main class="acceso acceso--registro">
   <section class="acceso__historia">
-    <a class="acceso__marca" routerLink="/login" aria-label="RoomiesFind, inicio">
-      <img src="/logo.svg" alt="" />
-      <span>RoomiesFind</span>
-    </a>
+    <div class="acceso__cabecera">
+      <a class="acceso__marca" routerLink="/login" [attr.aria-label]="'marca.inicio' | t">
+        <img src="/logo.png" alt="" />
+        <span>RoomiesFind</span>
+      </a>
+      <app-selector-idioma></app-selector-idioma>
+    </div>
     <div class="acceso__mensaje">
-      <h1>Primero, cuéntanos <em>cómo convives.</em></h1>
-      <p>Con esto te comparamos con otras personas. Lo puedes cambiar cuando quieras.</p>
+      <h1>{{ 'registro.titulo1' | t }} <em>{{ 'registro.titulo2' | t }}</em></h1>
+      <p>{{ 'registro.texto' | t }}</p>
     </div>
   </section>
 
   <section class="acceso__panel" aria-labelledby="register-title">
     <div class="acceso__contenido">
-      <h2 id="register-title">Crea tu cuenta</h2>
+      <h2 id="register-title">{{ 'registro.accion' | t }}</h2>
 
       <section class="grupo">
-        <h3>Tus datos</h3>
+        <h3>{{ 'registro.tusDatos' | t }}</h3>
         <div class="selector-foto">
-          <app-avatar tamano="l" [nombre]="datos.nombre" [foto]="vistaPreviaFoto" alt="Vista previa de tu foto"></app-avatar>
+          <app-avatar tamano="l" [nombre]="datos.nombre" [foto]="vistaPreviaFoto" [alt]="'registro.vistaPrevia' | t"></app-avatar>
           <div class="selector-foto__acciones">
             <input #fotoInput id="foto" class="oculto-visual" name="foto" type="file"
               accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif"
               (change)="seleccionarFoto($event)" />
-            <label class="btn btn--secundario" for="foto">{{ fotoSeleccionada ? 'Cambiar foto' : 'Agregar foto' }}</label>
-            <button *ngIf="vistaPreviaFoto" class="btn btn--secundario" type="button" (click)="quitarFoto(fotoInput)">Quitar</button>
-            <small>Opcional. JPG, PNG, WEBP o GIF, hasta 5 MB.</small>
+            <label class="btn btn--secundario" for="foto">{{ (fotoSeleccionada ? 'comun.cambiarFoto' : 'registro.agregarFoto') | t }}</label>
+            <button *ngIf="vistaPreviaFoto" class="btn btn--secundario" type="button" (click)="quitarFoto(fotoInput)">{{ 'registro.quitar' | t }}</button>
+            <small>{{ 'registro.fotoOpcional' | t }}</small>
           </div>
         </div>
         <div class="grupo__rejilla">
           <div class="campo grupo__ancho">
-            <label for="reg-nombre">Nombre</label>
+            <label for="reg-nombre">{{ 'registro.nombre' | t }}</label>
             <input id="reg-nombre" type="text" autocomplete="name" [(ngModel)]="datos.nombre" />
           </div>
           <div class="campo">
-            <label for="reg-correo">Correo</label>
-            <input id="reg-correo" type="email" autocomplete="email" [(ngModel)]="datos.email" placeholder="tucorreo@ejemplo.com" />
+            <label for="reg-correo">{{ 'login.correo' | t }}</label>
+            <input id="reg-correo" type="email" autocomplete="email" [(ngModel)]="datos.email" [placeholder]="'login.correoEjemplo' | t" />
           </div>
           <div class="campo">
-            <label for="reg-clave">Contraseña</label>
-            <input id="reg-clave" type="password" autocomplete="new-password" minlength="6" [(ngModel)]="datos.password" placeholder="Mínimo 6 caracteres" />
+            <label for="reg-clave">{{ 'login.contrasena' | t }}</label>
+            <input id="reg-clave" type="password" autocomplete="new-password" minlength="6" [(ngModel)]="datos.password" [placeholder]="'registro.minimoClave' | t" />
           </div>
         </div>
       </section>
 
       <section class="grupo">
-        <h3>Qué estás buscando</h3>
+        <h3>{{ 'form.buscando' | t }}</h3>
         <div class="grupo__rejilla">
           <div class="campo">
-            <label for="reg-presupuesto">Presupuesto mensual (COP)</label>
+            <label for="reg-presupuesto">{{ 'form.presupuesto' | t }}</label>
             <input id="reg-presupuesto" type="number" min="0" step="10000" [(ngModel)]="datos.presupuesto" />
           </div>
           <div class="campo">
-            <label for="reg-barrio">Barrio en Pasto</label>
+            <label for="reg-barrio">{{ 'form.barrio' | t }}</label>
             <app-selector-barrio idCampo="reg-barrio" [(valor)]="datos.zona"></app-selector-barrio>
           </div>
         </div>
       </section>
 
       <section class="grupo">
-        <h3>Cómo vives</h3>
+        <h3>{{ 'form.comoVives' | t }}</h3>
         <div class="grupo__rejilla">
           <div class="campo">
-            <label for="reg-horario">Horario</label>
+            <label for="reg-horario">{{ 'form.horario' | t }}</label>
             <select id="reg-horario" [(ngModel)]="datos.horario">
-              <option value="madrugador">Madrugador</option>
-              <option value="nocturno">Nocturno</option>
-              <option value="mixto">Mixto</option>
+              <option value="madrugador">{{ 'horario.madrugador' | t }}</option>
+              <option value="nocturno">{{ 'horario.nocturno' | t }}</option>
+              <option value="mixto">{{ 'horario.mixto' | t }}</option>
             </select>
           </div>
           <div class="campo">
-            <label for="reg-visitas">Visitas en casa</label>
+            <label for="reg-visitas">{{ 'form.visitas' | t }}</label>
             <select id="reg-visitas" [(ngModel)]="datos.frecuencia_visitas">
-              <option value="nunca">Nunca</option>
-              <option value="ocasional">Ocasional</option>
-              <option value="frecuente">Frecuente</option>
+              <option value="nunca">{{ 'visitas.nunca' | t }}</option>
+              <option value="ocasional">{{ 'visitas.ocasional' | t }}</option>
+              <option value="frecuente">{{ 'visitas.frecuente' | t }}</option>
             </select>
           </div>
-          <app-escala nombre="limpieza" etiqueta="Orden en casa" minimo="Relajado" maximo="Muy ordenado" [(valor)]="datos.limpieza"></app-escala>
-          <app-escala nombre="tolerancia_ruido" etiqueta="Ruido" minimo="Necesito silencio" maximo="No me molesta" [(valor)]="datos.tolerancia_ruido"></app-escala>
+          <app-escala nombre="limpieza" [etiqueta]="'form.orden' | t" [minimo]="'form.relajado' | t" [maximo]="'form.muyOrdenado' | t" [(valor)]="datos.limpieza"></app-escala>
+          <app-escala nombre="tolerancia_ruido" [etiqueta]="'form.ruido' | t" [minimo]="'form.necesitoSilencio' | t" [maximo]="'form.noMeMolesta' | t" [(valor)]="datos.tolerancia_ruido"></app-escala>
         </div>
         <div class="grupo__casillas">
-          <label class="casilla"><input type="checkbox" [(ngModel)]="datos.tiene_mascotas" /> Tengo mascotas</label>
-          <label class="casilla"><input type="checkbox" [(ngModel)]="datos.acepta_mascotas" /> Acepto vivir con mascotas</label>
+          <label class="casilla"><input type="checkbox" [(ngModel)]="datos.tiene_mascotas" /> {{ 'form.tengoMascotas' | t }}</label>
+          <label class="casilla"><input type="checkbox" [(ngModel)]="datos.acepta_mascotas" /> {{ 'form.aceptoMascotas' | t }}</label>
         </div>
       </section>
 
       <div class="campo">
-        <label for="reg-descripcion">Unas líneas sobre ti (opcional)</label>
-        <textarea id="reg-descripcion" rows="3" placeholder="Qué haces, qué te gusta y cómo imaginas la casa." [(ngModel)]="datos.descripcion"></textarea>
+        <label for="reg-descripcion">{{ 'registro.descripcion' | t }}</label>
+        <textarea id="reg-descripcion" rows="3" [placeholder]="'form.descripcionEjemplo' | t" [(ngModel)]="datos.descripcion"></textarea>
       </div>
 
       <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
-      <p class="aviso aviso--espera" *ngIf="servidorLento" role="status">
-        El servidor está despertando (plan gratuito): la primera petición puede tardar hasta un minuto.
-      </p>
+      <p class="aviso aviso--espera" *ngIf="servidorLento" role="status">{{ 'comun.espera' | t }}</p>
 
       <button class="btn btn--primario acceso__enviar" type="button" (click)="registrar()"
         [disabled]="cargando || !datos.nombre || !datos.email || !datos.password || !datos.zona">
-        {{ cargando ? 'Creando cuenta...' : 'Crear cuenta' }}
+        {{ (cargando ? 'registro.creando' : 'registro.crear') | t }}
       </button>
 
-      <p class="acceso__alterno">¿Ya tienes cuenta? <a class="enlace" routerLink="/login">Inicia sesión</a></p>
+      <p class="acceso__alterno">{{ 'registro.conCuenta' | t }} <a class="enlace" routerLink="/login">{{ 'login.accion' | t }}</a></p>
     </div>
   </section>
 </main>
