@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { IdiomaService } from './idioma.service';
 
 /**
  * Lee textos en voz alta con la voz del navegador (Web Speech API).
@@ -9,7 +10,7 @@ import { Injectable, NgZone } from '@angular/core';
 export class LecturaVozService {
   private alTerminarActual: (() => void) | null = null;
 
-  constructor(private zona: NgZone) {}
+  constructor(private zona: NgZone, private i18n: IdiomaService) {}
 
   get disponible(): boolean {
     return typeof window !== 'undefined' && 'speechSynthesis' in window;
@@ -20,7 +21,7 @@ export class LecturaVozService {
     this.detener();
     this.alTerminarActual = alTerminar;
 
-    const voz = this.vozEnEspanol();
+    const voz = this.vozDelIdioma();
     const frases = texto.split(/(?<=[.!?…])\s+/).filter(Boolean);
     const terminar = () => {
       if (this.alTerminarActual === alTerminar) this.finalizar();
@@ -28,7 +29,7 @@ export class LecturaVozService {
 
     frases.forEach((frase, indice) => {
       const locucion = new SpeechSynthesisUtterance(frase);
-      locucion.lang = voz?.lang ?? 'es-CO';
+      locucion.lang = voz?.lang ?? (this.i18n.idioma === 'en' ? 'en-US' : 'es-CO');
       if (voz) locucion.voice = voz;
       locucion.onerror = terminar;
       if (indice === frases.length - 1) locucion.onend = terminar;
@@ -48,9 +49,10 @@ export class LecturaVozService {
     if (alTerminar) this.zona.run(alTerminar);
   }
 
-  private vozEnEspanol(): SpeechSynthesisVoice | undefined {
+  private vozDelIdioma(): SpeechSynthesisVoice | undefined {
     const voces = window.speechSynthesis.getVoices();
-    return voces.find((voz) => voz.lang === 'es-CO')
-      ?? voces.find((voz) => voz.lang.toLowerCase().startsWith('es'));
+    const preferida = this.i18n.idioma === 'en' ? 'en-US' : 'es-CO';
+    return voces.find((voz) => voz.lang === preferida)
+      ?? voces.find((voz) => voz.lang.toLowerCase().startsWith(this.i18n.idioma));
   }
 }
