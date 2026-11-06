@@ -3,12 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ComparadorComponent, HabitosComparables } from '../../components/comparador/comparador.component';
+import { SelectorIdiomaComponent } from '../../components/selector-idioma/selector-idioma.component';
+import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { AuthService } from '../../services/auth.service';
+import { IdiomaService } from '../../services/idioma.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ComparadorComponent],
+  imports: [CommonModule, FormsModule, RouterLink, ComparadorComponent, SelectorIdiomaComponent, TraducirPipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -26,7 +29,7 @@ export class LoginComponent {
   /** Cuenta pública para quien revisa el proyecto. Se muestra en la pantalla de ingreso. */
   readonly cuentaDemo = { email: 'test@gmail.com', password: '123456' };
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private i18n: IdiomaService) {}
 
   usarCuentaDemo(): void {
     this.email = this.cuentaDemo.email;
@@ -38,7 +41,7 @@ export class LoginComponent {
     this.cargando = true;
     this.error = null;
     this.servidorLento = false;
-    // El plan gratuito de Render duerme el servicio: la primera petición puede tardar ~1 minuto.
+    // Si el servidor tarda en responder, se avisa para que la persona no crea que falló.
     this.temporizadorLento = setTimeout(() => {
       if (this.cargando) this.servidorLento = true;
     }, 8000);
@@ -51,7 +54,7 @@ export class LoginComponent {
       error: (err) => {
         this.cargando = false;
         this.limpiarTemporizador();
-        this.error = err.error?.error || 'No se pudo iniciar sesión.';
+        this.error = this.i18n.errorApi(err.error?.error, 'login.error');
       }
     });
   }
