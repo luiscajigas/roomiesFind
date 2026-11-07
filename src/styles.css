@@ -7,6 +7,7 @@
 @import './app/components/selector-idioma/selector-idioma.component.css';
 @import './app/components/tarjeta-companero/tarjeta-companero.component.css';
 @import './app/components/visor-foto/visor-foto.component.css';
+@import './app/components/moderar-persona/moderar-persona.component.css';
 @import './app/pages/auth.styles.css';
 @import './app/pages/dashboard/dashboard.styles.css';
 @import './app/pages/registro/registro.styles.css';
