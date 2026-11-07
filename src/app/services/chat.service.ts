@@ -26,7 +26,9 @@ export type EventoChat =
   | { tipo: 'enviado'; idCliente: string; mensaje: MensajeChat }
   | { tipo: 'error'; idCliente: string | null; mensaje: string }
   | { tipo: 'leidos'; lectorId: number; remitenteId: number; leidoEn: string }
-  | { tipo: 'escribiendo'; usuarioId: number };
+  | { tipo: 'escribiendo'; usuarioId: number }
+  | { tipo: 'alerta'; usuarioId: number }
+  | { tipo: 'bloqueo'; usuarioId: number };
 
 export type EstadoConexion = 'desconectado' | 'conectando' | 'conectado';
 
@@ -135,7 +137,7 @@ export class ChatService implements OnDestroy {
       default: {
         const evento = datos as unknown as EventoChat;
         this.eventos$.next(evento);
-        if (evento.tipo === 'mensaje' || evento.tipo === 'leidos') this.refrescarNoLeidos();
+        if (evento.tipo === 'mensaje' || evento.tipo === 'leidos' || evento.tipo === 'bloqueo') this.refrescarNoLeidos();
       }
     }
   }
