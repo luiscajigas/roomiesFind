@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { EscalaComponent } from '../../components/escala/escala.component';
+import { PersonasBloqueadasComponent } from '../../components/personas-bloqueadas/personas-bloqueadas.component';
 import { SelectorBarrioComponent } from '../../components/selector-barrio/selector-barrio.component';
 import { esBarrioDeLaLista } from '../../data/barrios-pasto';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
@@ -20,7 +21,7 @@ type PerfilEditable = Pick<Perfil,
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, EscalaComponent, SelectorBarrioComponent, TraducirPipe],
+  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, EscalaComponent, PersonasBloqueadasComponent, SelectorBarrioComponent, TraducirPipe],
   templateUrl: './perfil.component.html'
 })
 export class PerfilComponent implements OnInit {

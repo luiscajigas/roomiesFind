@@ -11,6 +11,11 @@
     <p>{{ 'perfil.cargando' | t }}</p>
   </div>
 
+  <p class="alerta-cuenta perfil__alerta" *ngIf="perfil?.alerta" role="status">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.500 20h19L12 3Z" /><path d="M12 10v4M12 17.500v.01" /></svg>
+    {{ 'alerta.propia' | t }}
+  </p>
+
   <form class="perfil" *ngIf="!cargando && formulario" (ngSubmit)="guardar()">
     <aside class="perfil__foto">
       <app-avatar tamano="l" [nombre]="nombre" [foto]="fotoSrc" [alt]="'tarjeta.foto' | t: { nombre: nombre }"></app-avatar>
@@ -87,6 +92,8 @@
       </div>
     </div>
   </form>
+
+  <app-personas-bloqueadas *ngIf="!cargando && formulario"></app-personas-bloqueadas>
 
   <p class="aviso aviso--error" *ngIf="!cargando && !formulario && error" role="alert">{{ error }}</p>
 </main>
