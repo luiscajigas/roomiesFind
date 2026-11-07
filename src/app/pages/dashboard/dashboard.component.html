@@ -15,7 +15,7 @@
     </div>
 
     <aside class="resumen" *ngIf="!cargando && resultados.length" [attr.aria-label]="'inicio.resumen' | t">
-      <p class="resumen__total"><strong>{{ resultados.length }}</strong> {{ 'inicio.comparadas' | t }}</p>
+      <p class="resumen__total"><strong>{{ total }}</strong> {{ 'inicio.comparadas' | t }}</p>
       <div class="resumen__barra" aria-hidden="true">
         <span *ngFor="let fila of resumen" [ngClass]="'nivel--' + fila.nivel.id" [style.flex-grow]="fila.cantidad"></span>
       </div>
@@ -40,15 +40,15 @@
 
       <section id="companeros" *ngIf="!cargando && miPerfil && mejorOpcion as mejor">
         <div class="encabezado-seccion"><h2>{{ 'inicio.mejorOpcion' | t }}</h2></div>
-        <app-tarjeta-companero [resultado]="mejor" [yo]="miPerfil" [destacada]="true"></app-tarjeta-companero>
+        <app-tarjeta-companero [resultado]="mejor" [yo]="miPerfil" [destacada]="true" (bloqueada)="cargar()"></app-tarjeta-companero>
 
         <ng-container *ngIf="otrasOpciones.length">
           <div class="encabezado-seccion inicio__otras">
             <h2>{{ 'inicio.otras' | t }}</h2>
-            <a class="enlace" *ngIf="hayMasOpciones" routerLink="/companeros">{{ 'inicio.verTodas' | t: { cantidad: resultados.length } }}</a>
+            <a class="enlace" *ngIf="hayMasOpciones" routerLink="/companeros">{{ 'inicio.verTodas' | t: { cantidad: total } }}</a>
           </div>
           <div class="rejilla-companeros">
-            <app-tarjeta-companero *ngFor="let r of otrasOpciones" [resultado]="r" [yo]="miPerfil"></app-tarjeta-companero>
+            <app-tarjeta-companero *ngFor="let r of otrasOpciones" [resultado]="r" [yo]="miPerfil" (bloqueada)="cargar()"></app-tarjeta-companero>
           </div>
         </ng-container>
       </section>

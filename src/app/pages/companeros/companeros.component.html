@@ -6,43 +6,85 @@
     <p>{{ 'companeros.texto' | t }}</p>
   </section>
 
+  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error | t }}</p>
+
+  <ng-container *ngIf="miPerfil as yo">
+    <form class="filtros" (ngSubmit)="buscar()">
+      <div class="campo">
+        <label for="filtro-comuna">{{ 'companeros.comuna' | t }}</label>
+        <select id="filtro-comuna" name="comuna" [(ngModel)]="comuna" (ngModelChange)="buscar()">
+          <option value="">{{ 'companeros.todas' | t }}</option>
+          <option *ngFor="let opcion of comunas" [value]="opcion">{{ opcion }}</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtro-horario">{{ 'companeros.horario' | t }}</label>
+        <select id="filtro-horario" name="horario" [(ngModel)]="horario" (ngModelChange)="buscar()">
+          <option value="">{{ 'companeros.cualquiera' | t }}</option>
+          <option value="madrugador">{{ i18n.horario('madrugador') }}</option>
+          <option value="nocturno">{{ i18n.horario('nocturno') }}</option>
+          <option value="mixto">{{ i18n.horario('mixto') }}</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtro-presupuesto">{{ 'companeros.presupuestoMaximo' | t }}</label>
+        <input id="filtro-presupuesto" name="presupuesto" type="number" min="0" step="50000" inputmode="numeric"
+          [placeholder]="'companeros.sinLimite' | t" [(ngModel)]="presupuestoMaximo" (change)="buscar()" />
+      </div>
+      <div class="campo">
+        <label for="filtro-mascotas">{{ 'companeros.mascotas' | t }}</label>
+        <select id="filtro-mascotas" name="mascotas" [(ngModel)]="mascotas" (ngModelChange)="buscar()">
+          <option value="">{{ 'companeros.cualquiera' | t }}</option>
+          <option value="sin_mascotas">{{ 'companeros.sinMascotas' | t }}</option>
+          <option value="con_mascotas">{{ 'companeros.conMascotas' | t }}</option>
+          <option value="aceptan">{{ 'companeros.aceptan' | t }}</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtro-puntaje">{{ 'companeros.compatibilidadMinima' | t }}</label>
+        <select id="filtro-puntaje" name="puntaje" [(ngModel)]="puntajeMinimo" (ngModelChange)="buscar()">
+          <option [ngValue]="null">{{ 'companeros.cualquiera' | t }}</option>
+          <option [ngValue]="85">{{ 'nivel.muyBien' | t }} (85%+)</option>
+          <option [ngValue]="65">{{ 'nivel.buena' | t }} (65%+)</option>
+          <option [ngValue]="40">{{ 'nivel.conversar' | t }} (40%+)</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtro-orden">{{ 'companeros.ordenar' | t }}</label>
+        <select id="filtro-orden" name="orden" [(ngModel)]="orden" (ngModelChange)="buscar()">
+          <option value="compatibilidad">{{ 'companeros.compatibilidad' | t }}</option>
+          <option value="presupuesto">{{ 'companeros.presupuesto' | t }}</option>
+          <option value="recientes">{{ 'companeros.recientes' | t }}</option>
+        </select>
+      </div>
+      <p class="filtros__cuenta" role="status" *ngIf="!cargando && !error">
+        {{ (total === 1 ? 'companeros.persona' : 'companeros.personas') | t: { cantidad: total } }}
+        <button *ngIf="hayFiltros" class="enlace filtros__quitar" type="button" (click)="quitarFiltros()">{{ 'companeros.quitarFiltros' | t }}</button>
+      </p>
+    </form>
+  </ng-container>
+
   <div class="cargando" *ngIf="cargando" role="status">
     <span class="giro" aria-hidden="true"></span>
     <p>{{ 'comun.comparando' | t }}</p>
   </div>
 
-  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error | t }}</p>
+  <ng-container *ngIf="!cargando && !error && miPerfil as yo">
+    <section class="rejilla-companeros" *ngIf="resultados.length">
+      <app-tarjeta-companero *ngFor="let resultado of resultados; trackBy: seguir" [resultado]="resultado" [yo]="yo" (bloqueada)="alBloquear($event)"></app-tarjeta-companero>
+    </section>
 
-  <ng-container *ngIf="!cargando && !error && resultados.length && miPerfil as yo">
-    <div class="filtros">
-      <div class="campo">
-        <label for="filtro-comuna">{{ 'companeros.comuna' | t }}</label>
-        <select id="filtro-comuna" [(ngModel)]="comuna">
-          <option value="">{{ 'companeros.todas' | t }}</option>
-          <option *ngFor="let opcion of comunasDisponibles" [value]="opcion">{{ opcion }}</option>
-        </select>
-      </div>
-      <div class="campo">
-        <label for="filtro-orden">{{ 'companeros.ordenar' | t }}</label>
-        <select id="filtro-orden" [(ngModel)]="orden">
-          <option value="compatibilidad">{{ 'companeros.compatibilidad' | t }}</option>
-          <option value="presupuesto">{{ 'companeros.presupuesto' | t }}</option>
-          <option value="nombre">{{ 'companeros.nombre' | t }}</option>
-        </select>
-      </div>
-      <p class="filtros__cuenta" role="status">
-        {{ (visibles.length === 1 ? 'companeros.persona' : 'companeros.personas') | t: { cantidad: visibles.length } }}
-      </p>
+    <div class="companeros__mas" *ngIf="hayMas">
+      <p class="aviso aviso--error" *ngIf="errorMas" role="alert">{{ 'companeros.errorLista' | t }}</p>
+      <button class="btn btn--secundario" type="button" [disabled]="cargandoMas" (click)="verMas()">
+        {{ (cargandoMas ? 'comun.comparando' : 'companeros.verMas') | t: { cantidad: total - resultados.length } }}
+      </button>
     </div>
 
-    <section class="rejilla-companeros" *ngIf="visibles.length">
-      <app-tarjeta-companero *ngFor="let resultado of visibles" [resultado]="resultado" [yo]="yo"></app-tarjeta-companero>
+    <p class="vacio" *ngIf="!resultados.length && hayFiltros">{{ 'companeros.sinResultados' | t }}</p>
+    <section class="vacio" *ngIf="!resultados.length && !hayFiltros">
+      <h2>{{ 'comun.vacioTitulo' | t }}</h2>
+      <p>{{ 'comun.vacioTexto' | t }}</p>
     </section>
-    <p class="vacio" *ngIf="!visibles.length">{{ 'companeros.sinComuna' | t }}</p>
   </ng-container>
-
-  <section class="vacio" *ngIf="!cargando && !error && !resultados.length">
-    <h2>{{ 'comun.vacioTitulo' | t }}</h2>
-    <p>{{ 'comun.vacioTexto' | t }}</p>
-  </section>
 </main>

@@ -28,6 +28,7 @@ interface Perfil {
 }
 
 interface EntradaWorker {
+  id: number;
   yo: Perfil;
   candidatos: Perfil[];
 }
@@ -123,11 +124,10 @@ function calcularCompatibilidad(yo: Perfil, candidato: Perfil) {
 }
 
 addEventListener('message', ({ data }: { data: EntradaWorker }) => {
-  const { yo, candidatos } = data;
+  const { id, yo, candidatos } = data;
 
-  const resultados = candidatos
-    .map((candidato) => calcularCompatibilidad(yo, candidato))
-    .sort((a, b) => b.score - a.score);
+  // Conserva el orden: lo decide el servidor, que conoce a todas las personas.
+  const resultados = candidatos.map((candidato) => calcularCompatibilidad(yo, candidato));
 
-  postMessage(resultados);
+  postMessage({ id, resultados });
 });

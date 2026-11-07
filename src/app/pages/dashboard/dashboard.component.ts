@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, from, of, switchMap } from 'rxjs';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { DescripcionComponent } from '../../components/descripcion/descripcion.component';
@@ -9,12 +9,12 @@ import { TarjetaCompaneroComponent } from '../../components/tarjeta-companero/ta
 import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { IdiomaService } from '../../services/idioma.service';
 import { AuthService } from '../../services/auth.service';
-import { PerfilService } from '../../services/perfil.service';
+import { PaginaCandidatos, PerfilService } from '../../services/perfil.service';
 import { CompatibilidadService } from '../../services/compatibilidad.service';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
-import { NIVELES, NivelCompatibilidad, nivelDe } from '../../utils/nivel-compatibilidad';
+import { MotorCompatibilidad } from '../../utils/motor-compatibilidad';
+import { NIVELES, NivelCompatibilidad } from '../../utils/nivel-compatibilidad';
 
-const PUNTAJE_BUENA_OPCION = 65;
 const OTRAS_EN_INICIO = 6;
 
 @Component({
@@ -27,13 +27,15 @@ const OTRAS_EN_INICIO = 6;
 export class DashboardComponent implements OnInit, OnDestroy {
   miPerfil: Perfil | null = null;
   resultados: ResultadoCompatibilidad[] = [];
+  total = 0;
+  conteos: PaginaCandidatos['resumen'] = { muyBien: 0, buena: 0, conversar: 0, distintos: 0 };
   cargando = true;
   hayErrorCarga = false;
   fotoSubiendo = false;
   errorFoto: string | null = null;
   private versionFoto = Date.now();
 
-  private worker: Worker | null = null;
+  private readonly motor = new MotorCompatibilidad();
 
   constructor(
     private perfilService: PerfilService,
@@ -43,28 +45,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (typeof Worker !== 'undefined') {
-      this.worker = new Worker(new URL('../../workers/compatibilidad.worker', import.meta.url));
-      this.worker.onmessage = ({ data }) => {
-        this.resultados = data;
-        this.cargando = false;
-        // Registramos cada score calculado, para el historial/analítica del backend.
-        for (const r of data as ResultadoCompatibilidad[]) {
-          this.compatibilidadService.registrar(r.candidato.id, r.score).subscribe({ error: () => {} });
-        }
-      };
-    }
+    this.cargar();
+  }
 
+  /** Solo se trae a quienes se muestran aquí; los totales los calcula el servidor. */
+  cargar(): void {
     forkJoin({
       miPerfil: this.perfilService.miPerfil(),
-      candidatos: this.perfilService.candidatos()
-    }).subscribe({
-      next: ({ miPerfil, candidatos }) => {
+      pagina: this.perfilService.buscar({ tamano: 1 + OTRAS_EN_INICIO })
+    }).pipe(
+      switchMap(({ miPerfil, pagina }) => forkJoin({
+        miPerfil: of(miPerfil),
+        pagina: of(pagina),
+        resultados: from(this.motor.calcular(miPerfil, pagina.candidatos))
+      }))
+    ).subscribe({
+      next: ({ miPerfil, pagina, resultados }) => {
         this.miPerfil = miPerfil;
-        if (this.worker) {
-          this.worker.postMessage({ yo: miPerfil, candidatos });
-        } else {
-          this.cargando = false;
+        this.total = pagina.total;
+        this.conteos = pagina.resumen;
+        this.resultados = resultados;
+        this.cargando = false;
+        // Registramos cada score calculado, para el historial/analítica del backend.
+        for (const r of resultados) {
+          this.compatibilidadService.registrar(r.candidato.id, r.score).subscribe({ error: () => {} });
         }
       },
       error: () => {
@@ -75,7 +79,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.worker?.terminate();
+    this.motor.terminar();
   }
 
   get nombre(): string {
@@ -84,7 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   get titulo(): string {
     const primerNombre = this.nombre.trim().split(/\s+/)[0];
-    const buenas = this.resultados.filter((r) => r.score >= PUNTAJE_BUENA_OPCION).length;
+    const buenas = this.conteos.muyBien + this.conteos.buena;
     if (this.cargando || buenas === 0) return this.i18n.t('inicio.hola', { nombre: primerNombre });
     return buenas === 1
       ? this.i18n.t('inicio.una', { nombre: primerNombre })
@@ -93,8 +97,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /** Cuántas personas hay en cada nivel de compatibilidad. */
   get resumen(): { nivel: NivelCompatibilidad; cantidad: number }[] {
+    const cantidades: Record<NivelCompatibilidad['id'], number> = {
+      'muy-bien': this.conteos.muyBien,
+      buena: this.conteos.buena,
+      conversar: this.conteos.conversar,
+      distintos: this.conteos.distintos
+    };
     return NIVELES
-      .map((nivel) => ({ nivel, cantidad: this.resultados.filter((r) => nivelDe(r.score).id === nivel.id).length }))
+      .map((nivel) => ({ nivel, cantidad: cantidades[nivel.id] }))
       .filter((fila) => fila.cantidad > 0);
   }
 
@@ -107,7 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   get hayMasOpciones(): boolean {
-    return this.resultados.length > 1 + OTRAS_EN_INICIO;
+    return this.total > 1 + OTRAS_EN_INICIO;
   }
 
   irASeccion(id: string): void {

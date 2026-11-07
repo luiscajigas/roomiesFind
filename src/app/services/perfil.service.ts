@@ -57,10 +57,6 @@ export class PerfilService {
     return this.http.get<PaginaCandidatos>(`${this.apiUrl}/perfiles/buscar`, { params });
   }
 
-  candidatos(): Observable<Perfil[]> {
-    return this.http.get<Perfil[]>(`${this.apiUrl}/perfiles/candidatos`);
-  }
-
   obtener(id: number): Observable<Perfil> {
     return this.http.get<Perfil>(`${this.apiUrl}/perfiles/${id}`);
   }
