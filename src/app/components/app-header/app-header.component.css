@@ -69,3 +69,8 @@ app-selector-idioma { margin-left: auto; }
   .brand > span { font-size: 1.05rem; }
   .account-menu__solo-movil { display: flex !important; }
 }
+
+.alerta-en-vivo { align-items: center; margin-top: 0.75rem; }
+.alerta-en-vivo > span { flex: 1; }
+.alerta-en-vivo__cerrar { display: grid; width: 1.75rem; height: 1.75rem; flex: 0 0 auto; place-items: center; padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; }
+.alerta-en-vivo__cerrar svg { margin: 0; color: currentColor; }

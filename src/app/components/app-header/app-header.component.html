@@ -56,3 +56,12 @@
     </nav>
   </div>
 </header>
+
+<div class="alerta-cuenta alerta-en-vivo" *ngIf="cuentaConAlerta as id" role="alert">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.500 20h19L12 3Z" /><path d="M12 10v4M12 17.500v.01" /></svg>
+  <span>{{ 'alerta.enVivo' | t }}</span>
+  <a class="enlace" routerLink="/chat" [queryParams]="{ con: id }" (click)="cuentaConAlerta = null">{{ 'alerta.ver' | t }}</a>
+  <button class="alerta-en-vivo__cerrar" type="button" [attr.aria-label]="'visor.cerrar' | t" (click)="cuentaConAlerta = null">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+  </button>
+</div>

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { SelectorIdiomaComponent } from '../selector-idioma/selector-idioma.component';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
@@ -15,8 +16,11 @@ import { ThemeService } from '../../services/theme.service';
   imports: [CommonModule, RouterLink, RouterLinkActive, AvatarComponent, SelectorIdiomaComponent, TraducirPipe],
   templateUrl: './app-header.component.html'
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
   menuAbierto = false;
+  /** Persona con la que se conversa y que acaba de recibir una alerta. */
+  cuentaConAlerta: number | null = null;
+  private eventos?: Subscription;
 
   @ViewChild('menuContainer') private menuContainer?: ElementRef<HTMLElement>;
   @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
@@ -32,6 +36,13 @@ export class AppHeaderComponent implements OnInit {
   /** La conexión queda abierta en toda la app para avisar de mensajes nuevos. */
   ngOnInit(): void {
     if (this.auth.estaAutenticado) this.chat.conectar();
+    this.eventos = this.chat.eventos$.subscribe((evento) => {
+      if (evento.tipo === 'alerta') this.cuentaConAlerta = evento.usuarioId;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.eventos?.unsubscribe();
   }
 
   get noLeidos$() {
