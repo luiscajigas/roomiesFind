@@ -1,8 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Perfil } from '../models/perfil.model';
+
+export type OrdenBusqueda = 'compatibilidad' | 'presupuesto' | 'recientes';
+export type FiltroMascotas = 'sin_mascotas' | 'con_mascotas' | 'aceptan';
+
+/** Lo que no se indique no se filtra. */
+export interface FiltrosBusqueda {
+  pagina?: number;
+  tamano?: number;
+  orden?: OrdenBusqueda;
+  zonas?: string[];
+  horario?: string;
+  presupuestoMaximo?: number | null;
+  mascotas?: FiltroMascotas | '';
+  puntajeMinimo?: number | null;
+}
+
+export interface PaginaCandidatos {
+  candidatos: Perfil[];
+  total: number;
+  resumen: { muyBien: number; buena: number; conversar: number; distintos: number };
+}
 
 @Injectable({ providedIn: 'root' })
 export class PerfilService {
@@ -23,6 +44,17 @@ export class PerfilService {
 
   actualizar(datos: Partial<Perfil>): Observable<Perfil> {
     return this.http.put<Perfil>(`${this.apiUrl}/perfiles/me`, datos);
+  }
+
+  /** Una página de personas, ya filtrada y ordenada por el servidor. */
+  buscar(filtros: FiltrosBusqueda = {}): Observable<PaginaCandidatos> {
+    let params = new HttpParams();
+    for (const clave of ['pagina', 'tamano', 'orden', 'horario', 'presupuestoMaximo', 'mascotas', 'puntajeMinimo'] as const) {
+      const valor = filtros[clave];
+      if (valor !== undefined && valor !== null && valor !== '') params = params.set(clave, valor);
+    }
+    for (const zona of filtros.zonas ?? []) params = params.append('zona', zona);
+    return this.http.get<PaginaCandidatos>(`${this.apiUrl}/perfiles/buscar`, { params });
   }
 
   candidatos(): Observable<Perfil[]> {
