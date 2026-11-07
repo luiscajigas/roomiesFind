@@ -1,0 +1,57 @@
+<div class="moderar">
+  <button class="moderar__boton" type="button" (click)="abrir('reporte')">{{ 'moderar.reportar' | t }}</button>
+  <button class="moderar__boton" type="button" (click)="abrir('bloqueo')">{{ 'moderar.bloquear' | t }}</button>
+</div>
+
+<dialog #dialogo *ngIf="ventana" class="dialogo" (click)="alHacerClic($event)" (close)="alCerrar()">
+  <form *ngIf="ventana === 'reporte'" class="dialogo__contenido" (ngSubmit)="reportar()">
+    <h2>{{ 'moderar.tituloReporte' | t: { nombre: nombre } }}</h2>
+    <p>{{ 'moderar.textoReporte' | t }}</p>
+
+    <fieldset class="dialogo__motivos">
+      <legend>{{ 'moderar.motivo' | t }}</legend>
+      <label *ngFor="let opcion of motivos">
+        <input type="radio" name="motivo" [value]="opcion" [(ngModel)]="motivo" />
+        {{ textoMotivo(opcion) | t }}
+      </label>
+    </fieldset>
+
+    <div class="campo">
+      <label for="reporte-detalle-{{ personaId }}">{{ (motivo === 'otro' ? 'moderar.detalleObligatorio' : 'moderar.detalle') | t }}</label>
+      <textarea id="reporte-detalle-{{ personaId }}" name="detalle" rows="3" maxlength="500" [(ngModel)]="detalle"></textarea>
+    </div>
+
+    <label class="dialogo__casilla">
+      <input type="checkbox" name="bloquear" [(ngModel)]="tambienBloquear" />
+      {{ 'moderar.tambienBloquear' | t }}
+    </label>
+
+    <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
+    <div class="dialogo__acciones">
+      <button class="btn btn--secundario" type="button" [disabled]="enviando" (click)="cerrar()">{{ 'perfil.cancelar' | t }}</button>
+      <button class="btn btn--primario" type="submit" [disabled]="!motivo || faltaDetalle || enviando">
+        {{ (enviando ? 'comun.guardando' : 'moderar.enviarReporte') | t }}
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="ventana === 'bloqueo'" class="dialogo__contenido">
+    <h2>{{ 'moderar.tituloBloqueo' | t: { nombre: nombre } }}</h2>
+    <p>{{ 'moderar.textoBloqueo' | t }}</p>
+    <p class="aviso aviso--error" *ngIf="error" role="alert">{{ error }}</p>
+    <div class="dialogo__acciones">
+      <button class="btn btn--secundario" type="button" [disabled]="enviando" (click)="cerrar()">{{ 'perfil.cancelar' | t }}</button>
+      <button class="btn btn--primario" type="button" [disabled]="enviando" (click)="bloquear()">
+        {{ (enviando ? 'comun.guardando' : 'moderar.confirmarBloqueo') | t }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="ventana === 'gracias'" class="dialogo__contenido">
+    <h2>{{ 'moderar.tituloGracias' | t }}</h2>
+    <p>{{ 'moderar.textoGracias' | t }}</p>
+    <div class="dialogo__acciones">
+      <button class="btn btn--primario" type="button" (click)="cerrar()">{{ 'moderar.listo' | t }}</button>
+    </div>
+  </div>
+</dialog>
