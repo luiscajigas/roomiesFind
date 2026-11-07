@@ -16,6 +16,11 @@
     </div>
   </header>
 
+  <p class="alerta-cuenta tarjeta__alerta" *ngIf="candidato.alerta">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.500 20h19L12 3Z" /><path d="M12 10v4M12 17.500v.01" /></svg>
+    {{ 'alerta.cuenta' | t }}
+  </p>
+
   <p class="tarjeta__descripcion" *ngIf="candidato.descripcion as texto"><app-descripcion [usuarioId]="candidato.id" [texto]="texto"></app-descripcion></p>
 
   <div class="tarjeta__cuerpo">
@@ -42,6 +47,8 @@
       {{ (explicacionAbierta ? 'tarjeta.ocultar' : 'tarjeta.porQue') | t }}
       <svg [class.girado]="explicacionAbierta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
     </button>
+
+    <app-moderar-persona class="tarjeta__moderar" [personaId]="candidato.id" [nombre]="candidato.nombre" (bloqueada)="bloqueada.emit($event)"></app-moderar-persona>
 
     <div class="explicacion" *ngIf="explicacionAbierta" aria-live="polite">
       <p class="explicacion__estado" *ngIf="cargandoExplicacion && !explicacion">
