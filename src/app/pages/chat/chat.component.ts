@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
+import { ModerarPersonaComponent } from '../../components/moderar-persona/moderar-persona.component';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { Perfil } from '../../models/perfil.model';
 import { AuthService } from '../../services/auth.service';
@@ -22,6 +23,7 @@ interface FilaConversacion {
   otroId: number;
   nombre: string;
   foto: string | null;
+  alerta: boolean;
   ultimo: MensajeChat | null;
   noLeidos: number;
 }
@@ -34,7 +36,7 @@ const CERCA_DEL_FINAL_PX = 120;
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, TraducirPipe],
+  imports: [CommonModule, FormsModule, RouterLink, AppHeaderComponent, AvatarComponent, ModerarPersonaComponent, TraducirPipe],
   templateUrl: './chat.component.html'
 })
 export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
@@ -54,6 +56,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   @ViewChild('campo') private campo?: ElementRef<HTMLTextAreaElement>;
+  @ViewChild(ModerarPersonaComponent) private moderador?: ModerarPersonaComponent;
 
   readonly largoMaximo = LARGO_MAXIMO;
   personas = new Map<number, Perfil>();
@@ -259,6 +262,13 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
   }
 
+  alBloquear(id: number): void {
+    this.personas.delete(id);
+    this.conversaciones = this.conversaciones.filter((conversacion) => conversacion.otroId !== id);
+    this.chat.refrescarNoLeidos();
+    this.router.navigate(['/chat']);
+  }
+
   volverALista(): void {
     this.router.navigate(['/chat']);
   }
@@ -351,6 +361,18 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
       case 'escribiendo':
         if (evento.usuarioId === this.otroId) this.mostrarEscribiendo();
         break;
+      case 'alerta':
+        this.cargarConversaciones();
+        break;
+      case 'bloqueo':
+        // Con la ventana abierta, este aviso puede llegar antes que la respuesta: al cerrarla se actualiza todo.
+        if (evento.usuarioId === this.otroId && this.moderador?.ventana) break;
+        // Puede ser un bloqueo o un desbloqueo: el servidor dice cómo quedó.
+        this.personas.delete(evento.usuarioId);
+        this.conversaciones = this.conversaciones.filter((conversacion) => conversacion.otroId !== evento.usuarioId);
+        this.cargarConversaciones();
+        if (evento.usuarioId === this.otroId) this.cargarMensajes(evento.usuarioId);
+        break;
     }
   }
 
@@ -421,6 +443,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
       otroId,
       nombre: persona?.nombre ?? '',
       foto: this.perfiles.urlFoto(persona?.foto_url),
+      alerta: !!persona?.alerta,
       ultimo,
       noLeidos: otroId === this.otroId ? 0 : noLeidos
     };

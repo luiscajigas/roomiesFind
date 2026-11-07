@@ -22,7 +22,10 @@
             [class.chat__fila--activa]="fila.otroId === otroId" [attr.aria-current]="fila.otroId === otroId ? 'true' : null">
             <app-avatar [nombre]="fila.nombre" [foto]="fila.foto"></app-avatar>
             <span class="chat__fila-texto">
-              <strong>{{ fila.nombre }}</strong>
+              <strong>
+                {{ fila.nombre }}
+                <svg *ngIf="fila.alerta" class="chat__fila-alerta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" [attr.aria-label]="'alerta.corta' | t"><path d="M12 3 2.500 20h19L12 3Z" /><path d="M12 10v4M12 17.500v.01" /></svg>
+              </strong>
               <small [class.chat__sin-leer]="fila.noLeidos > 0">
                 <ng-container *ngIf="fila.ultimo as ultimo; else nueva">
                   <ng-container *ngIf="ultimo.remitenteId === miId">{{ 'chat.tu' | t }} </ng-container>{{ ultimo.contenido }}
@@ -59,7 +62,13 @@
             <h2>{{ persona.nombre }}</h2>
             <p>{{ i18n.zona(persona.zona) }} · {{ i18n.horario(persona.horario) }}</p>
           </div>
+          <app-moderar-persona class="chat__moderar" [personaId]="persona.id" [nombre]="persona.nombre" (bloqueada)="alBloquear($event)"></app-moderar-persona>
         </header>
+
+        <p class="alerta-cuenta chat__alerta" *ngIf="persona.alerta" role="status">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.500 20h19L12 3Z" /><path d="M12 10v4M12 17.500v.01" /></svg>
+          {{ 'alerta.cuenta' | t }}
+        </p>
 
         <p class="chat__aviso" *ngIf="!conectado" role="status">
           <span class="giro" aria-hidden="true"></span>
