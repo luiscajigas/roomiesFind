@@ -12,6 +12,10 @@ export interface Perfil {
   acepta_mascotas: boolean;
   descripcion?: string;
   foto_url?: string | null;
+  /** Puntaje calculado por el servidor para ordenar y paginar. */
+  puntaje?: number;
+  /** Varias personas distintas reportaron esta cuenta. */
+  alerta?: boolean;
 }
 
 export interface ResultadoCompatibilidad {
