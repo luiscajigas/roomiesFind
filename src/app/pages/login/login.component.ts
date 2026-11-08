@@ -6,6 +6,7 @@ import { ComparadorComponent, HabitosComparables } from '../../components/compar
 import { SelectorIdiomaComponent } from '../../components/selector-idioma/selector-idioma.component';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { AuthService } from '../../services/auth.service';
+import { CLAVE_AVISO_SUSPENSION, CUENTA_SUSPENDIDA } from '../../services/auth.interceptor';
 import { IdiomaService } from '../../services/idioma.service';
 
 @Component({
@@ -29,7 +30,16 @@ export class LoginComponent {
   /** Cuenta pública para quien revisa el proyecto. Se muestra en la pantalla de ingreso. */
   readonly cuentaDemo = { email: 'test@gmail.com', password: '123456' };
 
-  constructor(private auth: AuthService, private router: Router, private i18n: IdiomaService) {}
+  constructor(private auth: AuthService, private router: Router, private i18n: IdiomaService) {
+    try {
+      if (sessionStorage.getItem(CLAVE_AVISO_SUSPENSION)) {
+        sessionStorage.removeItem(CLAVE_AVISO_SUSPENSION);
+        this.error = this.i18n.errorApi(CUENTA_SUSPENDIDA, 'login.error');
+      }
+    } catch {
+      // Sin almacenamiento no hay aviso que mostrar.
+    }
+  }
 
   usarCuentaDemo(): void {
     this.email = this.cuentaDemo.email;
