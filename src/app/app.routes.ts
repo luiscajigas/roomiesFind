@@ -6,6 +6,8 @@ import { PerfilComponent } from './pages/perfil/perfil.component';
 import { CompanerosComponent } from './pages/companeros/companeros.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
+import { AdminComponent } from './pages/admin/admin.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -15,5 +17,6 @@ export const routes: Routes = [
   { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
   { path: 'companeros', component: CompanerosComponent, canActivate: [authGuard] },
   { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
+  { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
   { path: '**', redirectTo: 'login' }
 ];
