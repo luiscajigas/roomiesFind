@@ -18,9 +18,16 @@ export interface DatosRegistro {
   descripcion?: string;
 }
 
+export interface UsuarioSesion {
+  id: number;
+  nombre: string;
+  email: string;
+  rol?: 'usuario' | 'admin';
+}
+
 interface RespuestaAuth {
   token: string;
-  usuario: { id: number; nombre: string; email: string };
+  usuario: UsuarioSesion;
 }
 
 const CLAVE_TOKEN = 'roomies_token';
@@ -52,6 +59,13 @@ export class AuthService {
       .pipe(tap((r) => this.guardarSesion(r)));
   }
 
+  /** Trae los datos actuales de la sesión: el rol puede haber cambiado desde que se inició. */
+  actualizarSesion(): Observable<UsuarioSesion> {
+    return this.http.get<UsuarioSesion>(`${this.apiUrl}/auth/sesion`).pipe(
+      tap((usuario) => localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuario)))
+    );
+  }
+
   logout(): void {
     localStorage.removeItem(CLAVE_TOKEN);
     localStorage.removeItem(CLAVE_USUARIO);
@@ -70,7 +84,11 @@ export class AuthService {
     return !!this.token;
   }
 
-  get usuarioActual(): { id: number; nombre: string; email: string } | null {
+  get esAdmin(): boolean {
+    return this.usuarioActual?.rol === 'admin';
+  }
+
+  get usuarioActual(): UsuarioSesion | null {
     const raw = localStorage.getItem(CLAVE_USUARIO);
     return raw ? JSON.parse(raw) : null;
   }
