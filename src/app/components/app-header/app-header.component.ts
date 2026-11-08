@@ -35,7 +35,11 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   /** La conexión queda abierta en toda la app para avisar de mensajes nuevos. */
   ngOnInit(): void {
-    if (this.auth.estaAutenticado) this.chat.conectar();
+    if (this.auth.estaAutenticado) {
+      this.chat.conectar();
+      // Actualiza el rol guardado; si la cuenta fue suspendida, el interceptor cierra la sesión.
+      this.auth.actualizarSesion().subscribe({ error: () => {} });
+    }
     this.eventos = this.chat.eventos$.subscribe((evento) => {
       if (evento.tipo === 'alerta') this.cuentaConAlerta = evento.usuarioId;
     });
@@ -51,6 +55,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   get foto$() {
     return this.perfil.fotoActual$;
+  }
+
+  get esAdmin(): boolean {
+    return this.auth.esAdmin;
   }
 
   get usuario() {

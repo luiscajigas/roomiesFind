@@ -11,6 +11,7 @@
       <span class="contador-mensajes" *ngIf="noLeidos$ | async as cantidad">{{ cantidad }}</span>
     </a>
     <a routerLink="/perfil" routerLinkActive="primary-nav__link--active">{{ 'nav.perfil' | t }}</a>
+    <a *ngIf="esAdmin" routerLink="/admin" routerLinkActive="primary-nav__link--active">{{ 'nav.admin' | t }}</a>
   </nav>
   <app-selector-idioma></app-selector-idioma>
   <div class="topbar__user" *ngIf="usuario" #menuContainer>
@@ -41,6 +42,10 @@
       <a routerLink="/perfil" (click)="cerrarMenu()">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg>
         {{ 'nav.perfil' | t }}
+      </a>
+      <a *ngIf="esAdmin" class="account-menu__solo-movil" routerLink="/admin" (click)="cerrarMenu()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 4.500 3.400 8.300 8 9 4.600-.7 8-4.500 8-9V6l-8-3Z" /></svg>
+        {{ 'nav.admin' | t }}
       </a>
       <a routerLink="/companeros" (click)="cerrarMenu()">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
