@@ -45,6 +45,9 @@ export const TEXTOS = {
   'login.crearCuenta': { es: 'Crea una', en: 'Create one' },
   'login.demo': { es: 'Cuenta de demostración', en: 'Demo account' },
   'login.usarDemo': { es: 'Usar esta cuenta', en: 'Use this account' },
+  'login.tipoDemo': { es: 'Tipo de cuenta de demostración', en: 'Demo account type' },
+  'login.demoUsuario': { es: 'Usuario', en: 'User' },
+  'login.demoAdmin': { es: 'Administrador', en: 'Admin' },
   'login.error': { es: 'No se pudo iniciar sesión.', en: 'Could not log in.' },
 
   'registro.titulo1': { es: 'Primero, cuéntanos', en: 'First, tell us' },
