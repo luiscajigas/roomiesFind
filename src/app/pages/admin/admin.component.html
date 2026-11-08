@@ -1,0 +1,101 @@
+<main class="pagina admin">
+  <app-header></app-header>
+
+  <section class="encabezado-pagina">
+    <h1>{{ 'admin.titulo' | t }}</h1>
+    <p>{{ 'admin.texto' | t }}</p>
+  </section>
+
+  <dl class="admin__cifras" *ngIf="resumen as r">
+    <div><dt>{{ 'admin.cuentasPorRevisar' | t }}</dt><dd>{{ r.cuentasPorRevisar }}</dd></div>
+    <div><dt>{{ 'admin.reportesPendientes' | t }}</dt><dd>{{ r.reportesPendientes }}</dd></div>
+    <div><dt>{{ 'admin.alertasActivas' | t }}</dt><dd>{{ r.alertasActivas }}</dd></div>
+    <div><dt>{{ 'admin.cuentasSuspendidas' | t }}</dt><dd>{{ r.cuentasSuspendidas }}</dd></div>
+  </dl>
+
+  <div class="admin__pestanas" role="tablist" [attr.aria-label]="'admin.titulo' | t">
+    <button type="button" role="tab" [attr.aria-selected]="pestana === 'pendientes'" (click)="cambiar('pendientes')">{{ 'admin.porRevisar' | t }}</button>
+    <button type="button" role="tab" [attr.aria-selected]="pestana === 'todos'" (click)="cambiar('todos')">{{ 'admin.historial' | t }}</button>
+    <button type="button" role="tab" [attr.aria-selected]="pestana === 'suspendidas'" (click)="cambiar('suspendidas')">{{ 'admin.suspendidas' | t }}</button>
+  </div>
+
+  <p class="aviso aviso--exito" *ngIf="aviso" role="status">{{ aviso | t }}</p>
+  <p class="aviso aviso--error" *ngIf="errorAccion" role="alert">{{ errorAccion }}</p>
+  <p class="aviso aviso--error" *ngIf="error" role="alert">{{ 'admin.errorCarga' | t }}</p>
+
+  <div class="cargando" *ngIf="cargando" role="status">
+    <span class="giro" aria-hidden="true"></span>
+    <p>{{ 'chat.cargando' | t }}</p>
+  </div>
+
+  <ng-container *ngIf="!cargando && !error && pestana !== 'suspendidas'">
+    <p class="vacio" *ngIf="!cuentas.length">{{ (pestana === 'pendientes' ? 'admin.sinPendientes' : 'admin.sinReportes') | t }}</p>
+
+    <article class="admin-cuenta" *ngFor="let cuenta of cuentas">
+      <header class="admin-cuenta__cabecera">
+        <app-avatar [nombre]="cuenta.persona.nombre" [foto]="foto(cuenta.persona)"></app-avatar>
+        <div class="admin-cuenta__persona">
+          <h2>{{ cuenta.persona.nombre }}</h2>
+          <p>{{ cuenta.persona.email }}</p>
+        </div>
+        <ul class="admin-cuenta__etiquetas">
+          <li class="etiqueta etiqueta--alerta" *ngIf="cuenta.alerta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.500 20h19L12 3Z" /><path d="M12 10v4M12 17.500v.01" /></svg>{{ 'admin.conAlerta' | t }}</li>
+          <li class="etiqueta etiqueta--suspendida" *ngIf="cuenta.suspendida">{{ 'admin.suspendida' | t }}</li>
+          <li class="etiqueta">{{ (vigentes(cuenta) === 1 ? 'admin.unReporte' : 'admin.reportes') | t: { cantidad: vigentes(cuenta) } }}</li>
+        </ul>
+      </header>
+
+      <ul class="admin-cuenta__reportes">
+        <li *ngFor="let reporte of cuenta.reportes" [class.admin-reporte--cerrado]="reporte.estado !== 'pendiente'">
+          <div class="admin-reporte__linea">
+            <strong>{{ textoMotivo(reporte) | t }}</strong>
+            <span class="etiqueta etiqueta--estado" [ngClass]="'etiqueta--' + reporte.estado">{{ textoEstado(reporte) | t }}</span>
+          </div>
+          <p class="admin-reporte__detalle" *ngIf="reporte.detalle">«{{ reporte.detalle }}»</p>
+          <small>
+            {{ 'admin.por' | t: { nombre: reporte.reportante?.nombre ?? ('admin.cuentaBorrada' | t) } }}
+            · <time [attr.datetime]="reporte.creadoEn">{{ reporte.creadoEn | date: 'medium' : undefined : localeFechas }}</time>
+          </small>
+        </li>
+      </ul>
+
+      <div class="admin-cuenta__acciones" *ngIf="suspendiendo !== cuenta.persona.id">
+        <button class="btn btn--secundario" type="button" *ngIf="vigentes(cuenta)" [disabled]="ocupada === cuenta.persona.id" (click)="descartar(cuenta)">{{ 'admin.descartar' | t }}</button>
+        <button class="btn btn--secundario" type="button" *ngIf="pendientes(cuenta)" [disabled]="ocupada === cuenta.persona.id" (click)="mantener(cuenta)">{{ 'admin.mantener' | t }}</button>
+        <button class="btn btn--primario" type="button" *ngIf="!cuenta.suspendida && cuenta.persona.rol !== 'admin'" [disabled]="ocupada === cuenta.persona.id" (click)="abrirSuspension(cuenta.persona.id)">{{ 'admin.suspender' | t }}</button>
+        <button class="btn btn--secundario" type="button" *ngIf="cuenta.suspendida" [disabled]="ocupada === cuenta.persona.id" (click)="reactivar(cuenta.persona.id)">{{ 'admin.reactivar' | t }}</button>
+      </div>
+
+      <form class="admin-cuenta__suspension" *ngIf="suspendiendo === cuenta.persona.id" (ngSubmit)="suspender(cuenta.persona.id)">
+        <div class="campo">
+          <label for="motivo-{{ cuenta.persona.id }}">{{ 'admin.motivoSuspension' | t }}</label>
+          <textarea id="motivo-{{ cuenta.persona.id }}" name="motivo" rows="2" maxlength="500" [(ngModel)]="motivoSuspension"></textarea>
+        </div>
+        <p>{{ 'admin.efectoSuspension' | t }}</p>
+        <div class="admin-cuenta__acciones">
+          <button class="btn btn--secundario" type="button" (click)="suspendiendo = null">{{ 'perfil.cancelar' | t }}</button>
+          <button class="btn btn--primario" type="submit" [disabled]="!motivoSuspension.trim() || ocupada === cuenta.persona.id">{{ 'admin.confirmarSuspension' | t }}</button>
+        </div>
+      </form>
+    </article>
+  </ng-container>
+
+  <ng-container *ngIf="!cargando && !error && pestana === 'suspendidas'">
+    <p class="vacio" *ngIf="!suspendidas.length">{{ 'admin.sinSuspendidas' | t }}</p>
+    <article class="admin-cuenta" *ngFor="let fila of suspendidas">
+      <header class="admin-cuenta__cabecera">
+        <app-avatar [nombre]="fila.persona.nombre" [foto]="foto(fila.persona)"></app-avatar>
+        <div class="admin-cuenta__persona">
+          <h2>{{ fila.persona.nombre }}</h2>
+          <p>{{ fila.persona.email }}</p>
+        </div>
+        <button class="btn btn--secundario" type="button" [disabled]="ocupada === fila.persona.id" (click)="reactivar(fila.persona.id)">{{ 'admin.reactivar' | t }}</button>
+      </header>
+      <p class="admin-reporte__detalle">«{{ fila.motivo }}»</p>
+      <small class="admin-cuenta__nota">
+        {{ 'admin.suspendidaPor' | t: { nombre: fila.suspendidaPor?.nombre ?? ('admin.cuentaBorrada' | t) } }}
+        · <time [attr.datetime]="fila.creadaEn">{{ fila.creadaEn | date: 'medium' : undefined : localeFechas }}</time>
+      </small>
+    </article>
+  </ng-container>
+</main>
