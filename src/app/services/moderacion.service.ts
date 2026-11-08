@@ -2,10 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ClaveTexto } from '../i18n/textos';
 import { Perfil } from '../models/perfil.model';
 
 export const MOTIVOS_REPORTE = ['acoso', 'perfil_falso', 'estafa', 'contenido_inapropiado', 'otro'] as const;
 export type MotivoReporte = (typeof MOTIVOS_REPORTE)[number];
+
+export const TEXTO_MOTIVO: Record<MotivoReporte, ClaveTexto> = {
+  acoso: 'moderar.motivoAcoso',
+  perfil_falso: 'moderar.motivoFalso',
+  estafa: 'moderar.motivoEstafa',
+  contenido_inapropiado: 'moderar.motivoContenido',
+  otro: 'moderar.motivoOtro'
+};
 
 @Injectable({ providedIn: 'root' })
 export class ModeracionService {

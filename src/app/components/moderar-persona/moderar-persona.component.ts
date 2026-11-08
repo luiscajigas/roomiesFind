@@ -4,15 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { ClaveTexto } from '../../i18n/textos';
 import { IdiomaService } from '../../services/idioma.service';
-import { MOTIVOS_REPORTE, ModeracionService, MotivoReporte } from '../../services/moderacion.service';
-
-const TEXTO_MOTIVO: Record<MotivoReporte, ClaveTexto> = {
-  acoso: 'moderar.motivoAcoso',
-  perfil_falso: 'moderar.motivoFalso',
-  estafa: 'moderar.motivoEstafa',
-  contenido_inapropiado: 'moderar.motivoContenido',
-  otro: 'moderar.motivoOtro'
-};
+import { MOTIVOS_REPORTE, ModeracionService, MotivoReporte, TEXTO_MOTIVO } from '../../services/moderacion.service';
 
 /** Botones para reportar y bloquear a una persona, con sus ventanas de confirmación. */
 @Component({
