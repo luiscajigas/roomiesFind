@@ -27,8 +27,16 @@ export class LoginComponent {
   readonly ejemploYo: HabitosComparables = { nombre: 'Tú', presupuesto: 650000, limpieza: 4, tolerancia_ruido: 2 };
   readonly ejemploOtro: HabitosComparables = { nombre: 'Ana', presupuesto: 600000, limpieza: 4, tolerancia_ruido: 3 };
 
-  /** Cuenta pública para quien revisa el proyecto. Se muestra en la pantalla de ingreso. */
-  readonly cuentaDemo = { email: 'test@gmail.com', password: '123456' };
+  /** Cuentas públicas para quien revisa el proyecto. Se muestran en la pantalla de ingreso. */
+  readonly cuentasDemo = {
+    usuario: { email: 'test@gmail.com', password: '123456' },
+    admin: { email: 'admin@gmail.com', password: '123456' }
+  };
+  tipoDemo: 'usuario' | 'admin' = 'usuario';
+
+  get cuentaDemo(): { email: string; password: string } {
+    return this.cuentasDemo[this.tipoDemo];
+  }
 
   constructor(private auth: AuthService, private router: Router, private i18n: IdiomaService) {
     try {

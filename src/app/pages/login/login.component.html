@@ -44,7 +44,13 @@
       <p class="acceso__alterno">{{ 'login.sinCuenta' | t }} <a class="enlace" routerLink="/registro">{{ 'login.crearCuenta' | t }}</a></p>
 
       <aside class="acceso__demo" aria-labelledby="demo-title">
-        <h3 id="demo-title">{{ 'login.demo' | t }}</h3>
+        <div class="acceso__demo-cabecera">
+          <h3 id="demo-title">{{ 'login.demo' | t }}</h3>
+          <div class="acceso__demo-tipos" role="group" [attr.aria-label]="'login.tipoDemo' | t">
+            <button type="button" [attr.aria-pressed]="tipoDemo === 'usuario'" (click)="tipoDemo = 'usuario'">{{ 'login.demoUsuario' | t }}</button>
+            <button type="button" [attr.aria-pressed]="tipoDemo === 'admin'" (click)="tipoDemo = 'admin'">{{ 'login.demoAdmin' | t }}</button>
+          </div>
+        </div>
         <dl>
           <div><dt>{{ 'login.correo' | t }}</dt><dd>{{ cuentaDemo.email }}</dd></div>
           <div><dt>{{ 'login.contrasena' | t }}</dt><dd>{{ cuentaDemo.password }}</dd></div>
