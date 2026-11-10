@@ -2,33 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Perfil } from '../models/perfil.model';
+import { Conversacion, EventoNavegador, Mensaje, MensajeAlServidor, PaginaMensajes } from '../api/tipos';
 import { AuthService } from './auth.service';
 
-export interface MensajeChat {
-  id: number;
-  remitenteId: number;
-  destinatarioId: number;
-  contenido: string;
-  creadoEn: string;
-  leidoEn: string | null;
-}
-
-export interface ConversacionChat {
-  otroId: number;
-  persona: Perfil;
-  ultimoMensaje: MensajeChat;
-  noLeidos: number;
-}
-
-export type EventoChat =
-  | { tipo: 'mensaje'; mensaje: MensajeChat }
-  | { tipo: 'enviado'; idCliente: string; mensaje: MensajeChat }
-  | { tipo: 'error'; idCliente: string | null; mensaje: string }
-  | { tipo: 'leidos'; lectorId: number; remitenteId: number; leidoEn: string }
-  | { tipo: 'escribiendo'; usuarioId: number }
-  | { tipo: 'alerta'; usuarioId: number }
-  | { tipo: 'bloqueo'; usuarioId: number };
+export type MensajeChat = Mensaje;
+export type ConversacionChat = Conversacion;
+export type EventoChat = EventoNavegador;
 
 export type EstadoConexion = 'desconectado' | 'conectando' | 'conectado';
 
@@ -77,9 +56,9 @@ export class ChatService implements OnDestroy {
     return this.http.get<ConversacionChat[]>(`${this.apiUrl}/chat/conversaciones`);
   }
 
-  mensajes(otroId: number, antesDe?: number): Observable<{ mensajes: MensajeChat[]; hayMas: boolean }> {
+  mensajes(otroId: number, antesDe?: number): Observable<PaginaMensajes> {
     const params = antesDe ? new HttpParams().set('antesDe', antesDe) : undefined;
-    return this.http.get<{ mensajes: MensajeChat[]; hayMas: boolean }>(
+    return this.http.get<PaginaMensajes>(
       `${this.apiUrl}/chat/conversaciones/${otroId}/mensajes`, { params });
   }
 
@@ -148,7 +127,7 @@ export class ChatService implements OnDestroy {
     this.temporizadorReconexion = setTimeout(() => this.abrir(), espera);
   }
 
-  private transmitir(datos: Record<string, unknown>): boolean {
+  private transmitir(datos: MensajeAlServidor): boolean {
     if (this.socket?.readyState !== WebSocket.OPEN || this.estado$.value !== 'conectado') return false;
     this.socket.send(JSON.stringify(datos));
     return true;
