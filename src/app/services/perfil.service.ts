@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { CambiosPerfil, FiltroMascotas, FotoGuardada, OrdenBusqueda, PaginaCandidatos } from '../api/tipos';
 import { Perfil } from '../models/perfil.model';
 
-export type OrdenBusqueda = 'compatibilidad' | 'presupuesto' | 'recientes';
-export type FiltroMascotas = 'sin_mascotas' | 'con_mascotas' | 'aceptan';
+export type { FiltroMascotas, OrdenBusqueda, PaginaCandidatos };
 
 /** Lo que no se indique no se filtra. */
 export interface FiltrosBusqueda {
@@ -19,11 +19,6 @@ export interface FiltrosBusqueda {
   puntajeMinimo?: number | null;
 }
 
-export interface PaginaCandidatos {
-  candidatos: Perfil[];
-  total: number;
-  resumen: { muyBien: number; buena: number; conversar: number; distintos: number };
-}
 
 @Injectable({ providedIn: 'root' })
 export class PerfilService {
@@ -42,7 +37,7 @@ export class PerfilService {
     );
   }
 
-  actualizar(datos: Partial<Perfil>): Observable<Perfil> {
+  actualizar(datos: CambiosPerfil): Observable<Perfil> {
     return this.http.put<Perfil>(`${this.apiUrl}/perfiles/me`, datos);
   }
 
@@ -61,10 +56,10 @@ export class PerfilService {
     return this.http.get<Perfil>(`${this.apiUrl}/perfiles/${id}`);
   }
 
-  actualizarFoto(foto: File): Observable<{ foto_url: string }> {
+  actualizarFoto(foto: File): Observable<FotoGuardada> {
     const formulario = new FormData();
     formulario.append('foto', foto);
-    return this.http.put<{ foto_url: string }>(`${this.apiUrl}/perfiles/me/foto`, formulario).pipe(
+    return this.http.put<FotoGuardada>(`${this.apiUrl}/perfiles/me/foto`, formulario).pipe(
       tap(({ foto_url }) => {
         this.versionFoto = Date.now();
         this.fotoActual.next(this.urlFoto(foto_url, this.versionFoto));
