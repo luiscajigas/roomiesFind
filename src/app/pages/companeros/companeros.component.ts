@@ -11,7 +11,7 @@ import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
 import { CompatibilidadService } from '../../services/compatibilidad.service';
 import { IdiomaService } from '../../services/idioma.service';
 import { FiltroMascotas, FiltrosBusqueda, OrdenBusqueda, PerfilService } from '../../services/perfil.service';
-import { MotorCompatibilidad } from '../../utils/motor-compatibilidad';
+import { MotorCompatibilidadService } from '../../services/motor-compatibilidad.service';
 
 const POR_PAGINA = 12;
 
@@ -42,12 +42,12 @@ export class CompanerosComponent implements OnInit, OnDestroy {
   private pagina = 1;
   /** Al quitar a alguien, los siguientes se corren hacia atrás y uno quedaría sin mostrarse. */
   private huboBajas = false;
-  private readonly motor = new MotorCompatibilidad();
   private readonly busquedas = new Subject<void>();
   private readonly suscripciones = new Subscription();
   private pedidoMas?: Subscription;
 
   constructor(
+    private motor: MotorCompatibilidadService,
     private perfiles: PerfilService,
     private compatibilidad: CompatibilidadService,
     readonly i18n: IdiomaService
@@ -89,7 +89,6 @@ export class CompanerosComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.suscripciones.unsubscribe();
     this.pedidoMas?.unsubscribe();
-    this.motor.terminar();
   }
 
   get hayMas(): boolean {

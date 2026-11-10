@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { forkJoin, from, of, switchMap } from 'rxjs';
@@ -10,9 +10,9 @@ import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { IdiomaService } from '../../services/idioma.service';
 import { AuthService } from '../../services/auth.service';
 import { PaginaCandidatos, PerfilService } from '../../services/perfil.service';
+import { MotorCompatibilidadService } from '../../services/motor-compatibilidad.service';
 import { CompatibilidadService } from '../../services/compatibilidad.service';
 import { Perfil, ResultadoCompatibilidad } from '../../models/perfil.model';
-import { MotorCompatibilidad } from '../../utils/motor-compatibilidad';
 import { NIVELES, NivelCompatibilidad } from '../../utils/nivel-compatibilidad';
 
 const OTRAS_EN_INICIO = 6;
@@ -24,7 +24,7 @@ const OTRAS_EN_INICIO = 6;
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   miPerfil: Perfil | null = null;
   resultados: ResultadoCompatibilidad[] = [];
   total = 0;
@@ -35,9 +35,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   errorFoto: string | null = null;
   private versionFoto = Date.now();
 
-  private readonly motor = new MotorCompatibilidad();
 
   constructor(
+    private motor: MotorCompatibilidadService,
     private perfilService: PerfilService,
     private compatibilidadService: CompatibilidadService,
     private auth: AuthService,
@@ -78,9 +78,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.motor.terminar();
-  }
 
   get nombre(): string {
     return this.usuario?.nombre || this.i18n.t('inicio.tuPerfil');
