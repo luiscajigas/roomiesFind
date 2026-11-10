@@ -2,45 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { MotivoReporte } from './moderacion.service';
+import { CuentaReportada, Ficha, ReporteAdmin, ResumenAdmin, Suspension } from '../api/tipos';
 
-export interface FichaPersona {
-  id: number;
-  nombre: string;
-  email: string;
-  rol: 'usuario' | 'admin';
-  foto_url: string | null;
-}
-
-export interface ReporteAdmin {
-  id: number;
-  motivo: MotivoReporte;
-  detalle: string | null;
-  estado: 'pendiente' | 'revisado' | 'descartado';
-  creadoEn: string;
-  reportante: { id: number; nombre: string } | null;
-}
-
-export interface CuentaReportada {
-  persona: FichaPersona;
-  alerta: boolean;
-  suspendida: boolean;
-  reportes: ReporteAdmin[];
-}
-
-export interface CuentaSuspendida {
-  persona: FichaPersona;
-  motivo: string;
-  creadaEn: string;
-  suspendidaPor: { id: number; nombre: string } | null;
-}
-
-export interface ResumenAdmin {
-  cuentasPorRevisar: number;
-  reportesPendientes: number;
-  alertasActivas: number;
-  cuentasSuspendidas: number;
-}
+export type FichaPersona = Ficha;
+export type CuentaSuspendida = Suspension;
+export type { CuentaReportada, ReporteAdmin, ResumenAdmin };
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
