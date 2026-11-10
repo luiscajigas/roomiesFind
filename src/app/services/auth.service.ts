@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Sesion, UsuarioSesion } from '../api/tipos';
 
 export interface DatosRegistro {
   nombre: string;
@@ -18,17 +19,8 @@ export interface DatosRegistro {
   descripcion?: string;
 }
 
-export interface UsuarioSesion {
-  id: number;
-  nombre: string;
-  email: string;
-  rol?: 'usuario' | 'admin';
-}
-
-interface RespuestaAuth {
-  token: string;
-  usuario: UsuarioSesion;
-}
+export type { UsuarioSesion };
+type RespuestaAuth = Sesion;
 
 const CLAVE_TOKEN = 'roomies_token';
 const CLAVE_USUARIO = 'roomies_usuario';
