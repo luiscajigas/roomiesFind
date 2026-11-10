@@ -1,4 +1,6 @@
 import { OTRO_BARRIO } from '../data/barrios-pasto';
+import type { Perfil, ResultadoCompatibilidad } from '../models/perfil.model';
+import type { PeticionCalculo, RespuestaCalculo } from './compatibilidad.mensajes';
 
 /// <reference lib="webworker" />
 
@@ -12,28 +14,14 @@ import { OTRO_BARRIO } from '../data/barrios-pasto';
  * para interpretar en lenguaje natural un resultado que ya fue calculado
  * aquí -así se reduce el consumo de tokens y el resultado del match es
  * siempre reproducible/objetivo-.
+ *
+ * Las mismas reglas están en SQL (perfiles/repository/PerfilRepository.java), porque el
+ * servidor necesita el puntaje para ordenar y paginar. Si cambian, hay que cambiarlas en
+ * los dos lados. Se verificó con todos los perfiles reales que ambos dan el mismo puntaje.
  */
 
-interface Perfil {
-  id: number;
-  nombre: string;
-  presupuesto: number;
-  zona: string;
-  horario: 'madrugador' | 'nocturno' | 'mixto';
-  limpieza: number;
-  tolerancia_ruido: number;
-  frecuencia_visitas: 'nunca' | 'ocasional' | 'frecuente';
-  tiene_mascotas: boolean;
-  acepta_mascotas: boolean;
-}
 
-interface EntradaWorker {
-  id: number;
-  yo: Perfil;
-  candidatos: Perfil[];
-}
-
-function calcularCompatibilidad(yo: Perfil, candidato: Perfil) {
+function calcularCompatibilidad(yo: Perfil, candidato: Perfil): ResultadoCompatibilidad {
   const coincidencias: string[] = [];
   const conflictos: string[] = [];
   let puntos = 0;
@@ -123,11 +111,14 @@ function calcularCompatibilidad(yo: Perfil, candidato: Perfil) {
   };
 }
 
-addEventListener('message', ({ data }: { data: EntradaWorker }) => {
-  const { id, yo, candidatos } = data;
-
-  // Conserva el orden: lo decide el servidor, que conoce a todas las personas.
-  const resultados = candidatos.map((candidato) => calcularCompatibilidad(yo, candidato));
-
-  postMessage({ id, resultados });
+addEventListener('message', ({ data }: MessageEvent<PeticionCalculo>) => {
+  let respuesta: RespuestaCalculo;
+  try {
+    // Conserva el orden: lo decide el servidor, que conoce a todas las personas.
+    respuesta = { id: data.id, ok: true, resultados: data.candidatos.map((candidato) => calcularCompatibilidad(data.yo, candidato)) };
+  } catch (error) {
+    // Un dato inesperado no debe dejar a la página esperando para siempre.
+    respuesta = { id: data.id, ok: false, error: error instanceof Error ? error.message : String(error) };
+  }
+  postMessage(respuesta);
 });
