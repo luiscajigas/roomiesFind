@@ -10,13 +10,15 @@ import { SelectorBarrioComponent } from '../../components/selector-barrio/select
 import { esBarrioDeLaLista } from '../../data/barrios-pasto';
 import { TraducirPipe } from '../../i18n/traducir.pipe';
 import { IdiomaService } from '../../services/idioma.service';
+import { CambiosPerfil } from '../../api/tipos';
 import { Perfil } from '../../models/perfil.model';
 import { AuthService } from '../../services/auth.service';
 import { PerfilService } from '../../services/perfil.service';
 
-type PerfilEditable = Pick<Perfil,
+/** Lo que se puede cambiar en el formulario: los mismos campos que acepta el API al guardar. */
+type PerfilEditable = Required<Pick<CambiosPerfil,
   'presupuesto' | 'zona' | 'horario' | 'limpieza' | 'tolerancia_ruido' |
-  'frecuencia_visitas' | 'tiene_mascotas' | 'acepta_mascotas' | 'descripcion'>;
+  'frecuencia_visitas' | 'tiene_mascotas' | 'acepta_mascotas' | 'descripcion'>>;
 
 @Component({
   selector: 'app-perfil',
